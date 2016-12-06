@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/KainosSoftwareLtd/project-dashboard.png?label=ready&title=Ready)](https://waffle.io/KainosSoftwareLtd/project-dashboard)
 # Project Dashboard
 
 ## Configuration
