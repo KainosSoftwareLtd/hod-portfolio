@@ -34,7 +34,7 @@ if (env === 'production') {
 }
 
 // Download files
-fileStore.downloadFiles(process.env.S3_BUCKET_NAME, __dirname + '/lib/projects/', function() {
+fileStore.downloadFiles(__dirname + '/lib/projects/', function() {
   /*
   Load all the project data from the files.
   */

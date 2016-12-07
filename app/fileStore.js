@@ -3,10 +3,13 @@ var fs      = require('fs');
 var _       = require('underscore');
 var log     = require('./logger');
 
+var FileStore = function() {};
+
 var s3 = new AWS.S3({
     signatureVersion: 'v4',
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    params: { Bucket: process.env.S3_BUCKET_NAME || 'gov-project-dashboard'}
 });
 
 function createDirectoryIfNotExists(directory) {
@@ -27,11 +30,9 @@ function createDirectoryIfNotExists(directory) {
  * 
  * @param {string} sourceObjectName Name of the object in S3 bucket - the saved file will have the same name
  * @param {string} destinationDirectory Location of the new file
- * @param {string} bucketName Name of the bucket that contains files in its root directory
  */
-function saveBucketObject(sourceObjectName, destinationDirectory, bucketName, done) {
+function saveBucketObject(sourceObjectName, destinationDirectory, done) {
     var params = {
-        Bucket: bucketName,
         Key: sourceObjectName
     };
 
@@ -55,11 +56,10 @@ function saveBucketObject(sourceObjectName, destinationDirectory, bucketName, do
  * Downloads all files from the root directory of an S3 bucket
  * WARNING: The bucket can't contain subdirectories
  * 
- * @param {string} bucketName Name of the bucket containing files
  * @param {string} destinationDirectory Location for the downloaded files (may not exist)
  */
-function downloadFiles(bucketName, destinationDirectory, done) {
-    s3.listObjects({Bucket: bucketName}, function(err, data) {
+FileStore.downloadFiles = function (destinationDirectory, done) {
+    s3.listObjects(null, function(err, data) {
         if (err) {
             log.error(err, err.stack);
             done();
@@ -70,7 +70,7 @@ function downloadFiles(bucketName, destinationDirectory, done) {
             var finishIfAllSaved = _.after(data.Contents.length, done);
 
             data.Contents.forEach(function(file) {
-                saveBucketObject(file.Key, destinationDirectory, bucketName, function() {
+                saveBucketObject(file.Key, destinationDirectory, function() {
                     finishIfAllSaved(); // will trigger done() after last object was saved
                 });
             });
@@ -78,4 +78,19 @@ function downloadFiles(bucketName, destinationDirectory, done) {
     });
 }
 
-exports.downloadFiles = downloadFiles;
+FileStore.uploadObjectAsJsonFile = function (keyName, objectToUpload) {
+    var params = {
+        Key: keyName + '.json',
+        Body: JSON.stringify(objectToUpload)
+    };
+
+    s3.upload(params, function(err, data) {
+        if(err) { log.error(err); }
+        else {
+            log.debug("Successfully uploaded data to: " + keyName);
+            log.trace(data);
+        }
+    });
+};
+
+module.exports = FileStore;
