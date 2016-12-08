@@ -6,11 +6,13 @@ var merge = require('merge');
 
 var FileStore = function() {};
 
+var FileStore = function() {};
+
 var s3 = new AWS.S3({
     signatureVersion: 'v4',
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    params: { Bucket: process.env.S3_BUCKET_NAME || 'gov-project-dashboard' }
+    params: { Bucket: process.env.S3_BUCKET_NAME }
 });
 
 function createDirectoryIfNotExists(directory) {
