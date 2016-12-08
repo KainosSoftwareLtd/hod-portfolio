@@ -48,6 +48,12 @@ Controller.prototype.handleSlugPrototype = function(req, res) {
   }
 }
 
+// Add project form
+Controller.prototype.handleAddProject = function(req, res) {
+  var id = req.params.id;
+    res.render('add-project');
+}
+
 /**
  * @param  {String} groupBy Name of the field by which the projects will be grouped
  * @param  {String} path Router path, ex: '/location'

@@ -2,7 +2,10 @@
 
 {% block head %} {% include "includes/head.html" %} {% endblock %}
 
-{% set global_header_text = "Gov Project Dashboard" %}
+{% set global_header_text = "" %}
+{% block header_class %}with-proposition{% endblock %}
+
+{% block proposition_header %} {% include "includes/propositional_navigation.html" %} {% endblock %}
 
 {% block body_end %}
   {% include "includes/scripts.html" %}

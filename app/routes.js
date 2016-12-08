@@ -31,6 +31,7 @@ controller.setupIndexPageRoute('theme', '/theme');
 controller.setupIndexPageRoute('health', '/health', health_order);
 controller.setupIndexPageRoute('priority', '/priority', priority_order);
 
+router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProject);
 router.get('/projects/:id/:slug', connect.ensureLoggedIn(), controller.handleProjectIdSlug);
 router.get('/projects/:id/:slug/prototype', connect.ensureLoggedIn(), controller.handleSlugPrototype);
 router.get('/api', connect.ensureLoggedIn(), controller.handleApi);
