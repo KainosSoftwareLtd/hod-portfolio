@@ -3,35 +3,29 @@ var _ = require('underscore');
 var Person = require('./person');
 
 module.exports = class Project {
-    constructor(id, name, description) {
-        this.id = id;
+    constructor(name, description) {
         this.name = name;
         this.description = description;
         this.ourTeam = [];
         this.clientTeam = [];
+
+        // setting defaults - this project was designed not to work without them...
+        this.facing = "user";
+        this.priority = "Low";
+        this.location = "Unknown";
     }
 
-    set setId(int) { this.id = int; }
-    set setName(str) { this.name = str; }
-    set setDescription(str) { this.description = str; }
-    set setLocation(str) { this.location = str; }
-    set setDepartment(str) { this.department = str; }
-    set setAgency(str) { this.agency = str; }
-    set setHealth(str) { this.health = str; }
-    set setPriority(str) { this.priority = str; }
-    set setOurTeam(ourTeam){ this.ourTeam = ourTeam; }
-    set setClientTeam(clientTeam){ this.clientTeam = clientTeam; }
-
-    get getId() { return this.id; }
-    get getName() { return this.name; }
-    get getDescription() { return this.description; }
-    get getLocation() { return this.location; }
-    get getDepartment() { return this.department; }
-    get getAgency() { return this.agency; }
-    get getHealth() { return this.health; }
-    get getPriority() { return this.priority; }
-    get getOurTeam() { return this.ourTeam; }
-    get getClientTeam() { return this.clientTeam; }
+    setId(str) { this.id = str; }
+    setName(str) { this.name = str; }
+    setDescription(str) { this.description = str; }
+    setLocation(str) { this.location = str; }
+    setDepartment(str) { this.department = str; }
+    setAgency(str) { this.agency = str; }
+    setHealth(str) { this.health = str; }
+    setPriority(str) { this.priority = str; }
+    setOurTeam(ourTeam) { this.ourTeam = ourTeam; }
+    setClientTeam(clientTeam) { this.clientTeam = clientTeam; }
+    setPhase(phase) { this.phase = phase; }
 
     addToOurTeam(Person) {
         this.ourTeam.push(Person);
@@ -51,5 +45,26 @@ module.exports = class Project {
         this.clientTeam = _.reject(this.clientTeam, function(person) {
             return person.id === id;
         });
+    }
+
+    static fromJson(data) {
+        var p = new Project();
+        Object.assign(p, data);
+
+        if (data && data.ourTeam) {
+            p.setOurTeam([]);
+            data.ourTeam.forEach(function(item) {
+                p.addToOurTeam(Person.fromJson(item));
+            });
+        }
+
+        if (data && data.clientTeam) {
+            p.setClientTeam([]);
+            data.clientTeam.forEach(function(item) {
+                p.addToClientTeam(Person.fromJson(item));
+            });
+        }
+
+        return p;
     }
 }

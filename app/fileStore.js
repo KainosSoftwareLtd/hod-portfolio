@@ -1,7 +1,10 @@
-var AWS     = require('aws-sdk');
-var fs      = require('fs');
-var _       = require('underscore');
-var log     = require('./logger');
+var AWS = require('aws-sdk');
+var fs = require('fs');
+var _ = require('underscore');
+var log = require('./logger');
+var merge = require('merge');
+
+var FileStore = function() {};
 
 var FileStore = function() {};
 
@@ -13,16 +16,16 @@ var s3 = new AWS.S3({
 });
 
 function createDirectoryIfNotExists(directory) {
-  try {
-    fs.mkdirSync(directory);
-    log.debug('Creating a directory: ' + directory);
-  } catch(e) {
-    if ( e.code != 'EEXIST' ) {
-        throw e;
-    } else {
-        log.debug('Skipping creation of a directory as it already exists: ' + directory);
+    try {
+        fs.mkdirSync(directory);
+        log.debug('Creating a directory: ' + directory);
+    } catch (e) {
+        if (e.code != 'EEXIST') {
+            throw e;
+        } else {
+            log.debug('Skipping creation of a directory as it already exists: ' + directory);
+        }
     }
-  }
 }
 
 /**
@@ -30,6 +33,7 @@ function createDirectoryIfNotExists(directory) {
  * 
  * @param {string} sourceObjectName Name of the object in S3 bucket - the saved file will have the same name
  * @param {string} destinationDirectory Location of the new file
+ * @param {function} done Callback function
  */
 function saveBucketObject(sourceObjectName, destinationDirectory, done) {
     var params = {
@@ -40,25 +44,26 @@ function saveBucketObject(sourceObjectName, destinationDirectory, done) {
         if (err) {
             log.error(err, err.stack);
             done();
-        } else { 
+        } else {
             var file = fs.createWriteStream(destinationDirectory + sourceObjectName);
             log.debug('Downloading file: ' + sourceObjectName);
             var stream = s3.getObject(params).createReadStream().pipe(file);
-            stream.on('finish', function () { 
+            stream.on('finish', function() {
                 log.debug('The file has been saved to: ' + destinationDirectory + sourceObjectName);
                 done();
             });
         }
     });
-}
+};
 
 /**
  * Downloads all files from the root directory of an S3 bucket
  * WARNING: The bucket can't contain subdirectories
  * 
  * @param {string} destinationDirectory Location for the downloaded files (may not exist)
+ * @param {function} done Callback 
  */
-FileStore.downloadFiles = function (destinationDirectory, done) {
+FileStore.downloadFiles = function(destinationDirectory, done) {
     s3.listObjects(null, function(err, data) {
         if (err) {
             log.error(err, err.stack);
@@ -76,20 +81,72 @@ FileStore.downloadFiles = function (destinationDirectory, done) {
             });
         }
     });
+};
+
+/**
+ * Downloads all files and returns them as JSON list
+ * WARNING: The bucket can't contain subdirectories
+ * 
+ * @param {function} done Callback 
+ */
+FileStore.getAllProjects = function(done) {
+    s3.listObjects(null, function(err, data) {
+        if (err) {
+            log.error(err, err.stack);
+            done(err, data);
+        } else {
+            var errors = [];
+            var projects = [];
+            // needs to be called (data.Contents.length) times to call done()
+            var downloadFinished = _.after(data.Contents.length, function() {
+                done(errors, projects);
+            });
+
+            data.Contents.forEach(function(file) {
+                if (file.Key === 'defaults.json') {
+                    downloadFinished();
+                    return;
+                }
+
+                getS3FileContents(file, function(err, data) {
+                    if (err) {
+                        log.error(err, err.stack);
+                        errors.push(err);
+                    } else {
+                        var jsonData = JSON.parse(data);
+                        projects.push(jsonData);
+                    }
+
+                    downloadFinished();
+                });
+            });
+        }
+    });
+};
+
+function getS3FileContents(file, callback) {
+    s3.getObject({ Key: file.Key }, function(err, data) {
+        if (err) {
+            log.error(err, err.stack);
+            callback(err);
+        } else {
+            callback(null, data.Body.toString());
+        }
+    });
 }
 
-FileStore.uploadObjectAsJsonFile = function (keyName, objectToUpload) {
+FileStore.uploadObjectAsJsonFile = function(keyName, objectToUpload, callback) {
     var params = {
         Key: keyName + '.json',
         Body: JSON.stringify(objectToUpload)
     };
 
     s3.upload(params, function(err, data) {
-        if(err) { log.error(err); }
-        else {
+        if (err) { log.error(err); } else {
             log.debug("Successfully uploaded data to: " + keyName);
             log.trace(data);
         }
+        callback(err, data);
     });
 };
 
