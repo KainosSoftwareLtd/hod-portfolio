@@ -1,6 +1,12 @@
+'use strict';
 var _ = require('underscore');
 var connect = require('connect-ensure-login');
 var projectCache = require('./projectCache');
+var log = require('./logger');
+var apiUtils = require('./apiUtils');
+var projectDao = require('./dao/project');
+var Project = require('./models/project');
+var ApiResponse = apiUtils.ApiResponse;
 
 function Controller(router) {
     if (!(this instanceof Controller)) {
@@ -21,6 +27,30 @@ Controller.prototype.handleApiProjectId = function(req, res) {
     } else {
         res.json({ error: 'ID not found' });
     }
+}
+
+// JSON data of a project
+Controller.prototype.handleApiAddProject = function(req, res) {
+    let newProject = new Project(req.body.name, req.body.description);
+    newProject.setLocation(req.body.location);
+    newProject.setPhase(req.body.phase);
+    
+    projectDao.addProject(newProject, function(err, project) {
+        log.trace('Adding project: ' + JSON.stringify(project));
+        if(err) {
+            log.debug('Error adding project with id = ' + project.id);
+
+            apiUtils.handleResultSet(res, 500, 
+                new ApiResponse(null, ['Error adding project'])
+            );
+        } else {
+            log.debug('Project with id = ' + project.id + ' has been added');
+
+            apiUtils.handleResultSet(res, 200, 
+                new ApiResponse({projectId: project.id}, ['The project has been added'])
+            );
+        }
+    });
 }
 
 // All the data as JSON

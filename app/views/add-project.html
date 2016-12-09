@@ -10,7 +10,7 @@
 
 	<div class="grid-row">
 		<section style="padding-top:30px;">
-			<form action="/docs/tutorials-and-examples" method="post" class="form">
+			<form action="/api/projects/add" method="post" class="form" id="addProjectForm">
 				
 				<h1 class="form-title heading-large">
 					Add Project
@@ -20,7 +20,7 @@
 				<div class="form-group">
 					<label class="form-label-bold" for="name">Title</label>
 					<p class="form-hint">Name of the project</p>
-					<input type="text" class="form-control" id="name">
+					<input type="text" class="form-control" id="name" name="name">
 				</div>
 			
 				<!-- Location -->
@@ -31,7 +31,7 @@
 							Location of the team working on the project, e.g. London
 						</span>
 					</label>
-					<input type="text" class="form-control" id="location">
+					<input type="text" class="form-control" id="location" name="location">
 				</div>
 			
 				<!-- Description -->
@@ -42,7 +42,7 @@
 							Description of the project
 						</span>
 					</label>
-					<textarea class="form-control" id="description"></textarea>
+					<textarea class="form-control" id="description" name="description"></textarea>
 				</div>
 
 				<!-- Phase -->
@@ -69,5 +69,26 @@
 		</section>
 	</div>
 </main>
+{% endblock %}
 
+{% block body_end %}
+{{ super() }}
+<script>
+$("#addProjectForm").submit(function(e) {
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('action'),
+        contentType: "application/json",
+        data: JSON.stringify($('#addProjectForm').serializeObject())
+
+    })
+    .done(function(response) {
+        alert(JSON.stringify(response.messages[0])); 
+    })
+    .fail(function(response) {
+        alert('There was an error adding project. ' + response.messages[0]);
+    });
+});
+</script>
 {% endblock %}

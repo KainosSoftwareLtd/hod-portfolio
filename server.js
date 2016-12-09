@@ -1,6 +1,7 @@
 var path = require('path'),
     fs = require('fs'),
     session = require('express-session'),
+    bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     flash = require('connect-flash'),
     express = require('express'),
@@ -60,6 +61,8 @@ app.use(function(req, res, next) {
     res.locals.asset_path = "/public/";
     next();
 });
+
+app.use( bodyParser.json() ); // to support JSON-encoded bodies
 
 if (!process.env.COOKIE_SECRET) {
     log.warn('COOKIE_SECRET is not set. Unsafe cookie secret will be used instead.');
