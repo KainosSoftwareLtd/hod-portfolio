@@ -101,7 +101,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder) {
         data = _.groupBy(data, groupBy);
         var new_data = indexify(data);
         var phases = _.countBy(projectList, 'phase');
-        rowOrder = prepareRowOrderIfNotPresent(rowOrder, data);
+        rowOrder = prepareRowOrder(rowOrder, data);
 
         res.render('index', {
             "data": new_data,
@@ -115,22 +115,19 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder) {
 }
 
 /**
- * If no rowOrder was specified, prepare an alphabetical one
- * else return the exact same rowOrder as given in the parameter
- * useful when you want to force a specific order instead of an alphabetical one
- * ex: ['Top', 'High', 'Medium'] to make the 'Top' priority section appear first
+ * Prepare row order
+ * 
  * @param  {String[]} [rowOrder] list that forces the order of values by which the projects are grouped
- * @param  {Object[]} projects data
+ * @param  {Object[]} data projects
  * @return {String[]} list showing the order of values by which the projects are grouped
  */
-function prepareRowOrderIfNotPresent(rowOrder, data) {
-    if (rowOrder === undefined) {
-        rowOrder = [];
-        _.each(data, function(value, key, list) {
-            rowOrder.push(key);
-        });
-        rowOrder.sort();
-    }
+function prepareRowOrder(rowOrder, data) {
+    rowOrder = [];
+    _.each(data, function(value, key, list) {
+        rowOrder.push(key);
+    });
+    rowOrder.sort();
+
     return rowOrder;
 }
 
