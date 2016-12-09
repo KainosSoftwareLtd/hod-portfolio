@@ -86,8 +86,8 @@ $("#addProjectForm").submit(function(e) {
     .done(function(response) {
         alert(JSON.stringify(response.messages[0])); 
     })
-    .fail(function(response) {
-        alert('There was an error adding project. ' + response.messages[0]);
+    .fail(function(jqXHR, textStatus) {
+        alert('There was an error adding project. ' + textStatus);
     });
 });
 </script>
