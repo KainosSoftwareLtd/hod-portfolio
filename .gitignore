@@ -27,3 +27,4 @@ docs
 typings.json
 typings/
 jsconfig.json
+npm-debug.log

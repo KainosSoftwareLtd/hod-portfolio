@@ -46,6 +46,7 @@ Controller.prototype.handleApiAddProject = function(req, res) {
         } else {
             log.debug('Project with id = ' + project.id + ' has been added');
 
+            projectCache.refreshProjectCache();
             apiUtils.handleResultSet(res, 200, 
                 new ApiResponse({projectId: project.id}, ['The project has been added'])
             );
