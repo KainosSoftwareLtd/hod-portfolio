@@ -67,7 +67,9 @@ if (!process.env.COOKIE_SECRET) {
     log.warn('COOKIE_SECRET is not set. Unsafe cookie secret will be used instead.');
 }
 app.use(cookieParser(process.env.COOKIE_SECRET || "unsafe-secret-CHANGE-ME"));
-app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(session({ cookie: { 
+    maxAge: 15 * 60 * 1000 // 15 minutes
+}})); 
 app.use(flash());
 
 // all routes will have access to this flash message
