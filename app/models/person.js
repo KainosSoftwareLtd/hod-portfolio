@@ -1,15 +1,29 @@
 'use strict';
+var utils = require('../utils');
 
 module.exports = class Person {
-    constructor(id, name, role) {
-        this.id = id;
+    constructor(name, role) {
         this.name = name;
         this.role = role;
+
+        this.id = utils.generateGUID();
     }
+
+    setId(str) { this.id = str; }
+    setName(str) { this.name = str; }
+    setRole(str) { this.role = str; }
+    setEmail(str) { this.email = str; }
+    setMobile(str) { this.mobile = str; }
+    setSkype(str) { this.skype = str; }
+    setSlack(str) { this.slack = str; }
 
     static fromJson(data) {
         var p = new Person();
         Object.assign(p, data);
+
+        if (!this.id) {
+            this.id = utils.generateGUID();
+        }
 
         return p;
     }

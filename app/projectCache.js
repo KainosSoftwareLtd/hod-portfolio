@@ -20,7 +20,7 @@ ProjectCache.refreshProjectCache = function() {
             cache["" + item.id] = item;
         });
     });
-}
+};
 
 /**
  * Returns all projects in a map  ID -> project
@@ -29,7 +29,7 @@ ProjectCache.refreshProjectCache = function() {
  */
 ProjectCache.getAll = function() {
     return cache;
-}
+};
 
 // init
 ProjectCache.refreshProjectCache();
