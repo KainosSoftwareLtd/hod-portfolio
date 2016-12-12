@@ -24,7 +24,7 @@ $("#projectForm").submit(function(e) {
     e.preventDefault();
     $.ajax({
         type: "POST",
-        url: '/api/projects/add',
+        url: '/api/projects',
         contentType: "application/json",
         data: JSON.stringify($('#projectForm').serializeObject())
     })

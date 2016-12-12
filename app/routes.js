@@ -37,8 +37,8 @@ router.get('/projects/:id/:slug', connect.ensureLoggedIn(), controller.handlePro
 router.get('/projects/:id/:slug/prototype', connect.ensureLoggedIn(), controller.handleSlugPrototype);
 
 router.get('/api', connect.ensureLoggedIn(), controller.handleApi);
-router.put('/api/projects/edit/:projectId', connect.ensureLoggedIn(), controller.handleApiEditProject);
+router.put('/api/projects/:projectId', connect.ensureLoggedIn(), controller.handleApiEditProject);
 router.get('/api/:id', connect.ensureLoggedIn(), controller.handleApiProjectId);
-router.post('/api/projects/add', connect.ensureLoggedIn(), controller.handleApiAddProject);
+router.post('/api/projects', connect.ensureLoggedIn(), controller.handleApiAddProject);
 
 module.exports = router;
