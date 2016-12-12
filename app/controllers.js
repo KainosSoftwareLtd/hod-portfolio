@@ -21,7 +21,7 @@ var phase_order = ['pipeline', 'discovery', 'alpha', 'beta', 'live'];
 
 // JSON data of a project
 Controller.prototype.handleApiProjectId = function(req, res) {
-    var data = projectCache.getAll()[req.params.id];
+    var data = projectCache.getById(req.params.id);
     if (data) {
         res.json(data);
     } else {
@@ -54,6 +54,39 @@ Controller.prototype.handleApiAddProject = function(req, res) {
     });
 }
 
+// JSON data of a project
+Controller.prototype.handleApiEditProject = function(req, res) {
+    let updatedProject = new Project(req.body.name, req.body.description);
+    updatedProject.setLocation(req.body.location);
+    updatedProject.setPhase(req.body.phase);
+    updatedProject.setId(req.params.projectId);
+
+    if(!updatedProject.id) {
+        log.debug('Error updating project. Project ID is missing');
+        apiUtils.handleResultSet(res, 422, 
+            new ApiResponse(null, ['Error updating project. Project ID is missing.'])
+        );
+    } else {
+        projectDao.addProject(updatedProject, function(err, project) {
+            log.trace('Updating project: ' + JSON.stringify(project));
+            if(err) {
+                log.debug('Error updating project with id = ' + project.id);
+    
+                apiUtils.handleResultSet(res, 500, 
+                    new ApiResponse(null, ['Error updating project'])
+                );
+            } else {
+                log.debug('Project with id = ' + project.id + ' has been updated');
+    
+                projectCache.refreshProjectCache();
+                apiUtils.handleResultSet(res, 200, 
+                    new ApiResponse({projectId: project.id}, ['The project has been updated'])
+                );
+            }
+        });
+    }
+}
+
 // All the data as JSON
 Controller.prototype.handleApi = function(req, res) {
     res.json(projectCache.getAll());
@@ -61,7 +94,7 @@ Controller.prototype.handleApi = function(req, res) {
 
 // Project info
 Controller.prototype.handleProjectIdSlug = function(req, res) {
-    var data = projectCache.getAll()[req.params.id];
+    var data = projectCache.getById(req.params.id);
     res.render('project', {
         "data": data,
         "phase_order": phase_order,
@@ -70,7 +103,7 @@ Controller.prototype.handleProjectIdSlug = function(req, res) {
 
 // Prototype version of project info 
 Controller.prototype.handleSlugPrototype = function(req, res) {
-    var data = projectCache.getAll()[req.params.id];
+    var data = projectCache.getById(req.params.id);
     if (typeof data.prototype == 'undefined') {
         res.render('no-prototype', {
             "data": data,
@@ -82,8 +115,17 @@ Controller.prototype.handleSlugPrototype = function(req, res) {
 
 // Add project form
 Controller.prototype.handleAddProject = function(req, res) {
-  var id = req.params.id;
+    var id = req.params.id;
     res.render('add-project');
+}
+
+// Edit project form
+Controller.prototype.handleEditProject = function(req, res) {
+    var id = req.params.id;
+    var project = projectCache.getById(id);
+    res.render('edit-project', {
+        project: project
+    });
 }
 
 /**
@@ -95,7 +137,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder) {
     this.router.get(path, connect.ensureLoggedIn(), function(req, res) {
         var projectList = [];
         Object.keys(projectCache.getAll()).forEach(function(ID) {
-            projectList.push(projectCache.getAll()[ID]);
+            projectList.push(projectCache.getById(ID));
         });
         var data = filterPhaseIfPresent(projectList, req.query.phase);
         data = _.groupBy(data, groupBy);
@@ -153,7 +195,7 @@ function indexify(data) {
 // Otherwise return unmodified data
 function filterPhaseIfPresent(data, phaseName) {
     if (typeof phaseName !== "undefined" && phaseName !== "all") {
-        data = _.where(data, { "phase": phaseName })
+        data = _.where(data, { "phase": phaseName });
     }
     return data;
 }
