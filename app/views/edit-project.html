@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-	Add Project
+	Edit Project
 {% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
 	<div class="grid-row">
 		<section style="padding-top:30px;">
 			<h1 class="form-title heading-large">
-				Add Project
+				Edit Project
 			</h1>
 			{% include "includes/project-form.html" %}
 		</section>
@@ -23,20 +23,18 @@
 $("#projectForm").submit(function(e) {
     e.preventDefault();
     $.ajax({
-        type: "POST",
-        url: '/api/projects/add',
+        type: "PUT",
+        url: '/api/projects/edit/{{ project.id }}',
         contentType: "application/json",
         data: JSON.stringify($('#projectForm').serializeObject())
     })
     .done(function(response) {
         alert(JSON.stringify(response.messages[0])); 
-    })
-    .fail(function(jqXHR, textStatus) {
-        alert('There was an error adding project. ' + textStatus);
-    })
-	.always(function() {
 		window.location.href = '/';
-	});
+    })
+    .fail(function(jqXHR) {
+        alert('There was an error updating project. Details: \n\n' + jqXHR.responseText);
+    });
 });
 
 $("select#phase").val("{{ project.phase }}");
