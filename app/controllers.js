@@ -110,6 +110,61 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
 };
 
 /**
+ * Add team member
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
+    let updatedPerson = new Person(req.body.name, req.body.role);
+    updatedPerson.setEmail(req.body.email);
+    updatedPerson.setMobile(req.body.mobile);
+    updatedPerson.setSkype(req.body.skype);
+    updatedPerson.setSlack(req.body.slack);
+    updatedPerson.setId(req.body.personId);
+
+    log.info('Updating a team member in project ID: ' + req.body.projectId);
+
+    if(!req.body.projectId) {
+        log.error('Project ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Project ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getAll()[req.body.projectId];
+
+    if(!project) {
+        var err = "Project with id " + req.body.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    projectDao.updateOurPersonInProject(project, updatedPerson, function(err, person) {
+        log.trace('Updating a person: ' + person.id);
+        if(err) {
+            log.debug('Error updating person with id = ' + person.id);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error updating person'])
+            );
+            return;
+        } else {
+            log.info('Person with id = ' + person.id + ' has been updated in ' + project.id);
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({personId: person.id}, ['Team member has been updated'])
+            );
+        }
+    });
+};
+
+/**
  * Remove a team member
  *
  * @param req

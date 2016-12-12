@@ -159,7 +159,7 @@ Edit team members
             type: "DELETE",
             url: '/api/projects/person/team',
             contentType: "application/json",
-            data: JSON.stringify({personID: personId})
+            data: JSON.stringify({personId: personId, projectId: $('#projectId').val()})
 
         })
         .done(function(response) {

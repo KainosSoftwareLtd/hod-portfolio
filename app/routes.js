@@ -41,5 +41,6 @@ router.get('/api/:id', connect.ensureLoggedIn(), controller.handleApiProjectId);
 router.post('/api/projects/add', connect.ensureLoggedIn(), controller.handleApiAddProject);
 router.post('/api/projects/person/team', connect.ensureLoggedIn(), controller.handleApiAddTeamMember);
 router.delete('/api/projects/person/team', connect.ensureLoggedIn(), controller.handleApiRemoveTeamMember);
+router.put('/api/projects/person/team', connect.ensureLoggedIn(), controller.handleApiUpdateTeamMember);
 
 module.exports = router;

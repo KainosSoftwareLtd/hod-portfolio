@@ -2,6 +2,7 @@ var fileStore = require('../fileStore');
 var Project = require('../models/project');
 var log = require('../logger');
 var utils = require('../utils');
+var _ = require('underscore');
 
 var Projects = function() {};
 
@@ -61,6 +62,39 @@ Projects.addOurPersonToProject = function(project, person, callback) {
 };
 
 /**
+ * Updates a project team member.
+ *
+ * @param {Project} project Project in which we are updating the person
+ * @param {Person} person person being updates
+ * @param {function} callback (err, data) callback
+ */
+Projects.updateOurPersonInProject = function(project, person, callback) {
+    log.info("Creating a person");
+    if (!person.id) {
+        log.error("Person has no ID");
+        callback("Person has no ID", false);
+        return;
+    }
+
+    let personFromCache = _.find(project.ourTeam, {id: person.id});
+    if (!personFromCache) {
+        log.error("Person not found");
+        callback("Person not found", false);
+        return;
+    }
+
+    Object.assign(personFromCache, person);
+
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, personFromCache);
+        }
+    });
+};
+
+/**
  * Removes a project team member.
  *
  * @param {Project} project Project from which we are removing the person
@@ -69,7 +103,7 @@ Projects.addOurPersonToProject = function(project, person, callback) {
  */
 Projects.removeOurPersonFromProject = function(project, personId, callback) {
     log.info("Removing a person");
-    if (!person.id) {
+    if (!personId) {
         log.error("Person has no ID");
         callback("Person has no ID", false);
         return;
