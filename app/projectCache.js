@@ -31,6 +31,10 @@ ProjectCache.getAll = function() {
     return cache;
 };
 
+ProjectCache.getById = function(projectId) {
+    return cache[projectId];
+}
+
 // init
 ProjectCache.refreshProjectCache();
 

@@ -18,7 +18,7 @@ Projects.addProject = function(project, callback) {
         log.debug("New ID generated: " + project.id);
     }
 
-    fileStore.uploadObjectAsJsonFile(project.name + "-" + project.id, project, function(err, data) {
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
         if (err) {
             callback(err);
         } else {
@@ -122,3 +122,4 @@ Projects.removeOurPersonFromProject = function(project, personId, callback) {
 };
 
 module.exports = Projects;
+

@@ -16,7 +16,7 @@ router.get('/display/:number?/:location?', connect.ensureLoggedIn(), function(re
 
     var data = [];
     Object.keys(projectCache.getAll()).forEach(function(ID) {
-        data.push(projectCache.getAll()[ID]);
+        data.push(projectCache.getById(ID));
     });
 
     // put data into simpler var for consise-ity (take out pipeline stuff).

@@ -34,14 +34,16 @@ controller.setupIndexPageRoute('priority', '/priority', priority_order);
 router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProject);
 router.get('/projects/:id/edit-our-team', connect.ensureLoggedIn(), controller.handleEditOurTeam);
 router.get('/projects/:projectId/person/team/:personId/edit', connect.ensureLoggedIn(), controller.handleEditTeamMember);
+router.get('/projects/:id/:slug/edit', connect.ensureLoggedIn(), controller.handleEditProject);
 router.get('/projects/:id/:slug', connect.ensureLoggedIn(), controller.handleProjectIdSlug);
 router.get('/projects/:id/:slug/prototype', connect.ensureLoggedIn(), controller.handleSlugPrototype);
 
 router.get('/api', connect.ensureLoggedIn(), controller.handleApi);
+router.put('/api/projects/:projectId', connect.ensureLoggedIn(), controller.handleApiEditProject);
 router.get('/api/:id', connect.ensureLoggedIn(), controller.handleApiProjectId);
-router.post('/api/projects/add', connect.ensureLoggedIn(), controller.handleApiAddProject);
 router.post('/api/projects/:projectId/person/team', connect.ensureLoggedIn(), controller.handleApiAddTeamMember);
 router.delete('/api/projects/:projectId/person/team/:personId', connect.ensureLoggedIn(), controller.handleApiRemoveTeamMember);
 router.put('/api/projects/:projectId/person/team/:personId', connect.ensureLoggedIn(), controller.handleApiUpdateTeamMember);
+router.post('/api/projects', connect.ensureLoggedIn(), controller.handleApiAddProject);
 
 module.exports = router;
