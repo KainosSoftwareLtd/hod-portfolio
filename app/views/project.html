@@ -97,9 +97,11 @@
       {% if peopleData %}
         <table>
           <thead>
-            <td>Role</td>
-            <td>Name</td>
-            <td><!-- column for "more" buttons --></td>
+            <tr>
+              <td>Role</td>
+              <td>Name</td>
+              <td><!-- column for "more" buttons --></td>
+            </tr>
           </thead>
            {% for teamMember in peopleData %}
            <tr>
@@ -143,7 +145,7 @@
   {% endmacro %}
 
       <section class="column-half">
-        <h2 class="heading-medium">Kainos team <a href="/projects/{{ data.id }}/edit-our-team"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
+        <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team">Kainos team <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
         {{ peopleTable(data["ourTeam"], "Kainos") }}
       </section>
       <section class="column-half">

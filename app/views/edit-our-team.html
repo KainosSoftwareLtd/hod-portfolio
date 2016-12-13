@@ -17,14 +17,16 @@ Edit team members
 
             <div class="grid-row">
                 <section class="column-half">
-                    <h2 class="heading-medium">Edit Kainos team members for {{ projectName }}</h2>
+                    <h2 class="heading-medium">Edit Kainos team members for <a href="/projects/{{ projectId }}/{{ projectName | slugify }}">{{ projectName }}</a></h2>
                     <div>
                         <table>
                             <thead>
-                            <td>Role</td>
-                            <td>Name</td>
-                            <td><!-- column for "more" buttons --></td>
-                            <td><!-- column for edition buttons --></td>
+                                <tr>
+                                    <td>Role</td>
+                                    <td>Name</td>
+                                    <td><!-- column for "more" buttons --></td>
+                                    <td><!-- column for edition buttons --></td>
+                                </tr>
                             </thead>
                             {% for teamMember in teamMembers %}
                             <tr>
@@ -33,7 +35,7 @@ Edit team members
                                 <td data-collapsable-parent="team-member-{{ loop.index }}">[+]</td>
                                 <td>
                                     <a href="#" onclick="removeTeamMember('{{ teamMember.id }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                    <a href="/projects/{{ projectId }}/person/team/{{ teamMember.id }}/edit">
+                                    <a href="/projects/{{ projectId }}/{{ projectName | slugify }}/person/team/{{ teamMember.id }}/edit">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </a>
                                 </td>
@@ -132,7 +134,7 @@ Edit team members
             alert(JSON.stringify(response.messages[0]));
             location.reload();
         })
-        .fail(function(jqXHR, textStatus) {
+        .fail(function(jqXHR) {
             alert('There was an error adding person. ' + jqXHR.responseText);
         });
     }

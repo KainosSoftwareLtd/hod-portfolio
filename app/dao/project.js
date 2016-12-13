@@ -65,7 +65,7 @@ Projects.addOurPersonToProject = function(project, person, callback) {
  * Updates a project team member.
  *
  * @param {Project} project Project in which we are updating the person
- * @param {Person} person person being updates
+ * @param {Person} person person being updated
  * @param {function} callback (err, data) callback
  */
 Projects.updateOurPersonInProject = function(project, person, callback) {

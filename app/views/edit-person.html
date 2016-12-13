@@ -40,7 +40,7 @@ Edit team members
             alert(JSON.stringify(response.messages[0]));
             window.location.href = '/projects/{{ projectId }}/edit-our-team';
         })
-        .fail(function(jqXHR, textStatus) {
+        .fail(function(jqXHR) {
             alert('There was an error while updating person. ' + jqXHR.responseText);
         });
     });

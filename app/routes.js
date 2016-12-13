@@ -32,8 +32,8 @@ controller.setupIndexPageRoute('health', '/health', health_order);
 controller.setupIndexPageRoute('priority', '/priority', priority_order);
 
 router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProject);
-router.get('/projects/:id/edit-our-team', connect.ensureLoggedIn(), controller.handleEditOurTeam);
-router.get('/projects/:projectId/person/team/:personId/edit', connect.ensureLoggedIn(), controller.handleEditTeamMember);
+router.get('/projects/:id/:slug/edit-our-team', connect.ensureLoggedIn(), controller.handleEditOurTeam);
+router.get('/projects/:projectId/:slug/person/team/:personId/edit', connect.ensureLoggedIn(), controller.handleEditTeamMember);
 router.get('/projects/:id/:slug/edit', connect.ensureLoggedIn(), controller.handleEditProject);
 router.get('/projects/:id/:slug', connect.ensureLoggedIn(), controller.handleProjectIdSlug);
 router.get('/projects/:id/:slug/prototype', connect.ensureLoggedIn(), controller.handleSlugPrototype);

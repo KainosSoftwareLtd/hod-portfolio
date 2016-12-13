@@ -285,9 +285,9 @@ Controller.prototype.handleAddProject = function(req, res) {
 Controller.prototype.handleEditOurTeam = function (req, res) {
     var id = req.params.id;
 
-    var project = projectCache.getAll()[id];
+    var project = projectCache.getById(id);
 
-    res.render('edit_our_team', {
+    res.render('edit-our-team', {
         projectName: project.name,
         projectId: id,
         teamMembers: project.ourTeam
@@ -307,7 +307,7 @@ Controller.prototype.handleEditTeamMember = function (req, res) {
     var project = projectCache.getById(projectId);
     var person = _.find(project.ourTeam, {id: personId});
 
-    res.render('edit_person', {
+    res.render('edit-person', {
         projectName: project.name,
         projectId: projectId,
         person: person
