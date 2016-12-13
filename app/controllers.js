@@ -78,7 +78,7 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getAll()[req.params.projectId];
+    var project = projectCache.getById(req.params.projectId);
 
     if(!project) {
         var err = "Project with id " + req.params.projectId + " does not exist";
@@ -129,7 +129,7 @@ Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getAll()[req.params.projectId];
+    var project = projectCache.getById(req.params.projectId);
 
     if(!project) {
         var err = "Project with id " + req.params.projectId + " does not exist";
@@ -179,7 +179,7 @@ Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getAll()[req.params.projectId];
+    var project = projectCache.getById(req.params.projectId);
 
     if(!project) {
         var err = "Project with id " + req.params.projectId + " does not exist";
@@ -242,7 +242,7 @@ Controller.prototype.handleApiEditProject = function(req, res) {
             }
         });
     }
-}
+};
 
 // All the data as JSON
 Controller.prototype.handleApi = function(req, res) {
@@ -304,7 +304,7 @@ Controller.prototype.handleEditTeamMember = function (req, res) {
     var projectId = req.params.projectId;
     var personId = req.params.personId;
 
-    var project = projectCache.getAll()[projectId];
+    var project = projectCache.getById(projectId);
     var person = _.find(project.ourTeam, {id: personId});
 
     res.render('edit_person', {
@@ -321,7 +321,7 @@ Controller.prototype.handleEditProject = function(req, res) {
     res.render('edit-project', {
         project: project
     });
-}
+};
 
 /**
  * @param  {String} groupBy Name of the field by which the projects will be grouped

@@ -93,59 +93,64 @@
   
   <div class="grid-row">
    {% macro peopleTable(peopleData, teamName) %}
-    <section class="column-half">
-      <h2 class="heading-medium">{{ teamName }} team</h2>
-        <div>
-          {% if data["ourTeam"] %}
-            <table>
-              <thead>
-                <td>Role</td>
-                <td>Name</td> 
-                <td><!-- column for "more" buttons --></td>
-              </thead>
-               {% for teamMember in peopleData %}
-               <tr>
-                 <td>{{ teamMember.role}}</td>
-                 <td>{{ teamMember.name }}</td>
-                 <td data-collapsable-parent="{{ teamName + loop.index }}">[+]</td>
-               </tr>
-               <tr>
-                 <td data-collapsable-child="{{ teamName + loop.index }}" colspan="3">
-                   <div class="grid-row">
-                     <section class="column-half">
-                       <p>Primary location: {{ teamMember.primaryLocation }} </p>
-                       {% if teamMember.secondaryLocation %}
-                         <p>Secondary location: {{ teamMember.secondaryLocation}} </p>
-                       {% endif %}
-                     </section>
-                     <section class="column-half">
-                       {% if teamMember.email %}
-                         <p>Email: <a href="mailto:{{ teamMember.email }}">{{ teamMember.email }}</a></p>
-                       {% endif %}
-                       
-                       {% if teamMember.mobile %}
-                        <p>Mobile: {{ teamMember.mobile}} </p>
-                       {% endif %}
+    <div>
+      {% if peopleData %}
+        <table>
+          <thead>
+            <td>Role</td>
+            <td>Name</td>
+            <td><!-- column for "more" buttons --></td>
+          </thead>
+           {% for teamMember in peopleData %}
+           <tr>
+             <td>{{ teamMember.role}}</td>
+             <td>{{ teamMember.name }}</td>
+             <td data-collapsable-parent="{{ teamName + loop.index }}">[+]</td>
+           </tr>
+           <tr>
+             <td data-collapsable-child="{{ teamName + loop.index }}" colspan="3">
+               <div class="grid-row">
+                 <section class="column-half">
+                   <p>Primary location: {{ teamMember.primaryLocation }} </p>
+                   {% if teamMember.secondaryLocation %}
+                     <p>Secondary location: {{ teamMember.secondaryLocation}} </p>
+                   {% endif %}
+                 </section>
+                 <section class="column-half">
+                   {% if teamMember.email %}
+                     <p>Email: <a href="mailto:{{ teamMember.email }}">{{ teamMember.email }}</a></p>
+                   {% endif %}
 
-                       {% if teamMember.slack %}
-                        <p>Slack: {{ teamMember.slack}} </p>
-                       {% endif %}
+                   {% if teamMember.mobile %}
+                    <p>Mobile: {{ teamMember.mobile}} </p>
+                   {% endif %}
 
-                       {% if teamMember.skype %}
-                        <p>Skype: {{ teamMember.skype }} </p>
-                       {% endif %}
-                     </section>
-                   </div>
-                 </td>
-               </tr>
-               {% endfor %}
-            </table>
-          {% endif %}
-        </div>
+                   {% if teamMember.slack %}
+                    <p>Slack: {{ teamMember.slack}} </p>
+                   {% endif %}
+
+                   {% if teamMember.skype %}
+                    <p>Skype: {{ teamMember.skype }} </p>
+                   {% endif %}
+                 </section>
+               </div>
+             </td>
+           </tr>
+           {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+  {% endmacro %}
+
+      <section class="column-half">
+        <h2 class="heading-medium">Kainos team <a href="/projects/{{ data.id }}/edit-our-team"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
+        {{ peopleTable(data["ourTeam"], "Kainos") }}
       </section>
-  {% endmacro %} 
-  {{ peopleTable(data["ourTeam"], "Kainos") }}
-  {{ peopleTable(data["clientTeam"], "Client") if data["clientTeam"] }}
+      <section class="column-half">
+          <h2 class="heading-medium">Client team</h2>
+          {{ peopleTable(data["clientTeam"], "Client") }}
+      </section>
+
   </div>
 </main>
 {% endblock %}
