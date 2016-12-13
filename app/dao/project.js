@@ -76,7 +76,8 @@ Projects.updateOurPersonInProject = function(project, person, callback) {
         return;
     }
 
-    let personFromCache = _.find(project.ourTeam, {id: person.id});
+    var personFromCache = _.find(project.ourTeam, {id: person.id});
+
     if (!personFromCache) {
         log.error("Person not found");
         callback("Person not found", false);

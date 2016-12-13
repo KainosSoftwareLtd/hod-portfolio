@@ -68,9 +68,9 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
     newPerson.setSkype(req.body.skype);
     newPerson.setSlack(req.body.slack);
 
-    log.info('Adding a new team member to project ID: ' + req.body.projectId);
+    log.info('Adding a new team member to project ID: ' + req.params.projectId);
 
-    if(!req.body.projectId) {
+    if(!req.params.projectId) {
         log.error('Project ID not supplied');
         apiUtils.handleResultSet(res, 400,
             new ApiResponse(null, ['Project ID not supplied'])
@@ -78,10 +78,10 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getAll()[req.body.projectId];
+    var project = projectCache.getAll()[req.params.projectId];
 
     if(!project) {
-        var err = "Project with id " + req.body.projectId + " does not exist";
+        var err = "Project with id " + req.params.projectId + " does not exist";
         log.error(err);
         apiUtils.handleResultSet(res, 422,
             new ApiResponse(null, [err])
@@ -110,22 +110,18 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
 };
 
 /**
- * Add team member
+ * Update team member
  *
  * @param req
  * @param res
  */
 Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
-    let updatedPerson = new Person(req.body.name, req.body.role);
-    updatedPerson.setEmail(req.body.email);
-    updatedPerson.setMobile(req.body.mobile);
-    updatedPerson.setSkype(req.body.skype);
-    updatedPerson.setSlack(req.body.slack);
-    updatedPerson.setId(req.body.personId);
+    let personData = Person.fromJson(req.body.person);
+    personData.setId(req.params.personId);
 
-    log.info('Updating a team member in project ID: ' + req.body.projectId);
+    log.info('Updating a team member in project ID: ' + req.params.projectId);
 
-    if(!req.body.projectId) {
+    if(!req.params.projectId) {
         log.error('Project ID not supplied');
         apiUtils.handleResultSet(res, 400,
             new ApiResponse(null, ['Project ID not supplied'])
@@ -133,10 +129,10 @@ Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getAll()[req.body.projectId];
+    var project = projectCache.getAll()[req.params.projectId];
 
     if(!project) {
-        var err = "Project with id " + req.body.projectId + " does not exist";
+        var err = "Project with id " + req.params.projectId + " does not exist";
         log.error(err);
         apiUtils.handleResultSet(res, 422,
             new ApiResponse(null, [err])
@@ -144,7 +140,7 @@ Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
         return;
     }
 
-    projectDao.updateOurPersonInProject(project, updatedPerson, function(err, person) {
+    projectDao.updateOurPersonInProject(project, personData, function(err, person) {
         log.trace('Updating a person: ' + person.id);
         if(err) {
             log.debug('Error updating person with id = ' + person.id);
@@ -171,11 +167,11 @@ Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
  * @param res
  */
 Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
-    var personId = req.body.personId;
+    var personId = req.params.personId;
 
-    log.info('Removing a new team member ' + personId + 'from project ID: ' + req.body.projectId);
+    log.info('Removing a new team member ' + personId + 'from project ID: ' + req.params.projectId);
 
-    if(!req.body.personId) {
+    if(!personId) {
         log.error('Person ID not supplied');
         apiUtils.handleResultSet(res, 400,
             new ApiResponse(null, ['Person ID not supplied'])
@@ -183,10 +179,10 @@ Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getAll()[req.body.projectId];
+    var project = projectCache.getAll()[req.params.projectId];
 
     if(!project) {
-        var err = "Project with id " + req.body.projectId + " does not exist";
+        var err = "Project with id " + req.params.projectId + " does not exist";
         log.error(err);
         apiUtils.handleResultSet(res, 422,
             new ApiResponse(null, [err])
@@ -260,6 +256,26 @@ Controller.prototype.handleEditOurTeam = function (req, res) {
         projectName: project.name,
         projectId: id,
         teamMembers: project.ourTeam
+    });
+};
+
+/**
+ * Render Edit team member page
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditTeamMember = function (req, res) {
+    var projectId = req.params.projectId;
+    var personId = req.params.personId;
+
+    var project = projectCache.getAll()[projectId];
+    var person = _.find(project.ourTeam, {id: personId});
+
+    res.render('edit_person', {
+        projectName: project.name,
+        projectId: projectId,
+        person: person
     });
 };
 

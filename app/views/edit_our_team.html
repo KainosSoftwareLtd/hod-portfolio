@@ -33,7 +33,7 @@ Edit team members
                                 <td data-collapsable-parent="team-member-{{ loop.index }}">[+]</td>
                                 <td>
                                     <a href="#" onclick="removeTeamMember('{{ teamMember.id }}')">remove</a>
-                                    <a href="#" onclick="editTeamMember('{{ teamMember.id }}')">edit</a>
+                                    <a href="/projects/{{ projectId }}/person/team/{{ teamMember.id }}/edit">edit</a>
                                 </td>
                             </tr>
                             <tr>
@@ -70,7 +70,6 @@ Edit team members
                                 <td colspan="4">
                                     <form action="#" method="POST" class="form" id="add-new-member-form">
                                         <div class="grid-row">
-                                            <input type="hidden" class="form-control" id="projectId" name="projectId" value="{{ projectId }}" >
                                             <section>
                                                 <div class="form-group">
                                                     <label class="form-label-bold" for="name">Name</label>
@@ -110,7 +109,7 @@ Edit team members
                                         </div>
 
                                         <div class="form-group">
-                                            <input type="submit" class="button" value="Create">
+                                            <input type="submit" class="button" value="Submit">
                                         </div>
                                     </form>
                                 </td>
@@ -133,11 +132,14 @@ Edit team members
 <script>
     $("#add-new-member-form").submit(function(e) {
         e.preventDefault();
+
+        var data = $('#add-new-member-form').serializeObject();
+
         $.ajax({
             type: "POST",
-            url: '/api/projects/person/team',
+            url: '/api/projects/{{ projectId }}/person/team',
             contentType: "application/json",
-            data: JSON.stringify($('#add-new-member-form').serializeObject())
+            data: JSON.stringify(data)
 
         })
         .done(function(response) {
@@ -157,10 +159,8 @@ Edit team members
     function removeTeamMember(personId) {
         $.ajax({
             type: "DELETE",
-            url: '/api/projects/person/team',
-            contentType: "application/json",
-            data: JSON.stringify({personId: personId, projectId: $('#projectId').val()})
-
+            url: '/api/projects/{{ projectId }}/person/team/' + personId,
+            contentType: "application/json"
         })
         .done(function(response) {
             alert(JSON.stringify(response.messages[0]));
