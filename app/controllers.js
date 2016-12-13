@@ -56,18 +56,20 @@ Controller.prototype.handleApiAddProject = function(req, res) {
 
 // JSON data of a project
 Controller.prototype.handleApiEditProject = function(req, res) {
-    let updatedProject = new Project(req.body.name, req.body.description);
-    updatedProject.setLocation(req.body.location);
-    updatedProject.setPhase(req.body.phase);
-    updatedProject.setId(req.params.projectId);
+    var project = projectCache.getById(req.params.projectId);
 
-    if(!updatedProject.id) {
-        log.debug('Error updating project. Project ID is missing');
+    if(!project.id) {
+        log.debug('Error updating project. Project ID is missing.');
         apiUtils.handleResultSet(res, 422, 
             new ApiResponse(null, ['Error updating project. Project ID is missing.'])
         );
     } else {
-        projectDao.addProject(updatedProject, function(err, project) {
+        project.setName(req.body.name);
+        project.setDescription(req.body.description);
+        project.setLocation(req.body.location);
+        project.setPhase(req.body.phase);
+
+        projectDao.addProject(project, function(err, editedProject) {
             log.trace('Updating project: ' + JSON.stringify(project));
             if(err) {
                 log.debug('Error updating project with id = ' + project.id);
@@ -76,11 +78,11 @@ Controller.prototype.handleApiEditProject = function(req, res) {
                     new ApiResponse(null, ['Error updating project'])
                 );
             } else {
-                log.debug('Project with id = ' + project.id + ' has been updated');
+                log.debug('Project with id = ' + editedProject.id + ' has been updated');
     
                 projectCache.refreshProjectCache();
                 apiUtils.handleResultSet(res, 200, 
-                    new ApiResponse({projectId: project.id}, ['The project has been updated'])
+                    new ApiResponse({projectId: editedProject.id}, ['The project has been updated'])
                 );
             }
         });
