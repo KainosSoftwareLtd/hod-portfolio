@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Edit team members
+{% endblock %}
+
+{% block content %}
+
+<main id="content" role="main">
+
+    <div class="grid-row">
+        <section style="padding-top:30px;">
+
+            <h1 class="form-title heading-large">
+                Edit Person
+            </h1>
+
+            {% include "includes/person-form.html" %}
+        </section>
+    </div>
+</main>
+{% endblock %}
+
+{% block body_end %}
+{{ super() }}
+<script>
+    $("#person-form").submit(function(e) {
+        e.preventDefault();
+
+        var data = $('#person-form').serializeObject();
+
+        $.ajax({
+            type: "PUT",
+            url: '/api/projects/{{ projectId }}/person/team/' + data.person.id,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+            window.location.href = '/projects/{{ projectId }}/edit-our-team';
+        })
+        .fail(function(jqXHR) {
+            alert('There was an error while updating person. ' + jqXHR.responseText);
+        });
+    });
+
+</script>
+{% endblock %}
