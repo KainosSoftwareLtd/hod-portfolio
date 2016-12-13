@@ -58,10 +58,10 @@ Controller.prototype.handleApiAddProject = function(req, res) {
 Controller.prototype.handleApiEditProject = function(req, res) {
     var project = projectCache.getById(req.params.projectId);
 
-    if(!project.id) {
-        log.debug('Error updating project. Project ID is missing.');
+    if(!project) {
+        log.debug('Error updating project. Project with given ID was not found.');
         apiUtils.handleResultSet(res, 422, 
-            new ApiResponse(null, ['Error updating project. Project ID is missing.'])
+            new ApiResponse(null, ['Error updating project. Project with given ID was not found.'])
         );
     } else {
         project.setName(req.body.name);
