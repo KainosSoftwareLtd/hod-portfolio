@@ -113,7 +113,10 @@
              <td data-collapsable-child="{{ teamName + loop.index }}" colspan="3">
                <div class="grid-row">
                  <section class="column-half">
-                   <p>Primary location: {{ teamMember.primaryLocation }} </p>
+                   {% if teamMember.primaryLocation %}
+                     <p>Primary location: {{ teamMember.primaryLocation }} </p>
+                   {% endif %}
+
                    {% if teamMember.secondaryLocation %}
                      <p>Secondary location: {{ teamMember.secondaryLocation}} </p>
                    {% endif %}
@@ -149,7 +152,7 @@
         {{ peopleTable(data["ourTeam"], "Kainos") }}
       </section>
       <section class="column-half">
-          <h2 class="heading-medium">Client team</h2>
+          <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team">Client team <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
           {{ peopleTable(data["clientTeam"], "Client") }}
       </section>
 
