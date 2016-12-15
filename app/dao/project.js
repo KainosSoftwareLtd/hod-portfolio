@@ -147,7 +147,7 @@ Projects.addClientToProject = function(project, person, callback) {
 };
 
 /**
- * Updates a project clieant team member.
+ * Updates a project client team member.
  *
  * @param {Project} project Project in which we are updating the person
  * @param {Person} person person being updated

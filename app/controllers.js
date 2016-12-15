@@ -349,7 +349,7 @@ Controller.prototype.handleApiRemoveClientTeamMember = function(req, res) {
             log.debug('Error removing person with id = ' + personId);
 
             apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error adding person'])
+                new ApiResponse(null, ['Error removing person'])
             );
             return;
         } else {
