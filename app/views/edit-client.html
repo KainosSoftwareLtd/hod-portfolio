@@ -31,14 +31,14 @@ Edit team members
 
         $.ajax({
             type: "PUT",
-            url: '/api/projects/{{ projectId }}/person/team/' + data.person.id,
+            url: '/api/projects/{{ projectId }}/person/client/' + data.person.id,
             contentType: "application/json",
             data: JSON.stringify(data)
 
         })
         .done(function(response) {
             alert(JSON.stringify(response.messages[0]));
-            window.location.href = '/projects/{{ projectId }}/{{ projectName | slugify }}/edit-our-team';
+            window.location.href = '/projects/{{ projectId }}/{{ projectName | slugify }}/edit-client-team';
         })
         .fail(function(jqXHR) {
             alert('There was an error while updating person. ' + jqXHR.responseText);

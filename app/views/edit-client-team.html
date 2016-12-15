@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Edit team members
+Edit client team members
 {% endblock %}
 
 {% block content %}
@@ -12,12 +12,12 @@ Edit team members
         <section style="padding-top:30px;">
 
             <h1 class="form-title heading-large">
-                Edit Kainos team
+                Edit Client team
             </h1>
 
             <div class="grid-row">
                 <section class="column-half">
-                    <h2 class="heading-medium">Edit Kainos team members for <a href="/projects/{{ projectId }}/{{ projectName | slugify }}">{{ projectName }}</a></h2>
+                    <h2 class="heading-medium">Edit Client team members for <a href="/projects/{{ projectId }}/{{ projectName | slugify }}">{{ projectName }}</a></h2>
                     <div>
                         <table>
                             <thead>
@@ -35,7 +35,7 @@ Edit team members
                                 <td data-collapsable-parent="team-member-{{ loop.index }}">[+]</td>
                                 <td>
                                     <a href="#" onclick="removeTeamMember('{{ teamMember.id }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                    <a href="/projects/{{ projectId }}/{{ projectName | slugify }}/person/team/{{ teamMember.id }}/edit">
+                                    <a href="/projects/{{ projectId }}/{{ projectName | slugify }}/person/client/{{ teamMember.id }}/edit">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </a>
                                 </td>
@@ -104,7 +104,7 @@ Edit team members
 
         $.ajax({
             type: "POST",
-            url: '/api/projects/{{ projectId }}/person/team',
+            url: '/api/projects/{{ projectId }}/person/client',
             contentType: "application/json",
             data: JSON.stringify(data.person)
         })
@@ -130,7 +130,7 @@ Edit team members
 
         $.ajax({
             type: "DELETE",
-            url: '/api/projects/{{ projectId }}/person/team/' + personId,
+            url: '/api/projects/{{ projectId }}/person/client/' + personId,
             contentType: "application/json"
         })
         .done(function(response) {
