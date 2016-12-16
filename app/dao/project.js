@@ -44,7 +44,7 @@ Projects.getAll = function(callback) {
  * @param {function} callback (err, data) callback
  */
 Projects.addOurPersonToProject = function(project, person, callback) {
-    log.info("Creating a person");
+    log.info("Creating a team member");
     if (!person.id) {
         person.id = utils.generateGUID();
         log.debug("New ID generated: " + person.id);
@@ -69,7 +69,7 @@ Projects.addOurPersonToProject = function(project, person, callback) {
  * @param {function} callback (err, data) callback
  */
 Projects.updateOurPersonInProject = function(project, person, callback) {
-    log.info("Creating a person");
+    log.info("Updating a team member");
     if (!person.id) {
         log.error("Person has no ID");
         callback("Person has no ID", false);
@@ -103,7 +103,7 @@ Projects.updateOurPersonInProject = function(project, person, callback) {
  * @param {function} callback (err, data) callback
  */
 Projects.removeOurPersonFromProject = function(project, personId, callback) {
-    log.info("Removing a person");
+    log.info("Removing a team member");
     if (!personId) {
         log.error("Person has no ID");
         callback("Person has no ID", false);
@@ -111,6 +111,91 @@ Projects.removeOurPersonFromProject = function(project, personId, callback) {
     }
 
     project.removeFromOurTeam(personId);
+
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, project);
+        }
+    });
+};
+
+/**
+ * Adds a client team member to a project.
+ *
+ * @param {Project} project Project to which we are adding the person
+ * @param {Person} person person being added
+ * @param {function} callback (err, data) callback
+ */
+Projects.addClientToProject = function(project, person, callback) {
+    log.info("Creating a client team member");
+    if (!person.id) {
+        person.id = utils.generateGUID();
+        log.debug("New ID generated: " + person.id);
+    }
+
+    project.addToClientTeam(person);
+
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, person);
+        }
+    });
+};
+
+/**
+ * Updates a project client team member.
+ *
+ * @param {Project} project Project in which we are updating the person
+ * @param {Person} person person being updated
+ * @param {function} callback (err, data) callback
+ */
+Projects.updateClientInProject = function(project, person, callback) {
+    log.info("Updating a client team member");
+    if (!person.id) {
+        log.error("Person has no ID");
+        callback("Person has no ID", false);
+        return;
+    }
+
+    var personFromCache = _.find(project.clientTeam, {id: person.id});
+
+    if (!personFromCache) {
+        log.error("Person not found");
+        callback("Person not found", false);
+        return;
+    }
+
+    Object.assign(personFromCache, person);
+
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, personFromCache);
+        }
+    });
+};
+
+/**
+ * Removes a project client team member.
+ *
+ * @param {Project} project Project from which we are removing the person
+ * @param {String} personId ID of person being removed
+ * @param {function} callback (err, data) callback
+ */
+Projects.removeClientFromProject = function(project, personId, callback) {
+    log.info("Removing a clieant team member");
+    if (!personId) {
+        log.error("Person has no ID");
+        callback("Person has no ID", false);
+        return;
+    }
+
+    project.removeFromClientTeam(personId);
 
     fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
         if (err) {

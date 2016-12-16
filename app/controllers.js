@@ -320,7 +320,7 @@ Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
 Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
     var personId = req.params.personId;
 
-    log.info('Removing a new team member ' + personId + 'from project ID: ' + req.params.projectId);
+    log.info('Removing a team member ' + personId + 'from project ID: ' + req.params.projectId);
 
     if(!personId) {
         log.error('Person ID not supplied');
@@ -355,6 +355,160 @@ Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
             projectCache.refreshProjectCache();
             apiUtils.handleResultSet(res, 200,
                 new ApiResponse({personId: personId}, ['Team member has been removed'])
+            );
+        }
+    });
+};
+
+/**
+ * Add client team member
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiAddClientTeamMember = function(req, res) {
+    let newPerson = new Person(req.body.name, req.body.role);
+    newPerson.setEmail(req.body.email);
+    newPerson.setMobile(req.body.mobile);
+    newPerson.setSkype(req.body.skype);
+    newPerson.setSlack(req.body.slack);
+
+    log.info('Adding a new client team member to project ID: ' + req.params.projectId);
+
+    if(!req.params.projectId) {
+        log.error('Project ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Project ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getById(req.params.projectId);
+
+    if(!project) {
+        var err = "Project with id " + req.params.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    projectDao.addClientToProject(project, newPerson, function(err, person) {
+        log.trace('Adding a person: ' + person.role);
+        if(err) {
+            log.debug('Error adding person with id = ' + person.id);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error adding person'])
+            );
+            return;
+        } else {
+            log.info('Person with id = ' + person.id + ' has been added to ' + project.id);
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({personId: person.id}, ['Client team member has been added'])
+            );
+        }
+    });
+};
+
+/**
+ * Update client team member
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiUpdateClientTeamMember = function(req, res) {
+    let personData = Person.fromJson(req.body.person);
+    personData.setId(req.params.personId);
+
+    log.info('Updating a client team member in project ID: ' + req.params.projectId);
+
+    if(!req.params.projectId) {
+        log.error('Project ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Project ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getById(req.params.projectId);
+
+    if(!project) {
+        var err = "Project with id " + req.params.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    projectDao.updateClientInProject(project, personData, function(err, person) {
+        log.trace('Updating a person: ' + person.id);
+        if(err) {
+            log.debug('Error updating person with id = ' + person.id);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error updating person'])
+            );
+            return;
+        } else {
+            log.info('Person with id = ' + person.id + ' has been updated in ' + project.id);
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({personId: person.id}, ['Client team member has been updated'])
+            );
+        }
+    });
+};
+
+/**
+ * Remove a client team member
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiRemoveClientTeamMember = function(req, res) {
+    var personId = req.params.personId;
+
+    log.info('Removing a client team member ' + personId + 'from project ID: ' + req.params.projectId);
+
+    if(!personId) {
+        log.error('Person ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Person ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getById(req.params.projectId);
+
+    if(!project) {
+        var err = "Project with id " + req.params.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    projectDao.removeClientFromProject(project, personId, function(err, project) {
+        if(err) {
+            log.debug('Error removing person with id = ' + personId);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error removing person'])
+            );
+            return;
+        } else {
+            log.info('Person with id = ' + personId + ' has been removed from ' + project.id);
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({personId: personId}, ['Client team member has been removed'])
             );
         }
     });
@@ -465,7 +619,7 @@ Controller.prototype.handleEditResource = function (req, res) {
 };
 
 /**
- * Render Edit team memberspage
+ * Render Edit team members page
  *
  * @param req
  * @param res
@@ -496,6 +650,44 @@ Controller.prototype.handleEditTeamMember = function (req, res) {
     var person = _.find(project.ourTeam, {id: personId});
 
     res.render('edit-person', {
+        projectName: project.name,
+        projectId: projectId,
+        person: person
+    });
+};
+
+/**
+ * Render Edit client team members page
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditClientTeam = function (req, res) {
+    var id = req.params.id;
+
+    var project = projectCache.getById(id);
+
+    res.render('edit-client-team', {
+        projectName: project.name,
+        projectId: id,
+        teamMembers: project.clientTeam
+    });
+};
+
+/**
+ * Render Edit client team member page
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditClientTeamMember = function (req, res) {
+    var projectId = req.params.projectId;
+    var personId = req.params.personId;
+
+    var project = projectCache.getById(projectId);
+    var person = _.find(project.clientTeam, {id: personId});
+
+    res.render('edit-client', {
         projectName: project.name,
         projectId: projectId,
         person: person
