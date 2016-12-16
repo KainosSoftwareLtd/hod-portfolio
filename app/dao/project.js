@@ -235,7 +235,7 @@ Projects.addResourceToProject = function(project, resource, callback) {
  * Updates a resource
  *
  * @param {Project} project Project in which we are updating the resource
- * @param {Resource} resource resource being updated
+ * @param {ResourceLink} resource resource being updated
  * @param {function} callback (err, data) callback
  */
 Projects.updateResourceInProject = function(project, resource, callback) {

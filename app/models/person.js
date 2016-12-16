@@ -21,7 +21,7 @@ module.exports = class Person {
         var p = new Person();
         Object.assign(p, data);
 
-        if (!this.id) {
+        if (!this.id) { // if Object.assign removed the id
             this.id = utils.generateGUID();
         }
 

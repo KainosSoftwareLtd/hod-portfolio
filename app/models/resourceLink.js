@@ -17,7 +17,7 @@ module.exports = class ResourceLink {
         var r = new ResourceLink();
         Object.assign(r, data);
         
-        if (!this.id) {
+        if (!this.id) { // if Object.assign removed the id
             this.id = utils.generateGUID();
         }
 
