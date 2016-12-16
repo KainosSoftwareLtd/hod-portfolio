@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Edit resource
+{% endblock %}
+
+{% block content %}
+
+<main id="content" role="main">
+
+    <div class="grid-row">
+        <section style="padding-top:30px;">
+
+            <h1 class="form-title heading-large">
+                Edit Resource
+            </h1>
+
+            
+            <form action="#" class="form" id="resource-form">
+                <div class="grid-row">
+                    <input type="hidden" class="form-control" id="resourceId" name="resource[id]" value="{{ resource.id }}">
+                    <section>
+                        <div class="form-group">
+                            <label class="form-label-bold" for="name">Name</label>
+                            <p class="form-hint">Resource name</p>
+                            <input type="text" class="form-control" id="name" name="resource[name]" value="{{ resource.name }}">
+                        </div>
+            
+                        <div class="form-group">
+                            <label class="form-label-bold" for="url">URL</label>
+                            <p class="form-hint">Resource web address</p>
+                            <input type="url" class="form-control" id="url" name="resource[url]" value="{{ resource.url }}">
+                        </div>
+                    </section>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="button" value="Submit">
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+{% endblock %}
+
+{% block body_end %}
+{{ super() }}
+<script>
+    $("#resource-form").submit(function(e) {
+        e.preventDefault();
+
+        var data = $('#resource-form').serializeObject();
+
+        $.ajax({
+            type: "PUT",
+            url: '/api/projects/{{ projectId }}/resource/' + data.resource.id,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+            window.location.href = '/projects/{{ projectId }}/edit-resource';
+        })
+        .fail(function(jqXHR) {
+            alert('There was an error while updating resource. ' + jqXHR.responseText);
+        });
+    });
+
+</script>
+{% endblock %}

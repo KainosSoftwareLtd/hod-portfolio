@@ -54,14 +54,14 @@
         </div>
       {% endif %}
 
-      {% if data["resources"] %}
         <div class="grid-row">
-            <h2 class="heading-medium">Resources</h2>
-             {% for resource in data["resources"] %}
-              <a href = "{{ resource['url'] }}">{{ resource["name"] }}</a><br/>
-             {% endfor %}
+            <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Resources</a></h2>
+            {% if data["resources"] %}
+              {% for resource in data["resources"] %}
+                <a href = "{{ resource['url'] }}">{{ resource["name"] }}</a><br/>
+              {% endfor %}
+            {% endif %}
         </div>
-      {% endif %}
 
       {% if data.sponsor %}
         <h3 class="heading-small">Digital Sponsor</h3>
