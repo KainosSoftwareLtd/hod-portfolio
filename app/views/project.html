@@ -54,6 +54,19 @@
         </div>
       {% endif %}
 
+      {% if data["healthHistory"] %}
+        <div class="grid-row">
+          <h2 class="heading-medium">Health history <span data-collapsable-parent="health-history" class="clickable">[+]</span></h2>
+          <div data-collapsable-child="health-history" style="display: none;">
+            {% for health in data.healthHistory %}
+              <div>
+                <p>{{ health.status }} &mdash; {{ convertDate(health.date) }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
       {% if data["resources"] %}
         <div class="grid-row">
             <h2 class="heading-medium">Resources</h2>
@@ -107,7 +120,7 @@
            <tr>
              <td>{{ teamMember.role}}</td>
              <td>{{ teamMember.name }}</td>
-             <td data-collapsable-parent="{{ teamName + loop.index }}">[+]</td>
+             <td data-collapsable-parent="{{ teamName + loop.index }}" class="clickable">[+]</td>
            </tr>
            <tr>
              <td data-collapsable-child="{{ teamName + loop.index }}" colspan="3">

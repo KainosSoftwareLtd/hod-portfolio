@@ -377,6 +377,8 @@ Controller.prototype.handleApiEditProject = function(req, res) {
         project.setDescription(req.body.description);
         project.setLocation(req.body.location);
         project.setPhase(req.body.phase);
+        var a = req.user;
+        project.setHealth(req.body.health, req.user);
 
         projectDao.addProject(project, function(err, editedProject) {
             log.trace('Updating project: ' + JSON.stringify(project));
@@ -408,6 +410,7 @@ Controller.prototype.handleProjectIdSlug = function(req, res) {
     var data = projectCache.getById(req.params.id);
     res.render('project', {
         "data": data,
+        "convertDate": function(timestamp) { return new Date(timestamp).toLocaleDateString("en-GB", { year: 'numeric', month: 'long', day: 'numeric' }); },
         "phase_order": phase_order
     });
 };

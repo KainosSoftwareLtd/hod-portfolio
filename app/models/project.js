@@ -8,11 +8,13 @@ module.exports = class Project {
         this.description = description;
         this.ourTeam = [];
         this.clientTeam = [];
+        this.healthHistory = [];
 
         // setting defaults - this project was designed not to work without them...
         this.facing = "user";
         this.priority = "Low";
         this.location = "Unknown";
+        this.health = "Unknown";
     }
 
     setId(str) { this.id = str; }
@@ -21,7 +23,20 @@ module.exports = class Project {
     setLocation(str) { this.location = str; }
     setDepartment(str) { this.department = str; }
     setAgency(str) { this.agency = str; }
-    setHealth(str) { this.health = str; }
+    setHealth(str, user) {
+        if(str && str !== this.health) {
+            this.healthHistory.push({
+                status: str,
+                date: Date.now(),
+                user: {name: user.displayName, email: user.email}
+            });
+        }
+
+        if(str) {
+            this.health = str;
+        }
+    }
+
     setPriority(str) { this.priority = str; }
     setOurTeam(ourTeam) { this.ourTeam = ourTeam; }
     setClientTeam(clientTeam) { this.clientTeam = clientTeam; }
