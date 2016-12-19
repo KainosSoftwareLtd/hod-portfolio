@@ -7,6 +7,7 @@ var apiUtils = require('./apiUtils');
 var projectDao = require('./dao/project');
 var Project = require('./models/project');
 var Person = require('./models/person');
+var ResourceLink = require('./models/resourceLink');
 var ApiResponse = apiUtils.ApiResponse;
 
 function Controller(router) {
@@ -50,6 +51,156 @@ Controller.prototype.handleApiAddProject = function(req, res) {
             projectCache.refreshProjectCache();
             apiUtils.handleResultSet(res, 200, 
                 new ApiResponse({projectId: project.id}, ['The project has been added'])
+            );
+        }
+    });
+};
+
+/**
+ * Add resource
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiAddResource = function(req, res) {
+    let newResource = new ResourceLink(req.body.name, req.body.url);
+
+    log.info('Adding a new resource to project ID: ' + req.params.projectId);
+
+    if(!req.params.projectId) {
+        log.error('Project ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Project ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getById(req.params.projectId);
+
+    if(!project) {
+        var err = "Project with id " + req.params.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    projectDao.addResourceToProject(project, newResource, function(err, resource) {
+        log.trace('Adding a resource: ' + resource.role);
+        if(err) {
+            log.debug('Error adding resource with id = ' + resource.id);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error adding resource'])
+            );
+            return;
+        } else {
+            log.info('Resource with id = ' + resource.id + ' has been added to ' + project.id);
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({resourceId: resource.id}, ['Resource has been added'])
+            );
+        }
+    });
+};
+
+/**
+ * Remove a resource link
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiRemoveResource = function(req, res) {
+    var resourceId = req.params.resourceId;
+
+    log.info('Removing a resource ' + resourceId + 'from project ID: ' + req.params.projectId);
+
+    if(!resourceId) {
+        log.error('Resource ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Resource ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getById(req.params.projectId);
+
+    if(!project) {
+        var err = "Project with id " + req.params.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    projectDao.removeResourceFromProject(project, resourceId, function(err, project) {
+        if(err) {
+            log.debug('Error removing resource with id = ' + resourceId);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error adding resource'])
+            );
+            return;
+        } else {
+            log.info('Resource with id = ' + resourceId + ' has been removed from ' + project.id);
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({resourceId: resourceId}, ['Resource has been removed'])
+            );
+        }
+    });
+};
+
+/**
+ * Update resource
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiUpdateResource = function(req, res) {
+    let resourceData = ResourceLink.fromJson(req.body.resource);
+    resourceData.setId(req.params.resourceId);
+
+    log.info('Updating a resource in project ID: ' + req.params.projectId);
+
+    if(!req.params.projectId) {
+        log.error('Project ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Project ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getById(req.params.projectId);
+
+    if(!project) {
+        var err = "Project with id " + req.params.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    projectDao.updateResourceInProject(project, resourceData, function(err, resource) {
+        log.trace('Updating a resource: ' + resource.id);
+        if(err) {
+            log.debug('Error updating resource with id = ' + resource.id);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error updating resource'])
+            );
+            return;
+        } else {
+            log.info('Resource with id = ' + resource.id + ' has been updated in ' + project.id);
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({resourceId: resource.id}, ['Resource has been updated'])
             );
         }
     });
@@ -431,6 +582,43 @@ Controller.prototype.handleSlugPrototype = function(req, res) {
 Controller.prototype.handleAddProject = function(req, res) {
     var id = req.params.id;
     res.render('add-project');
+};
+
+/**
+ * Render Edit resources page
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditResources = function (req, res) {
+    var id = req.params.id;
+
+    var project = projectCache.getById(id);
+
+    res.render('edit-resources', {
+        projectName: project.name,
+        projectId: id,
+        resources: project.resources
+    });
+};
+
+/**
+ * Render Edit resource form
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditResource = function (req, res) {
+    var projectId = req.params.projectId;
+    var resourceId = req.params.resourceId;
+
+    var project = projectCache.getById(projectId);
+    var resource = _.find(project.resources, {id: resourceId});
+
+    res.render('edit-resource', {
+        projectId: projectId,
+        resource: resource
+    });
 };
 
 /**

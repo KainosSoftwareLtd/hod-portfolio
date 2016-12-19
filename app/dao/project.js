@@ -206,5 +206,90 @@ Projects.removeClientFromProject = function(project, personId, callback) {
     });
 };
 
+/**
+ * Adds a resource link to a project
+ *
+ * @param {Project} project Project to which we are adding the resource
+ * @param {ResourceLink} resource resource being added
+ * @param {function} callback (err, data) callback
+ */
+Projects.addResourceToProject = function(project, resource, callback) {
+    log.info("Creating a resource");
+    if (!resource.id) {
+        resource.id = utils.generateGUID();
+        log.debug("New ID generated: " + resource.id);
+    }
+
+    project.addResource(resource);
+
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, resource);
+        }
+    });
+};
+
+/**
+ * Updates a resource
+ *
+ * @param {Project} project Project in which we are updating the resource
+ * @param {ResourceLink} resource resource being updated
+ * @param {function} callback (err, data) callback
+ */
+Projects.updateResourceInProject = function(project, resource, callback) {
+    log.info("Updating a resource");
+    if (!resource.id) {
+        log.error("Resource has no ID");
+        callback("Resource has no ID", false);
+        return;
+    }
+
+    var resourceFromCache = _.find(project.resources, {id: resource.id});
+
+    if (!resourceFromCache) {
+        log.error("Resource not found");
+        callback("Resource not found", false);
+        return;
+    }
+
+    Object.assign(resourceFromCache, resource);
+
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, resourceFromCache);
+        }
+    });
+};
+
+/**
+ * Removes a resource
+ *
+ * @param {Project} project Project from which we are removing the resource
+ * @param {String} resourceId ID of resource being removed
+ * @param {function} callback (err, data) callback
+ */
+Projects.removeResourceFromProject = function(project, resourceId, callback) {
+    log.info("Removing a resource");
+    if (!resourceId) {
+        log.error("Resource has no ID");
+        callback("Resource has no ID", false);
+        return;
+    }
+
+    project.removeFromResources(resourceId);
+
+    fileStore.uploadObjectAsJsonFile(project.id, project, function(err, data) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, project);
+        }
+    });
+};
+
 module.exports = Projects;
 
