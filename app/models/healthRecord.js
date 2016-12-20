@@ -1,11 +1,14 @@
 'use strict';
 var utils = require('../utils');
+var ResourceLink = require('./resourceLink');
 
-module.exports = class HealthHistory {
-    constructor(status, user, comment) {
+module.exports = class HealthRecord {
+    constructor(type, status, user, comment, resourceLink) {
+        this.type = type;
         this.status = status;
         this.comment = comment;
         this.date = Date.now();
+        this.link = resourceLink;
         if(user) {
             this.user = {name: user.displayName, email: user.email};
         }
@@ -18,15 +21,21 @@ module.exports = class HealthHistory {
     setComment(str) { this.comment = str; }
     setDate(timestamp) { this.date = timestamp; }
     setUser(user) { this.user = {name: user.displayName, email: user.email}; }
+    setType(str) { this.type = str }
+    setLink(resourceLink) { this.link = resourceLink; }
 
     static fromJson(data) {
-        var hh = new HealthHistory();
+        var hr = new HealthRecord();
         Object.assign(hh, data);
 
-        if (!hh.id) { // if Object.assign removed the id
-            hh.id = utils.generateGUID();
+        if (data.link) {
+            hr.link = ResourceLink.fromJson(data.link);
         }
 
-        return hh;
+        if (!hr.id) { // if Object.assign removed the id
+            hr.id = utils.generateGUID();
+        }
+
+        return hr;
     }
 }
