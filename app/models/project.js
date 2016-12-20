@@ -40,7 +40,7 @@ module.exports = class Project {
         var h = new HealthRecord(type, status, user, comment, resource);
 
         if(status && this.health[type] && status !== this.health[type].status) {
-            this.addHeathHistory(h);
+            this.addHealthHistory(h);
         }
 
         if(status && type) {
@@ -67,7 +67,7 @@ module.exports = class Project {
         this.resources.push(ResourceLink);
     }
 
-    addHeathHistory(healthHistory) {
+    addHealthHistory(healthHistory) {
         if(!this.healthHistory[healthHistory.type]) {
             this.healthHistory[healthHistory.type] = [];
         }
