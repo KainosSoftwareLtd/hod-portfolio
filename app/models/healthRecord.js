@@ -26,7 +26,7 @@ module.exports = class HealthRecord {
 
     static fromJson(data) {
         var hr = new HealthRecord();
-        Object.assign(hh, data);
+        Object.assign(hr, data);
 
         if (data.link) {
             hr.link = ResourceLink.fromJson(data.link);

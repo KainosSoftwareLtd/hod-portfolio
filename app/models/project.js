@@ -10,7 +10,7 @@ module.exports = class Project {
         this.description = description;
         this.ourTeam = [];
         this.clientTeam = [];
-        this.healthHistory = {};
+        this.healthStatusHistory = {};
         this.health = {};
         this.resources = [];
 
@@ -53,7 +53,7 @@ module.exports = class Project {
     setClientTeam(clientTeam) { this.clientTeam = clientTeam; }
     setPhase(phase) { this.phase = phase; }
     setResources(resources) { this.resources = resources; }
-    setHealthHistory(array) { this.healthHistory = array; }
+    setHealthStatusHistory(array) { this.healthStatusHistory = array; }
 
     addToOurTeam(Person) {
         this.ourTeam.push(Person);
@@ -68,11 +68,11 @@ module.exports = class Project {
     }
 
     addHealthHistory(healthHistory) {
-        if(!this.healthHistory[healthHistory.type]) {
-            this.healthHistory[healthHistory.type] = [];
+        if(!this.healthStatusHistory[healthHistory.type]) {
+            this.healthStatusHistory[healthHistory.type] = [];
         }
 
-        this.healthHistory[healthHistory.type].push(healthHistory);
+        this.healthStatusHistory[healthHistory.type].push(healthHistory);
     }
 
     removeFromOurTeam(id) {
@@ -124,8 +124,8 @@ module.exports = class Project {
             });
         }
 
-        if (data && data.healthHistory) {
-            p.healthHistory = _.mapObject(data.healthHistory, function(values, key) {
+        if (data && data.healthStatusHistory) {
+            p.healthStatusHistory = _.mapObject(data.healthStatusHistory, function(values, key) {
                 return values.map(function(value) {
                     return HealthRecord.fromJson(value);
                 });
