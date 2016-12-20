@@ -51,8 +51,8 @@
         <div class="grid-row">
           <h2 class="heading-medium">Health</h2>
           <div class="health-circle">
-            <p class="circle {{ data.health | lower }}"></p>
-            <p class="circle-label">{{ data.health | title }}</p>
+            <p class="circle {{ data.health.overall.status | lower }}"></p>
+            <p class="circle-label">{{ data.health.overall.status | title }}</p>
           </div>
           <p><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">Update</a></p>
         </div>
