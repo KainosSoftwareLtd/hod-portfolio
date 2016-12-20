@@ -2,6 +2,7 @@
 var _ = require('underscore');
 var Person = require('./person');
 var ResourceLink = require('./resourceLink');
+var HealthHistory = require('./healthHistory');
 
 module.exports = class Project {
     constructor(name, description) {
@@ -25,13 +26,9 @@ module.exports = class Project {
     setLocation(str) { this.location = str; }
     setDepartment(str) { this.department = str; }
     setAgency(str) { this.agency = str; }
-    setHealth(str, user) {
+    setHealth(str, user, comment) {
         if(str && str !== this.health) {
-            this.healthHistory.push({
-                status: str,
-                date: Date.now(),
-                user: {name: user.displayName, email: user.email}
-            });
+            this.addHeathHistory(new HealthHistory(str, user, comment));
         }
 
         if(str) {
@@ -44,6 +41,7 @@ module.exports = class Project {
     setClientTeam(clientTeam) { this.clientTeam = clientTeam; }
     setPhase(phase) { this.phase = phase; }
     setResources(resources) { this.resources = resources; }
+    setHealthHistory(array) { this.healthHistory = array; }
 
     addToOurTeam(Person) {
         this.ourTeam.push(Person);
@@ -55,6 +53,10 @@ module.exports = class Project {
 
     addResource(ResourceLink) {
         this.resources.push(ResourceLink);
+    }
+
+    addHeathHistory(healthHistory) {
+        this.healthHistory.push(healthHistory);
     }
 
     removeFromOurTeam(id) {
@@ -97,6 +99,13 @@ module.exports = class Project {
             p.setResources([]);
             data.resources.forEach(function(item) {
                 p.addResource(ResourceLink.fromJson(item));
+            });
+        }
+
+        if (data && data.healthHistory) {
+            p.setHealthHistory([]);
+            data.healthHistory.forEach(function(item) {
+                p.addHeathHistory(HealthHistory.fromJson(item));
             });
         }
 

@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Edit project health
+{% endblock %}
+
+{% block content %}
+
+<main id="content" role="main">
+
+    <div class="grid-row">
+        <section style="padding-top:30px;">
+
+            <h1 class="form-title heading-large">
+                Edit project health
+            </h1>
+
+            <div class="grid-row">
+                <section class="column-half">
+                    <h2 class="heading-medium">Edit health status for <a href="/projects/{{ project.id }}/{{ project.name | slugify }}">{{ project.name }}</a></h2>
+                    <form class="form" id="healthStatusForm">
+
+                        <!-- status -->
+                        <div class="form-group">
+                            <label class="form-label-bold" for="status">
+                                Health
+                                <span class="form-hint">
+                                    Health of the project
+                                </span>
+                            </label>
+
+                            <select class="form-control" name="status" id="status">
+                                <option value="Good">Good</option>
+                                <option value="Fair">Fair</option>
+                                <option value="Risk">Risk</option>
+                            </select>
+                        </div>
+
+                        <!-- comment -->
+                        <div class="form-group">
+                            <label class="form-label-bold" for="comment">
+                                Comment
+                                <span class="form-hint">
+                                    Reason for the health status change
+                                </span>
+                            </label>
+                            <textarea class="form-control" id="comment" name="comment"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="button" value="Submit">
+                        </div>
+                    </form>
+
+                    {% if project["healthHistory"] %}
+                    <div class="grid-row">
+                        <h2 class="heading-medium">Health history <span data-collapsable-parent="health-history" class="clickable">[+]</span></h2>
+                        <div data-collapsable-child="health-history" style="display: none;">
+                            {% for health in project.healthHistory %}
+                            <div>
+                                <p>{{ health.status }} &mdash; {{ convertDate(health.date) }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </section>
+
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}
+
+{% block body_end %}
+{{ super() }}
+<script>
+    $("#healthStatusForm").submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "PUT",
+            url: '/api/projects/{{ project.id }}/health',
+            contentType: "application/json",
+            data: JSON.stringify($('#healthStatusForm').serializeObject())
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+            window.location.href = '/projects/{{ project.id }}/{{ project.name | slugify }}';
+        })
+        .fail(function(jqXHR) {
+            alert('There was an error updating health status. Details: \n\n' + jqXHR.responseText);
+        });
+    });
+
+    $("select#status").val("{{ project.health }}");
+</script>
+{% endblock %}

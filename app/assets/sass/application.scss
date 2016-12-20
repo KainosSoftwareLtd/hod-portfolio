@@ -7,6 +7,9 @@
 
 $pipeline-colour: $purple;
 $discovery-colour: #34a1ff;
+$good-colour: $green;
+$fair-colour: $yellow;
+$risk-colour: $orange;
 
 #global-header #logo {
   font-size:16px;line-height:1.8;padding-left:5px;
@@ -134,6 +137,11 @@ $discovery-colour: #34a1ff;
 .circle.beta      {background-color:$beta-colour;}
 .circle.live      {background-color:$live-colour;}
 
+.circle.good      {background-color:$good-colour;}
+.circle.fair      {background-color:$fair-colour;}
+.circle.risk      {background-color:$risk-colour;}
+.circle.unknown   {background-color:grey;}
+
 .phase_modifier {
   font-size:16px;
   position:absolute;
@@ -142,7 +150,7 @@ $discovery-colour: #34a1ff;
   text-align:center;
   color:white;
 }
-.phase-circle {
+.phase-circle, .health-circle {
   width:40%;
   position:relative;
 }

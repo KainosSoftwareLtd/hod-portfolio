@@ -49,25 +49,15 @@
 
       {% if data["health"] %}
         <div class="grid-row">
-            <h2 class="heading-medium">Health</h2>
-            <div>{{ data.health }}</div>
-        </div>
-      {% endif %}
-
-      {% if data["healthHistory"] %}
-        <div class="grid-row">
-          <h2 class="heading-medium">Health history <span data-collapsable-parent="health-history" class="clickable">[+]</span></h2>
-          <div data-collapsable-child="health-history" style="display: none;">
-            {% for health in data.healthHistory %}
-              <div>
-                <p>{{ health.status }} &mdash; {{ convertDate(health.date) }}</p>
-              </div>
-            {% endfor %}
+          <h2 class="heading-medium">Health</h2>
+          <div class="health-circle">
+            <p class="circle {{ data.health | lower }}"></p>
+            <p class="circle-label">{{ data.health | title }}</p>
           </div>
+          <p><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">Update</a></p>
         </div>
       {% endif %}
 
-      {% if data["resources"] %}
         <div class="grid-row">
             <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Resources</a></h2>
             {% if data["resources"] %}
