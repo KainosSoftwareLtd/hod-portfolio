@@ -10,11 +10,11 @@ Edit resources
     <div class="grid-row">
         <section style="padding-top:30px;">
             <h1 class="form-title heading-large">
-                Edit resources
+                Edit useful links
             </h1>
             <div class="grid-row">
                 <section class="column-half">
-                    <h2 class="heading-medium">Edit resources for <a href="/projects/{{ projectId }}/{{ projectName | slugify }}/">{{ projectName }}</a></h2>
+                    <h2 class="heading-medium">Edit useful links for <a href="/projects/{{ projectId }}/{{ projectName | slugify }}/">{{ projectName }}</a></h2>
                     <div>
                         <table>
                             <thead>
@@ -98,7 +98,7 @@ Edit resources
             location.reload();
         })
         .fail(function(jqXHR) {
-            alert('There was an error adding resource. ' + jqXHR.responseText);
+            alert('There was an error adding link. ' + jqXHR.responseText);
         });
     });
 
@@ -118,7 +118,7 @@ Edit resources
             location.reload();
         })
         .fail(function(jqXHR) {
-            alert('There was an error removing resource. ' + jqXHR.responseText);
+            alert('There was an error removing link. ' + jqXHR.responseText);
         });
     }
 </script>
