@@ -9,9 +9,7 @@ module.exports = class HealthRecord {
         this.comment = comment;
         this.date = Date.now();
         this.link = resourceLink;
-        if(user) {
-            this.user = {name: user.displayName, email: user.email};
-        }
+        this.user = user;
 
         this.id = utils.generateGUID();
     }

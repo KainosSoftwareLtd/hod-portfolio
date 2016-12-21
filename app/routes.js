@@ -40,6 +40,7 @@ router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProjec
 router.get('/projects/:id/:slug/edit-our-team', connect.ensureLoggedIn(), controller.handleEditOurTeam);
 router.get('/projects/:id/:slug/edit-resources', connect.ensureLoggedIn(), controller.handleEditResources);
 router.get('/projects/:id/:slug/edit-health', connect.ensureLoggedIn(), controller.handleEditHealthStatus);
+router.get('/projects/:id/:slug/display-health', connect.ensureLoggedIn(), controller.handleDisplayHealthStatus);
 router.get('/projects/:projectId/:slug/resource/:resourceId/edit', connect.ensureLoggedIn(), controller.handleEditResource);
 router.get('/projects/:projectId/:slug/person/team/:personId/edit', connect.ensureLoggedIn(), controller.handleEditTeamMember);
 router.get('/projects/:id/:slug/edit-client-team', connect.ensureLoggedIn(), controller.handleEditClientTeam);

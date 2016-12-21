@@ -769,6 +769,25 @@ Controller.prototype.handleEditHealthStatus = function (req, res) {
     });
 };
 
+/**
+ * Render Edit project health status
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleDisplayHealthStatus = function (req, res) {
+    var id = req.params.id;
+
+    var project = projectCache.getById(id);
+
+    res.render('display-health', {
+        project: project,
+        convertDate: function(timestamp) {
+            return new Date(timestamp).toLocaleDateString("en-GB", { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+    });
+};
+
 // Edit project form
 Controller.prototype.handleEditProject = function(req, res) {
     var id = req.params.id;

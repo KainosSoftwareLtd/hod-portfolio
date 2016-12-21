@@ -34,7 +34,7 @@ module.exports = class Project {
     setAgency(str) { this.agency = str; }
     setHealth(type, status, user, comment, linkTitle, link) {
         var resource = null;
-        if(resource) {
+        if(linkTitle && link) {
             resource = new ResourceLink(linkTitle, link);
         }
 

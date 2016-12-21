@@ -53,10 +53,12 @@
         {% if data["health"] %}
           <div class="grid-row">
             <h2 class="heading-medium circle-desc">Health</h2>
-            <div class="health-circle">
-              <p class="circle {{ data.health.overall.status | lower }}"></p>
-              <p class="circle-label">{{ data.health.overall.status | title }}</p>
-            </div>
+              <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">
+                <div class="health-circle">
+                  <p class="circle {{ data.health.overall.status | lower }}"></p>
+                  <p class="circle-label">{{ data.health.overall.status | title }}</p>
+                </div>
+              </a>
             <p class="circle-desc"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">Update</a></p>
           </div>
         {% endif %}
