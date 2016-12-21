@@ -521,8 +521,7 @@ Controller.prototype.handleApiRemoveClientTeamMember = function(req, res) {
  * @param res
  */
 Controller.prototype.handleApiUpdateHealthStatus = function(req, res) {
-    let status = req.body.status;
-    let comment = req.body.comment;
+    var health = req.body.health;
 
     log.info('Changing health status in project ID: ' + req.params.projectId);
 
@@ -545,10 +544,13 @@ Controller.prototype.handleApiUpdateHealthStatus = function(req, res) {
         return;
     }
 
-    project.setHealth(req.body.status, req.user, comment);
+    project.setHealth(health.type, health.status,
+        { name: req.user.displayName, email: req.user.email }, 
+        health.comment, health.link.name, health.link.url
+    );
 
     projectDao.addProject(project, function(err, person) {
-        log.trace('Updating project health status to: ' + status);
+        log.trace('Updating project health status to: ' + health.status);
         if(err) {
             log.debug('Error updating project health status for project with id = ' + project.id);
 
@@ -561,7 +563,7 @@ Controller.prototype.handleApiUpdateHealthStatus = function(req, res) {
 
             projectCache.refreshProjectCache();
             apiUtils.handleResultSet(res, 200,
-                new ApiResponse({personId: person.id}, ['Project health status has been updated'])
+                new ApiResponse({health: health}, ['Project health status has been updated'])
             );
         }
     });

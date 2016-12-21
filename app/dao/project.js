@@ -292,4 +292,3 @@ Projects.removeResourceFromProject = function(project, resourceId, callback) {
 };
 
 module.exports = Projects;
-

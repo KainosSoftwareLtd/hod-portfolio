@@ -19,8 +19,8 @@ module.exports = class Project {
         this.priority = "Low";
         this.location = "Unknown";
         this.health.overall = new HealthRecord(
-            "Overall",
-            "Unknown",
+            "overall",
+            "unknown",
             {name: "Bot", email: ""},
             "Overall project health has not yet been set.");
     }

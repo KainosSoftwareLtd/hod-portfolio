@@ -20,16 +20,33 @@ Edit project health
                     <h2 class="heading-medium">Edit health status for <a href="/projects/{{ project.id }}/{{ project.name | slugify }}">{{ project.name }}</a></h2>
                     <form class="form" id="healthStatusForm">
 
+                        <!-- type -->
+                        <div class="form-group">
+                            <label class="form-label-bold" for="type">
+                                    Healthcheck Type
+                            </label>
+
+                            <select class="form-control" name="health[type]" id="type">
+                                <option value="overall">Overall</option>
+                                <option value="engineering">Engineering</option>
+                                <option value="ops">Ops</option>
+                                <option value="userResearch">User Research</option>
+                                <option value="security">Security</option>
+                                <option value="delivery">Delivery</option>
+                                <option value="data">Data</option>
+                            </select>
+                        </div>
+
                         <!-- status -->
                         <div class="form-group">
                             <label class="form-label-bold" for="status">
-                                Health
+                                Healthcheck Status
                                 <span class="form-hint">
                                     Health of the project
                                 </span>
                             </label>
 
-                            <select class="form-control" name="status" id="status">
+                            <select class="form-control" name="health[status]" id="status">
                                 <option value="Good">Good</option>
                                 <option value="Fair">Fair</option>
                                 <option value="Risk">Risk</option>
@@ -44,7 +61,22 @@ Edit project health
                                     Reason for the health status change
                                 </span>
                             </label>
-                            <textarea class="form-control" id="comment" name="comment"></textarea>
+                            <textarea class="form-control" id="comment" name="health[comment]" maxlength="500">{{ project.health.comment }}</textarea>
+                        </div>
+
+                        <!-- link title-->
+                        <div class="form-group">
+                            <label class="form-label-bold" for="name">
+                                Healthcheck Link
+                                <span class="form-hint">
+                                    Title of the link
+                                </span>
+                            </label>
+                            <input type="text" name="health[link][name]" id="name" placeholder="Example Title"></input>
+                                <span class="form-hint">
+                                    Web address of the link
+                                </span>
+                            <input type="url" name="health[link][url]" placeholder="http://example.com/"></input>
                         </div>
 
                         <div class="form-group">
@@ -75,14 +107,18 @@ Edit project health
 
 {% block body_end %}
 {{ super() }}
+<script src="/public/javascripts/jquery.plugin.min.js"></script>
+<script src="/public/javascripts/jquery.maxlength.min.js"></script>
 <script>
     $("#healthStatusForm").submit(function(e) {
         e.preventDefault();
+        var formData = JSON.stringify($('#healthStatusForm').serializeObject());
+        console.log(formData)
         $.ajax({
             type: "PUT",
             url: '/api/projects/{{ project.id }}/health',
             contentType: "application/json",
-            data: JSON.stringify($('#healthStatusForm').serializeObject())
+            data: formData
         })
         .done(function(response) {
             alert(JSON.stringify(response.messages[0]));
@@ -93,6 +129,9 @@ Edit project health
         });
     });
 
-    $("select#status").val("{{ project.health }}");
+    $("select#type").val("overall");
+    $("select#status").val("{{ project.health.overall.status }}");
+
+    $('#comment').maxlength({max: 500});
 </script>
 {% endblock %}
