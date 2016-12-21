@@ -19,16 +19,21 @@ var priority_order = [
 ];
 
 var health_order = [
-  'Good',
-  'Fair',
-  'Risk'
+  'good',
+  'fair',
+  'risk',
+  'unknown'
 ];
+
+var healthGroupFunc = function(p) {
+    return p.health.overall ? p.health.overall.status : 'unknown';
+};
 
 var controller = new controllers(router);
 controller.setupIndexPageRoute('location', ['/', '/location']);
 controller.setupIndexPageRoute('agency', '/agency');
 controller.setupIndexPageRoute('theme', '/theme');
-controller.setupIndexPageRoute('health', '/health', health_order);
+controller.setupIndexPageRoute(healthGroupFunc, '/health', health_order, 'health');
 controller.setupIndexPageRoute('priority', '/priority', priority_order);
 
 router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProject);

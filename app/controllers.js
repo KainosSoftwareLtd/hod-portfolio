@@ -780,12 +780,14 @@ Controller.prototype.handleEditProject = function(req, res) {
 };
 
 /**
- * @param  {String} groupBy Name of the field by which the projects will be grouped
+ * @param  {String|function} groupBy Name of the field by which the projects will be grouped
  * @param  {String} path Router path, ex: '/location'
  * @param  {String[]} [rowOrder] Order of values by which to group the projects, default: alphabetical
+ * @param  {String=} [viewType] Optional view name if groupBy is not a string
  */
-Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder) {
+Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, viewType) {
     this.router.get(path, connect.ensureLoggedIn(), function(req, res) {
+        var view = viewType ? viewType : groupBy;
         var projectList = [];
         Object.keys(projectCache.getAll()).forEach(function(ID) {
             projectList.push(projectCache.getById(ID));
@@ -800,7 +802,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder) {
             "data": new_data,
             "phase": req.query.phase,
             "counts": phases,
-            "view": groupBy,
+            "view": view,
             "row_order": rowOrder,
             "phase_order": phase_order
         });
