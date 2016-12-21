@@ -583,7 +583,6 @@ Controller.prototype.handleApiEditProject = function(req, res) {
         project.setDescription(req.body.description);
         project.setLocation(req.body.location);
         project.setPhase(req.body.phase);
-        var a = req.user;
         project.setHealth(req.body.health, req.user);
 
         projectDao.addProject(project, function(err, editedProject) {

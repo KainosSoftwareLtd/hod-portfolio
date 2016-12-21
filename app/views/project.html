@@ -14,15 +14,14 @@
   
   <h1 class="heading-xlarge" style="margin-bottom:15px;">{{ data.name }}</h1>
 
+  {% if data["service_url"] %}
+  <p><a href = "{{ data.service_url }}">{{ data.service_url }}</a></p>
+  {% endif %}
+
+  <p>{{ data.description }}</p>
+
   <div class="grid-row">
-    <section class="column-two-thirds">
-
-      {% if data["service_url"] %}
-        <p><a href = "{{ data.service_url }}">{{ data.service_url }}</a></p>
-      {% endif %}
-
-      <p>{{ data.description }}</p>
-
+    <section class="column-third">
       <div class="location">Based in <strong>{{ data.location }}</strong></div>
 
       <h2 class="heading-medium">Project history</h2>
@@ -39,33 +38,38 @@
         {% endfor %}
       </div>
     </section>
-    <section class="column-third">
 
-      <div class="phase-circle">
-        <p class="circle {{ data.phase | lower }}"></p>
-        {% if data.phase_modifier %}<p class="phase_modifier">{{ data.phase_modifier }}</p>{% endif %}
-        <p class="circle-label">{{ data.phase | title }}</p>
-      </div>
+    <section class="column-two-thirds">
+      <section class="column-half">
+        <h2 class="heading-medium circle-desc">Phase</h2>
+        <div class="phase-circle">
+          <p class="circle {{ data.phase | lower }}"></p>
+          {% if data.phase_modifier %}<p class="phase_modifier">{{ data.phase_modifier }}</p>{% endif %}
+          <p class="circle-label">{{ data.phase | title }}</p>
+        </div>
+      </section>
 
-      {% if data["health"] %}
-        <div class="grid-row">
-          <h2 class="heading-medium">Health</h2>
-          <div class="health-circle">
-            <p class="circle {{ data.health.overall.status | lower }}"></p>
-            <p class="circle-label">{{ data.health.overall.status | title }}</p>
+      <section class="column-half">
+        {% if data["health"] %}
+          <div class="grid-row">
+            <h2 class="heading-medium circle-desc">Health</h2>
+            <div class="health-circle">
+              <p class="circle {{ data.health.overall.status | lower }}"></p>
+              <p class="circle-label">{{ data.health.overall.status | title }}</p>
+            </div>
+            <p class="circle-desc"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">Update</a></p>
           </div>
-          <p><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">Update</a></p>
-        </div>
-      {% endif %}
+        {% endif %}
+      </section>
 
-        <div class="grid-row">
-            <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Resources</a></h2>
-            {% if data["resources"] %}
-              {% for resource in data["resources"] %}
-                <a href = "{{ resource['url'] }}">{{ resource["name"] }}</a><br/>
-              {% endfor %}
-            {% endif %}
-        </div>
+      <div class="grid-row">
+          <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Resources</a></h2>
+          {% if data["resources"] %}
+            {% for resource in data["resources"] %}
+              <a href = "{{ resource['url'] }}">{{ resource["name"] }}</a><br/>
+            {% endfor %}
+          {% endif %}
+      </div>
 
       {% if data.sponsor %}
         <h3 class="heading-small">Digital Sponsor</h3>
