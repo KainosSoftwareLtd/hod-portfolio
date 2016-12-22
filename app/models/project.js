@@ -2,6 +2,7 @@
 var _ = require('underscore');
 var Person = require('./person');
 var ResourceLink = require('./resourceLink');
+var HealthRecord = require('./healthRecord');
 
 module.exports = class Project {
     constructor(name, description) {
@@ -9,12 +10,20 @@ module.exports = class Project {
         this.description = description;
         this.ourTeam = [];
         this.clientTeam = [];
+        this.healthStatusHistory = {};
+        this.health = {};
         this.resources = [];
+        this["phase-history"] = {};
 
         // setting defaults - this project was designed not to work without them...
         this.facing = "user";
         this.priority = "Low";
         this.location = "Unknown";
+        this.health.overall = new HealthRecord(
+            "overall",
+            "unknown",
+            {name: "Bot", email: ""},
+            "Overall project health has not yet been set.");
     }
 
     setId(str) { this.id = str; }
@@ -23,12 +32,50 @@ module.exports = class Project {
     setLocation(str) { this.location = str; }
     setDepartment(str) { this.department = str; }
     setAgency(str) { this.agency = str; }
-    setHealth(str) { this.health = str; }
+    setHealth(type, status, user, comment, linkTitle, link) {
+        var resource = null;
+        if(linkTitle && link) {
+            resource = new ResourceLink(linkTitle, link);
+        }
+
+        var h = new HealthRecord(type, status, user, comment, resource);
+
+        if(status && this.health[type] && status !== this.health[type].status) {
+            this.addHealthHistory(h);
+        }
+
+        if(status && type) {
+            this.health[type] = h;
+        }
+    }
+
     setPriority(str) { this.priority = str; }
     setOurTeam(ourTeam) { this.ourTeam = ourTeam; }
     setClientTeam(clientTeam) { this.clientTeam = clientTeam; }
-    setPhase(phase) { this.phase = phase; }
+    setPhase(phase) {
+        // set project phase history completed record
+        if(this.phase !== phase) {
+            if(!this["phase-history"][this.phase] && this.phase) {
+                this["phase-history"][this.phase] = [];
+            }
+
+            if(this.phase) {
+                this["phase-history"][this.phase].push({label: "Completed", date: new Date().toLocaleDateString("en-GB", { year: 'numeric', month: 'long' })});
+            }
+        }
+
+        // set project phase history started record
+        if(!this["phase-history"][phase]) {
+            this["phase-history"][phase] = [];
+        }
+
+        this["phase-history"][phase].push({label: "Started", date: new Date().toLocaleDateString("en-GB", { year: 'numeric', month: 'long' })});
+
+        this.phase = phase;
+
+    }
     setResources(resources) { this.resources = resources; }
+    setHealthStatusHistory(array) { this.healthStatusHistory = array; }
 
     addToOurTeam(Person) {
         this.ourTeam.push(Person);
@@ -40,6 +87,14 @@ module.exports = class Project {
 
     addResource(ResourceLink) {
         this.resources.push(ResourceLink);
+    }
+
+    addHealthHistory(healthHistory) {
+        if(!this.healthStatusHistory[healthHistory.type]) {
+            this.healthStatusHistory[healthHistory.type] = [];
+        }
+
+        this.healthStatusHistory[healthHistory.type].push(healthHistory);
     }
 
     removeFromOurTeam(id) {
@@ -85,6 +140,19 @@ module.exports = class Project {
             });
         }
 
+        if (data && data.health) {
+            p.health = _.mapObject(data.health, function(val, key) {
+                return HealthRecord.fromJson(val);
+            });
+        }
+
+        if (data && data.healthStatusHistory) {
+            p.healthStatusHistory = _.mapObject(data.healthStatusHistory, function(values, key) {
+                return values.map(function(value) {
+                    return HealthRecord.fromJson(value);
+                });
+            });
+        }
 
         return p;
     }

@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Project health summary
+{% endblock %}
+
+{% block content %}
+
+<main id="content" role="main">
+    <h1 class="form-title heading-large">
+        <a href="/projects/{{ project.id }}/{{ project.name | slugify }}">{{ project.name }}</a>
+        <span class="pull-right"><a href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">Update</a></span>
+    </h1>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Healthcheck Type and Link</td>
+                <td>Author and Date</td>
+                <td>Comment</td>
+                <td>Status</td>
+            </tr>
+        </thead>
+        {% set types = ["overall", "engineering", "ops", "userResearch", "security", "delivery", "data"] %}
+
+        {% for type in types %}
+            {% if project.health[type] %}
+            <tr>
+                <td>
+                    <div><strong class="bold-small">{{ project.health[type].type | title }}</strong></div>
+                    <a href="{{ project.health[type].link.url }}">
+                        {{ project.health[type].link.name }}
+                    </a>
+                </td>
+                <td>
+                    <a href="mailto:{{ project.health[type].user.email}}">
+                        {{ project.health[type].user.name }}
+                    </a>
+                        {% if project.health[type].date %}
+                            <div>{{ convertDate(project.health[type].date) }}</div>
+                        {% endif %}
+                </td>
+                <td>
+                    <div>{{ project.health[type].comment }}</div>
+                </td>
+                <td>
+                    <div class="health-circle">
+                        <p class="circle {{ project.health[type].status | lower }}"></p>
+                        <p class="circle-label">{{ project.health[type].status | title }}</p>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</main>
+{% endblock %}

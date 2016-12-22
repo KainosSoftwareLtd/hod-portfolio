@@ -4,6 +4,7 @@ var connect = require('connect-ensure-login');
 var projectCache = require('./projectCache');
 var log = require('./logger');
 var apiUtils = require('./apiUtils');
+var utils = require('./utils');
 var projectDao = require('./dao/project');
 var Project = require('./models/project');
 var Person = require('./models/person');
@@ -514,6 +515,61 @@ Controller.prototype.handleApiRemoveClientTeamMember = function(req, res) {
     });
 };
 
+/**
+ * Change projects health status
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleApiUpdateHealthStatus = function(req, res) {
+    var health = req.body.health;
+
+    log.info('Changing health status in project ID: ' + req.params.projectId);
+
+    if(!req.params.projectId) {
+        log.error('Project ID not supplied');
+        apiUtils.handleResultSet(res, 400,
+            new ApiResponse(null, ['Project ID not supplied'])
+        );
+        return;
+    }
+
+    var project = projectCache.getById(req.params.projectId);
+
+    if(!project) {
+        var err = "Project with id " + req.params.projectId + " does not exist";
+        log.error(err);
+        apiUtils.handleResultSet(res, 422,
+            new ApiResponse(null, [err])
+        );
+        return;
+    }
+
+    project.setHealth(health.type, health.status,
+        { name: req.user.displayName, email: req.user.email }, 
+        health.comment, health.link.name, health.link.url
+    );
+
+    projectDao.addProject(project, function(err, person) {
+        log.trace('Updating project health status to: ' + health.status);
+        if(err) {
+            log.debug('Error updating project health status for project with id = ' + project.id);
+
+            apiUtils.handleResultSet(res, 500,
+                new ApiResponse(null, ['Error updating project health status'])
+            );
+            return;
+        } else {
+            log.info('Project with id = ' + project.id + ' has been updated with new health status');
+
+            projectCache.refreshProjectCache();
+            apiUtils.handleResultSet(res, 200,
+                new ApiResponse({health: health}, ['Project health status has been updated'])
+            );
+        }
+    });
+};
+
 // JSON data of a project
 Controller.prototype.handleApiEditProject = function(req, res) {
     var project = projectCache.getById(req.params.projectId);
@@ -694,6 +750,40 @@ Controller.prototype.handleEditClientTeamMember = function (req, res) {
     });
 };
 
+/**
+ * Render Edit project health status
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditHealthStatus = function (req, res) {
+    var id = req.params.id;
+
+    var project = projectCache.getById(id);
+
+    res.render('edit-health', {
+        project: project,
+        convertDate: utils.convertDate
+    });
+};
+
+/**
+ * Render Edit project health status
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleDisplayHealthStatus = function (req, res) {
+    var id = req.params.id;
+
+    var project = projectCache.getById(id);
+
+    res.render('display-health', {
+        project: project,
+        convertDate: utils.convertDate
+    });
+};
+
 // Edit project form
 Controller.prototype.handleEditProject = function(req, res) {
     var id = req.params.id;
@@ -704,12 +794,14 @@ Controller.prototype.handleEditProject = function(req, res) {
 };
 
 /**
- * @param  {String} groupBy Name of the field by which the projects will be grouped
+ * @param  {String|function} groupBy Name of the field by which the projects will be grouped
  * @param  {String} path Router path, ex: '/location'
  * @param  {String[]} [rowOrder] Order of values by which to group the projects, default: alphabetical
+ * @param  {String=} [viewType] Optional view name if groupBy is not a string
  */
-Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder) {
+Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, viewType) {
     this.router.get(path, connect.ensureLoggedIn(), function(req, res) {
+        var view = viewType ? viewType : groupBy;
         var projectList = [];
         Object.keys(projectCache.getAll()).forEach(function(ID) {
             projectList.push(projectCache.getById(ID));
@@ -724,7 +816,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder) {
             "data": new_data,
             "phase": req.query.phase,
             "counts": phases,
-            "view": groupBy,
+            "view": view,
             "row_order": rowOrder,
             "phase_order": phase_order
         });

@@ -19,21 +19,28 @@ var priority_order = [
 ];
 
 var health_order = [
-  'Good',
-  'Fair',
-  'Critical'
+  'good',
+  'fair',
+  'risk',
+  'unknown'
 ];
+
+var healthGroupFunc = function(p) {
+    return p.health.overall ? p.health.overall.status : 'unknown';
+};
 
 var controller = new controllers(router);
 controller.setupIndexPageRoute('location', ['/', '/location']);
 controller.setupIndexPageRoute('agency', '/agency');
 controller.setupIndexPageRoute('theme', '/theme');
-controller.setupIndexPageRoute('health', '/health', health_order);
+controller.setupIndexPageRoute(healthGroupFunc, '/health', health_order, 'health');
 controller.setupIndexPageRoute('priority', '/priority', priority_order);
 
 router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProject);
 router.get('/projects/:id/:slug/edit-our-team', connect.ensureLoggedIn(), controller.handleEditOurTeam);
 router.get('/projects/:id/:slug/edit-resources', connect.ensureLoggedIn(), controller.handleEditResources);
+router.get('/projects/:id/:slug/edit-health', connect.ensureLoggedIn(), controller.handleEditHealthStatus);
+router.get('/projects/:id/:slug/display-health', connect.ensureLoggedIn(), controller.handleDisplayHealthStatus);
 router.get('/projects/:projectId/:slug/resource/:resourceId/edit', connect.ensureLoggedIn(), controller.handleEditResource);
 router.get('/projects/:projectId/:slug/person/team/:personId/edit', connect.ensureLoggedIn(), controller.handleEditTeamMember);
 router.get('/projects/:id/:slug/edit-client-team', connect.ensureLoggedIn(), controller.handleEditClientTeam);
@@ -44,6 +51,7 @@ router.get('/projects/:id/:slug/prototype', connect.ensureLoggedIn(), controller
 
 router.get('/api', connect.ensureLoggedIn(), controller.handleApi);
 router.put('/api/projects/:projectId', connect.ensureLoggedIn(), controller.handleApiEditProject);
+router.put('/api/projects/:projectId/health', connect.ensureLoggedIn(), controller.handleApiUpdateHealthStatus);
 router.get('/api/:id', connect.ensureLoggedIn(), controller.handleApiProjectId);
 router.post('/api/projects/:projectId/person/team', connect.ensureLoggedIn(), controller.handleApiAddTeamMember);
 router.post('/api/projects/:projectId/resource', connect.ensureLoggedIn(), controller.handleApiAddResource);
