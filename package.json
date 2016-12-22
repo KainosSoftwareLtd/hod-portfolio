@@ -14,6 +14,7 @@
     "aws-sdk": "^2.7.10",
     "basic-auth": "^1.0.4",
     "browser-sync": "2.18.2",
+    "body-parser": "^1.15.2",
     "bunyan": "^1.8.1",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",

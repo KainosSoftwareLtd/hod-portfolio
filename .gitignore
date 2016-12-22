@@ -1,4 +1,5 @@
 .env
+.node-version
 .sass-cache
 .DS_Store
 .start.pid
@@ -9,10 +10,12 @@ govuk_modules
 node_modules/*
 *.sublime-*
 docs
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
 .jshintrc
 .project
 .tern-project
@@ -21,3 +24,7 @@ docs
 /node_modules/
 /lib/
 .vscode/
+typings.json
+typings/
+jsconfig.json
+npm-debug.log

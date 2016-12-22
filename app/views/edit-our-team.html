@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Edit team members
+{% endblock %}
+
+{% block content %}
+
+<main id="content" role="main">
+
+    <div class="grid-row">
+        <section style="padding-top:30px;">
+
+            <h1 class="form-title heading-large">
+                Edit Kainos team
+            </h1>
+
+            <div class="grid-row">
+                <section class="column-half">
+                    <h2 class="heading-medium">Edit Kainos team members for <a href="/projects/{{ projectId }}/{{ projectName | slugify }}">{{ projectName }}</a></h2>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Role</td>
+                                    <td>Name</td>
+                                    <td><!-- column for "more" buttons --></td>
+                                    <td><!-- column for edition buttons --></td>
+                                </tr>
+                            </thead>
+                            {% for teamMember in teamMembers %}
+                            <tr>
+                                <td>{{ teamMember.role}}</td>
+                                <td>{{ teamMember.name }}</td>
+                                <td data-collapsable-parent="team-member-{{ loop.index }}">[+]</td>
+                                <td>
+                                    <a href="#" onclick="removeTeamMember('{{ teamMember.id }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                    <a href="/projects/{{ projectId }}/{{ projectName | slugify }}/person/team/{{ teamMember.id }}/edit">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-collapsable-child="team-member-{{ loop.index }}" colspan="4">
+                                    <div class="grid-row">
+                                        <section class="column-half">
+                                            {% if teamMember.primaryLocation %}
+                                            <p>Primary location: {{ teamMember.primaryLocation }} </p>
+                                            {% endif %}
+
+                                            {% if teamMember.secondaryLocation %}
+                                            <p>Secondary location: {{ teamMember.secondaryLocation}} </p>
+                                            {% endif %}
+                                        </section>
+                                        <section class="column-half">
+                                            {% if teamMember.email %}
+                                            <p>Email: <a href="mailto:{{ teamMember.email }}">{{ teamMember.email }}</a></p>
+                                            {% endif %}
+
+                                            {% if teamMember.mobile %}
+                                            <p>Mobile: {{ teamMember.mobile}} </p>
+                                            {% endif %}
+
+                                            {% if teamMember.slack %}
+                                            <p>Slack: {{ teamMember.slack}} </p>
+                                            {% endif %}
+
+                                            {% if teamMember.skype %}
+                                            <p>Skype: {{ teamMember.skype }} </p>
+                                            {% endif %}
+                                        </section>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <tr id="add-new-member" style="display: none;">
+                                <td colspan="4">
+                                    {% include "includes/person-form.html" %}
+                                </td>
+                            </tr>
+                            <tr id="add-btn-row">
+                                <td colspan="4"><a href="#" onclick="addTeamMember()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}
+
+{% block body_end %}
+{{ super() }}
+<script>
+    $("#person-form").submit(function(e) {
+        e.preventDefault();
+
+        var data = $('#person-form').serializeObject();
+
+        $.ajax({
+            type: "POST",
+            url: '/api/projects/{{ projectId }}/person/team',
+            contentType: "application/json",
+            data: JSON.stringify(data.person)
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+            location.reload();
+        })
+        .fail(function(jqXHR, textStatus) {
+            alert('There was an error adding person. ' + jqXHR.responseText);
+        });
+    });
+
+    function addTeamMember() {
+        $('#add-new-member').css('display', 'block');
+        $('#add-btn-row').css('display', 'none');
+    }
+
+    function removeTeamMember(personId) {
+        var r = confirm("Are you sure you want to remove this person?");
+        if (r == false) {
+            return;
+        }
+
+        $.ajax({
+            type: "DELETE",
+            url: '/api/projects/{{ projectId }}/person/team/' + personId,
+            contentType: "application/json"
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+            location.reload();
+        })
+        .fail(function(jqXHR) {
+            alert('There was an error removing person. ' + jqXHR.responseText);
+        });
+    }
+</script>
+{% endblock %}
