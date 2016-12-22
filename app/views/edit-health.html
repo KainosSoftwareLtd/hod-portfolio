@@ -84,20 +84,6 @@ Edit project health
                             <input type="submit" class="button" value="Submit">
                         </div>
                     </form>
-
-                    {% if project["healthHistory"] %}
-                    <div class="grid-row">
-                        <h2 class="heading-medium">Health history <span data-collapsable-parent="health-history" class="clickable">[+]</span></h2>
-                        <div data-collapsable-child="health-history" style="display: none;">
-                            {% for health in project.healthHistory %}
-                            <div>
-                                <p>{{ health.status }} &mdash; {{ convertDate(health.date) }}</p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
-
                 </section>
 
             </div>

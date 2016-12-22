@@ -8,7 +8,7 @@ Project health summary
 
 <main id="content" role="main">
     <h1 class="form-title heading-large">
-        {{ project.name }}
+        <a href="/projects/{{ project.id }}/{{ project.name | slugify }}">{{ project.name }}</a>
         <span class="pull-right"><a href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">Update</a></span>
     </h1>
 
@@ -24,29 +24,33 @@ Project health summary
         {% set types = ["overall", "engineering", "ops", "userResearch", "security", "delivery", "data"] %}
 
         {% for type in types %}
-        <tr>
-            <td>
-                <div><strong class="bold-small">{{ project.health[type].type | title }}</strong></div>
-                <a href="{{ project.health[type].link.url }}">
-                    {{ project.health[type].link.name }}
-                </a>
-            </td>
-            <td>
-                <a href="mailto:{{ project.health[type].user.email}}">
-                    {{ project.health[type].user.name }}
-                </a>
-                    <div>{{ convertDate(project.health[type].date) }}</div>
-            </td>
-            <td>
-                <div>{{ project.health[type].comment }}</div>
-            </td>
-            <td>
-                <div class="health-circle">
-                    <p class="circle {{ project.health[type].status | lower }}"></p>
-                    <p class="circle-label">{{ project.health[type].status | title }}</p>
-                </div>
-            </td>
-        </tr>
+            {% if project.health[type] %}
+            <tr>
+                <td>
+                    <div><strong class="bold-small">{{ project.health[type].type | title }}</strong></div>
+                    <a href="{{ project.health[type].link.url }}">
+                        {{ project.health[type].link.name }}
+                    </a>
+                </td>
+                <td>
+                    <a href="mailto:{{ project.health[type].user.email}}">
+                        {{ project.health[type].user.name }}
+                    </a>
+                        {% if project.health[type].date %}
+                            <div>{{ convertDate(project.health[type].date) }}</div>
+                        {% endif %}
+                </td>
+                <td>
+                    <div>{{ project.health[type].comment }}</div>
+                </td>
+                <td>
+                    <div class="health-circle">
+                        <p class="circle {{ project.health[type].status | lower }}"></p>
+                        <p class="circle-label">{{ project.health[type].status | title }}</p>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
         {% endfor %}
     </table>
 </main>

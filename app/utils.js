@@ -14,4 +14,10 @@ Utils.generateGUID = function() {
     });
 };
 
+Utils.convertDate = function(timestamp) {
+    return new Date(timestamp).toLocaleDateString("en-GB",
+        { year: 'numeric', month: 'long', day: 'numeric' }
+    );
+};
+
 module.exports = Utils;

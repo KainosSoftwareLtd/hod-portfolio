@@ -4,6 +4,7 @@ var connect = require('connect-ensure-login');
 var projectCache = require('./projectCache');
 var log = require('./logger');
 var apiUtils = require('./apiUtils');
+var utils = require('./utils');
 var projectDao = require('./dao/project');
 var Project = require('./models/project');
 var Person = require('./models/person');
@@ -583,7 +584,6 @@ Controller.prototype.handleApiEditProject = function(req, res) {
         project.setDescription(req.body.description);
         project.setLocation(req.body.location);
         project.setPhase(req.body.phase);
-        project.setHealth(req.body.health, req.user);
 
         projectDao.addProject(project, function(err, editedProject) {
             log.trace('Updating project: ' + JSON.stringify(project));
@@ -763,9 +763,7 @@ Controller.prototype.handleEditHealthStatus = function (req, res) {
 
     res.render('edit-health', {
         project: project,
-        convertDate: function(timestamp) {
-            return new Date(timestamp).toLocaleDateString("en-GB", { year: 'numeric', month: 'long', day: 'numeric' });
-        }
+        convertDate: utils.convertDate
     });
 };
 
@@ -782,9 +780,7 @@ Controller.prototype.handleDisplayHealthStatus = function (req, res) {
 
     res.render('display-health', {
         project: project,
-        convertDate: function(timestamp) {
-            return new Date(timestamp).toLocaleDateString("en-GB", { year: 'numeric', month: 'long', day: 'numeric' });
-        }
+        convertDate: utils.convertDate
     });
 };
 
