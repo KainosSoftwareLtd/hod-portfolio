@@ -40,7 +40,7 @@ router.get('/auth/openid/return',
     }),
     function (req, res) {
         req.flash('success', 'Welcome, ' + req.user.name.givenName);
-        res.redirect('/');
+        res.redirect(req.session.returnTo || '/'); // returnTo is set by connect-ensure-login
     }
 );
 
