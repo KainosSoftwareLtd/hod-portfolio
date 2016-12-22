@@ -59,6 +59,12 @@ FileStore.getAllProjects = function(done) {
                         errors.push(err);
                     } else {
                         var jsonData = JSON.parse(data);
+                        if(typeof jsonData.health === 'string') {
+                            jsonData.health = {
+                                overall: {type: "overall", status: jsonData.health.toLowerCase() }
+                            }
+                        }
+                        
                         projects.push(jsonData);
                     }
 
