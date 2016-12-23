@@ -619,18 +619,6 @@ Controller.prototype.handleProjectIdSlug = function(req, res) {
     });
 };
 
-// Prototype version of project info 
-Controller.prototype.handleSlugPrototype = function(req, res) {
-    var data = projectCache.getById(req.params.id);
-    if (typeof data.prototype == 'undefined') {
-        res.render('no-prototype', {
-            "data": data
-        });
-    } else {
-        res.redirect(data.prototype);
-    }
-};
-
 // Add project form
 Controller.prototype.handleAddProject = function(req, res) {
     var id = req.params.id;
