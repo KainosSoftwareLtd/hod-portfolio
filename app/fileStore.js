@@ -2,9 +2,6 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 var _ = require('underscore');
 var log = require('./logger');
-var merge = require('merge');
-
-var FileStore = function() {};
 
 var FileStore = function() {};
 
@@ -64,13 +61,36 @@ FileStore.getAllProjects = function(done) {
                                 overall: {type: "overall", status: jsonData.health.toLowerCase() }
                             }
                         }
-                        
+
                         projects.push(jsonData);
                     }
 
                     downloadFinished();
                 });
             });
+        }
+    });
+};
+
+/**
+ * Downloads a specific project
+ *
+ * @param {string} projectId
+ * @param {function} done Callback
+ */
+FileStore.getProjectById = function(projectId, done) {
+    getS3FileContents({Key: projectId + '.json'}, function(err, data) {
+        if (err) {
+            done(err);
+        } else {
+            var jsonData = JSON.parse(data);
+            if(typeof jsonData.health === 'string') {
+                jsonData.health = {
+                    overall: {type: "overall", status: jsonData.health.toLowerCase() }
+                }
+            }
+
+            done(null, jsonData);
         }
     });
 };

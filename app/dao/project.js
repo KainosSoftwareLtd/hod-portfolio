@@ -36,6 +36,17 @@ Projects.getAll = function(callback) {
     });
 };
 
+Projects.getOne = function(ID, callback) {
+    fileStore.getProjectById(ID, function(error, data) {
+        if(error) {
+            callback(error);
+        } else {
+            var project = Project.fromJson(data);
+            callback(null, project);
+        }
+    });
+};
+
 /**
  * Adds a project team member.
  *

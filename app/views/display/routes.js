@@ -14,36 +14,39 @@ router.get('/display/:number?/:location?', connect.ensureLoggedIn(), function(re
     // Grab location from URL (if it's there)
     var location = req.params.location;
 
-    var data = [];
-    Object.keys(projectCache.getAll()).forEach(function(ID) {
-        data.push(projectCache.getById(ID));
-    });
+    projectCache.getAll(function(err, projectMap) {
+        var data = [];
 
-    // put data into simpler var for consise-ity (take out pipeline stuff).
-    var data = _.filter(data, function(el) {
-        return (el.phase !== 'pipeline');
-    });
-
-    // if we've got a location filter the data.
-    if (location) {
-        data = _.filter(data, function(el) {
-            return (el.location.toLowerCase() == location.toLowerCase());
+        _.each(projectMap, function(proj) {
+            data.push(proj)
         });
-        // pass the location into the template for use there.
-        req.data.location = location;
-    }
 
-    // if number is too big for the current data reset it.
-    if (number >= data.length) number = 0;
+        // put data into simpler var for consise-ity (take out pipeline stuff).
+        var data = _.filter(data, function(el) {
+            return (el.phase !== 'pipeline');
+        });
 
-    // gather template data for rendering.
-    req.data.data = data[number];
-    req.data.total = data.length;
-    req.data.number = number;
+        // if we've got a location filter the data.
+        if (location) {
+            data = _.filter(data, function(el) {
+                return (el.location.toLowerCase() == location.toLowerCase());
+            });
+            // pass the location into the template for use there.
+            req.data.location = location;
+        }
 
-    // make sure we use the right template to render.
-    req.url = '/display/';
-    next();
+        // if number is too big for the current data reset it.
+        if (number >= data.length) number = 0;
+
+        // gather template data for rendering.
+        req.data.data = data[number];
+        req.data.total = data.length;
+        req.data.number = number;
+
+        // make sure we use the right template to render.
+        req.url = '/display/';
+        next();
+    });
 });
 
 module.exports = router;
