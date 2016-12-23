@@ -10,8 +10,8 @@ Project health summary
     <div class="grid-row">
         <h1 class="form-title heading-large">
             <a href="/projects/{{ project.id }}/{{ project.name | slugify }}">{{ project.name }}</a>
-            <span class="pull-right"><a href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">Update</a></span>
         </h1>
+        <a class="button" href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">Update</a>
 
         <table>
             <thead>
