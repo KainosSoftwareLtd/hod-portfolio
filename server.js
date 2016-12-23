@@ -9,7 +9,6 @@ var path = require('path'),
     nunjucks = require('express-nunjucks'),
     _ = require('underscore'),
     routes = require(__dirname + '/app/routes.js'),
-    dis_routes = require(__dirname + '/app/views/display/routes.js'),
     authRoutes = require(__dirname + '/app/authRoutes.js'),
     log = require(__dirname + '/app/logger.js'),
     passport = require('passport'),
@@ -88,7 +87,6 @@ if (typeof(routes) != "function") {
     log.warn("The use of bind in routes is deprecated - please check the prototype kit documentation for writing routes.")
     routes.bind(app);
 } else {
-    app.use("/", dis_routes);
     app.use("/", routes);
     app.use("/", authRoutes);
 }

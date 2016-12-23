@@ -22,7 +22,7 @@ module.exports = class Project {
         this.health.overall = new HealthRecord(
             "overall",
             "unknown",
-            {name: "Bot", email: ""},
+            {name: "Added Automatically", email: ""},
             "Overall project health has not yet been set.");
     }
 

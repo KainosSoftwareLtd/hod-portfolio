@@ -1,57 +1,46 @@
-{% extends "layout.html" %}
-
-{% block pageTitle %}
-Project health summary
-{% endblock %}
-
-{% block content %}
-
+{% extends "layout.html" %} {% block pageTitle %} Project health summary {% endblock %} {% block content %}
 <main id="content" role="main">
-    <h1 class="form-title heading-large">
-        <a href="/projects/{{ project.id }}/{{ project.name | slugify }}">{{ project.name }}</a>
-        <span class="pull-right"><a href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">Update</a></span>
-    </h1>
-
-    <table>
-        <thead>
-            <tr>
-                <td>Healthcheck Type and Link</td>
-                <td>Author and Date</td>
-                <td>Comment</td>
-                <td>Status</td>
-            </tr>
-        </thead>
-        {% set types = ["overall", "engineering", "ops", "userResearch", "security", "delivery", "data"] %}
-
-        {% for type in types %}
-            {% if project.health[type] %}
-            <tr>
-                <td>
-                    <div><strong class="bold-small">{{ project.health[type].type | title }}</strong></div>
-                    <a href="{{ project.health[type].link.url }}">
-                        {{ project.health[type].link.name }}
-                    </a>
-                </td>
-                <td>
-                    <a href="mailto:{{ project.health[type].user.email}}">
-                        {{ project.health[type].user.name }}
-                    </a>
-                        {% if project.health[type].date %}
-                            <div>{{ convertDate(project.health[type].date) }}</div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <p class="font-large">{{ project.name }} Health</p>
+            <p>
+                {% set types = ["overall", "engineering", "ops", "userResearch", "security", "delivery", "data"] %} {% for type in types %} {% if project.health[type] %}
+                <span class="health block {{ project.health[type].status | lower }}">{{ project.health[type].type | title }} <strong>{{ project.health[type].status | title }}</strong></span> {% endif %} {% endfor %}
+            </p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <p><a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}"> Back to project page</a> <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">Update Health</a>
+            </p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <p class="font-large">Detail</p>
+            {% set types = ["overall", "engineering", "ops", "userResearch", "security", "delivery", "data"] %} {% for type in types %} {% if project.health[type] %}
+            <div class="grid-row">
+                <section class="column-full">
+                    <div class="panel-indent">
+                        <p><strong class="bold-small">{{ project.health[type].type | title }}</strong> health <strong class="health {{ project.health[type].status | lower }}">{{ project.health[type].status | title }}</strong>
+                        </p>
+                        <p class="font-xsmall">{{ convertDate(project.health[type].date) }} by {{ project.health[type].user.name }}
+                        </p>
+                        <div>{{ project.health[type].comment }}</div>
+                        {% if project.health[type].link.url %}
+                        <div>
+                        <p>
+                            <ul class="link-list font-xsmall">
+                                <li><a href="{{ project.health[type].link.url }}">{{ project.health[type].link.name }}</a></li>
+                            </ul>
+                            </p>
+                        </div>
                         {% endif %}
-                </td>
-                <td>
-                    <div>{{ project.health[type].comment }}</div>
-                </td>
-                <td>
-                    <div class="health-circle">
-                        <p class="circle {{ project.health[type].status | lower }}"></p>
-                        <p class="circle-label">{{ project.health[type].status | title }}</p>
                     </div>
-                </td>
-            </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
+                </section>
+            </div>
+            {% endif %} {% endfor %}
+        </section>
+    </div>
 </main>
 {% endblock %}

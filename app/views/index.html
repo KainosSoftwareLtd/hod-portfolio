@@ -1,9 +1,5 @@
 {% extends "layout.html" %}
 
-{% block pageTitle %}
-	DWP Digital Portfolio
-{% endblock %}
-
 {% block content %}
 
 <main id="content" role="main">
@@ -15,10 +11,10 @@
 	<p style="margin-top:30px;">
 		Our services, ordered by {{ view }}
 
-		{% if view != 'agency' %}(<a href="/agency">order by agency</a>){% endif %}
-		{% if view != 'theme' %}(<a href="/theme">order by theme</a>){% endif %}
+		<!-- {% if view != 'agency' %}(<a href="/agency">order by agency</a>){% endif %} -->
+		<!-- {% if view != 'theme' %}(<a href="/theme">order by theme</a>){% endif %} -->
 		{% if view != 'location' %}(<a href="/location/">order by location</a>){% endif %}
-		{% if view != 'priority' %}(<a href="/priority">order by priority</a>){% endif %}
+		<!-- {% if view != 'priority' %}(<a href="/priority">order by priority</a>){% endif %} -->
 		{% if view != 'health' %}(<a href="/health">order by health</a>){% endif %}
 		
 	</p>
