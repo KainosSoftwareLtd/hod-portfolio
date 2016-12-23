@@ -1,171 +1,116 @@
-{% extends "layout.html" %}
-
-{% block pageTitle %}
-  GOV.UK prototyping kit
-{% endblock %}
-
-{% block content %}
-
+{% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
-
-  <div>
-     <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">Edit project</a>
-  </div>
-  
-  <h1 class="heading-xlarge" style="margin-bottom:15px;">{{ data.name }}</h1>
-
-  {% if data["service_url"] %}
-  <p><a href = "{{ data.service_url }}">{{ data.service_url }}</a></p>
-  {% endif %}
-
-  <p>{{ data.description }}</p>
-
-  <div class="grid-row">
-    <section class="column-third">
-      <div class="location">Based in <strong>{{ data.location }}</strong></div>
-
-      <h2 class="heading-medium">Project history</h2>
-      <div class="phase-history">
-        {% for phase in phase_order %}
-          {% if data["phase-history"][phase].length %}
-          <div class="phase-history-item border-{{phase}} txt-{{phase}}">
-            <h3><a href="#" class="tag tag-history {{phase}}">{{phase}}</a></h3>
-            {% for item in data["phase-history"][phase] %}
-              <p>{{ item.label }} &mdash; {{item.date}}</p>
-            {% endfor %}
-          </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </section>
-
-    <section class="column-two-thirds">
-      <section class="column-half">
-        <h2 class="heading-medium circle-desc">Phase</h2>
-        <div class="phase-circle">
-          <p class="circle {{ data.phase | lower }}"></p>
-          {% if data.phase_modifier %}<p class="phase_modifier">{{ data.phase_modifier }}</p>{% endif %}
-          <p class="circle-label">{{ data.phase | title }}</p>
-        </div>
-      </section>
-
-      <section class="column-half">
-        {% if data["health"] %}
-          <div class="grid-row">
-            <h2 class="heading-medium circle-desc">Health</h2>
-              <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">
-                <div class="health-circle">
-                  <p class="circle {{ data.health.overall.status | lower }}"></p>
-                  <p class="circle-label">{{ data.health.overall.status | title }}</p>
-                </div>
-              </a>
-            <p class="circle-desc"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">Update</a></p>
-          </div>
-        {% endif %}
-      </section>
-
-      <div class="grid-row">
-          <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Useful Links</a></h2>
-          {% if data["resources"] %}
-            {% for resource in data["resources"] %}
-              <a href = "{{ resource['url'] }}">{{ resource["name"] }}</a><br/>
-            {% endfor %}
-          {% endif %}
-      </div>
-
-      {% if data.sponsor %}
-        <h3 class="heading-small">Digital Sponsor</h3>
-        <p><a href="mailto:{{ data.sponsor_email | default('Not set') }}">{{ data.sponsor | default('Not set') }}</a></p>
-      {% endif %}
-
-      {% if data.service_man %}
-        <h3 class="heading-small">Service Manager</h3>
-        <p>{{ data.service_man | default('Not set') }}</p>
-      {% endif %}
-
-      {% if data["open_source"] %}
-        <h3 class="heading-small">Components</h3>
-      {% endif %}
-      {% for open_source in data["open_source"] %}
-        <p><a href = "{{ open_source['url'] }}">{{ open_source["name"] }}</a></p>
-      {% endfor %}
-
-      {% if data["related_services"] %}
-        <h3 class="heading-small">Related Services</h3>
-      {% endif %}
-      <p>
-      {% for related_service in data["related_services"] %}
-        <a href = "/projects/{{ related_service['id'] }}/x">{{ related_service["name"] }}</a><br/>
-      {% endfor %}
-      </p>
-    </section>
-  </div>
-  
-  <div class="grid-row">
-   {% macro peopleTable(peopleData, teamName) %}
-    <div>
-      {% if peopleData %}
-        <table>
-          <thead>
-            <tr>
-              <td>Role</td>
-              <td>Name</td>
-              <td><!-- column for "more" buttons --></td>
-            </tr>
-          </thead>
-           {% for teamMember in peopleData %}
-           <tr>
-             <td>{{ teamMember.role}}</td>
-             <td>{{ teamMember.name }}</td>
-             <td data-collapsable-parent="{{ teamName + loop.index }}" class="clickable">[+]</td>
-           </tr>
-           <tr>
-             <td data-collapsable-child="{{ teamName + loop.index }}" colspan="3">
-               <div class="grid-row">
-                 <section class="column-half">
-                   {% if teamMember.primaryLocation %}
-                     <p>Primary location: {{ teamMember.primaryLocation }} </p>
-                   {% endif %}
-
-                   {% if teamMember.secondaryLocation %}
-                     <p>Secondary location: {{ teamMember.secondaryLocation}} </p>
-                   {% endif %}
-                 </section>
-                 <section class="column-half">
-                   {% if teamMember.email %}
-                     <p>Email: <a href="mailto:{{ teamMember.email }}">{{ teamMember.email }}</a></p>
-                   {% endif %}
-
-                   {% if teamMember.mobile %}
-                    <p>Phone num: {{ teamMember.mobile}} </p>
-                   {% endif %}
-
-                   {% if teamMember.slack %}
-                    <p>Slack: {{ teamMember.slack}} </p>
-                   {% endif %}
-
-                   {% if teamMember.skype %}
-                    <p>Skype: {{ teamMember.skype }} </p>
-                   {% endif %}
-                 </section>
-               </div>
-             </td>
-           </tr>
-           {% endfor %}
-        </table>
-      {% endif %}
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <h1 class="font-xlarge">{{ data.name }}</h1>
+            <p class="location font-xsmall">{{ data.location }}</p>
+            <p><a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">Change details</a> <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">Change health</a></p>
+            <p>{{ data.description }}</p>
+        </section>
+        <section class="column-third">
+            <p class="phase {{ data.phase | lower }}">phase <strong>{{ data.phase | title }}</strong></p>
+            <p class="health {{ data.health.overall.status | lower }}">health <strong>{{ data.health.overall.status | title }}</strong></p>
+        </section>
     </div>
-  {% endmacro %}
-
-      <section class="column-half">
-        <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team">Kainos team <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
-        {{ peopleTable(data["ourTeam"], "Kainos") }}
-      </section>
-      <section class="column-half">
-          <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team">Client team <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
-          {{ peopleTable(data["clientTeam"], "Client") }}
-      </section>
-
-  </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <h2 class="font-large">Useful Links</h2>
+            <p>
+                {% if data["resources"].length > 0 %}
+                <ul class="link-list">
+                    {% for resource in data["resources"] %}
+                    <li><a href="{{ resource['url'] }}">{{ resource["name"] }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <ul class="link-list">
+                    <li>We don't have any links for this project.</li>
+                </ul>
+                {% endif %}
+            </p>
+            <p class="font-xsmall"> <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Change links</a></p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <h2 class="font-large">People</h2>
+        </section>
+    </div>
+    <div class="grid-row">
+        <!--MACRO FOR PEOPLE TABLE-->
+        {% macro peopleTable(peopleData, teamName) %}
+        <div>
+            {% if peopleData %}
+            <table>
+                <thead>
+                    <tr>
+                        <td>Role</td>
+                        <td>Name</td>
+                        <td>
+                            <!-- column for "more" buttons -->
+                        </td>
+                    </tr>
+                </thead>
+                {% for teamMember in peopleData %}
+                <tr>
+                    <td>{{ teamMember.role}}</td>
+                    <td>{{ teamMember.name }}</td>
+                    <td data-collapsable-parent="{{ teamName + loop.index }}" class="clickable">[+]</td>
+                </tr>
+                <tr>
+                    <td data-collapsable-child="{{ teamName + loop.index }}" colspan="3">
+                        <div class="grid-row">
+                            <section class="column-half">
+                                {% if teamMember.primaryLocation %}
+                                <p>Primary location: {{ teamMember.primaryLocation }} </p>
+                                {% endif %} {% if teamMember.secondaryLocation %}
+                                <p>Secondary location: {{ teamMember.secondaryLocation}} </p>
+                                {% endif %}
+                            </section>
+                            <section class="column-half">
+                                {% if teamMember.email %}
+                                <p>Email: <a href="mailto:{{ teamMember.email }}">{{ teamMember.email }}</a></p>
+                                {% endif %} {% if teamMember.mobile %}
+                                <p>Phone num: {{ teamMember.mobile}} </p>
+                                {% endif %} {% if teamMember.slack %}
+                                <p>Slack: {{ teamMember.slack}} </p>
+                                {% endif %} {% if teamMember.skype %}
+                                <p>Skype: {{ teamMember.skype }} </p>
+                                {% endif %}
+                            </section>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+        {% endmacro %}
+        <!--MACRO FOR PEOPLE TABLE-->
+        <section class="column-half">
+            <p class="font-medium">Our team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team">Change team members</a></p>
+            {{ peopleTable(data["ourTeam"], "Kainos") }}
+            <p></p>
+        </section>
+        <section class="column-half">
+            <p class="font-medium">Client team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team">Change team members</a></p>
+            {{ peopleTable(data["clientTeam"], "Client") }}
+            <p></p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-third">
+            <h2 class="font-large">Project history</h2>
+            <div class="phase-history">
+                {% for phase in phase_order %} {% if data["phase-history"][phase].length %}
+                <div class="phase-history-item border-{{phase}} txt-{{phase}}">
+                    <h3><a href="#" class="tag tag-history {{phase}}">{{phase}}</a></h3> {% for item in data["phase-history"][phase] %}
+                    <p>{{ item.label }} &mdash; {{item.date}}</p>
+                    {% endfor %}
+                </div>
+                {% endif %} {% endfor %}
+            </div>
+        </section>
+    </div>
 </main>
 {% endblock %}

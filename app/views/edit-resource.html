@@ -1,36 +1,26 @@
-{% extends "layout.html" %}
-
-{% block pageTitle %}
-Edit resource
-{% endblock %}
-
-{% block content %}
-
+{% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
-
     <div class="grid-row">
-        <section style="padding-top:30px;">
-
-            <h1 class="form-title heading-large">
-                Edit Link 
-            </h1>
-            
+        <section class="column-two-thirds">
+            <h1 class="form-title font-xlarge">Edit {{ resource.name }} Link</h1>
+            <p>
+                <a class="font-xsmall" href="/projects/{{ projectId }}/{{ projectName | slugify }}/edit-resources"> Useful links</a>
+            </p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
             <form action="#" class="form" id="resource-form">
-                <div class="grid-row">
-                    <input type="hidden" class="form-control" id="resourceId" name="resource[id]" value="{{ resource.id }}">
-                    <section>
-                        <div class="form-group">
-                            <label class="form-label-bold" for="name">Name</label>
-                            <p class="form-hint">Link name</p>
-                            <input type="text" class="form-control" id="name" name="resource[name]" value="{{ resource.name }}">
-                        </div>
-            
-                        <div class="form-group">
-                            <label class="form-label-bold" for="url">URL</label>
-                            <p class="form-hint">Web address</p>
-                            <input type="url" class="form-control" id="url" name="resource[url]" value="{{ resource.url }}">
-                        </div>
-                    </section>
+                <input type="hidden" class="form-control" id="resourceId" name="resource[id]" value="{{ resource.id }}">
+                <div class="form-group">
+                    <label class="form-label-bold" for="name">Name</label>
+                    <p class="form-hint">Link name</p>
+                    <input type="text" class="form-control" id="name" name="resource[name]" value="{{ resource.name }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label-bold" for="url">URL</label>
+                    <p class="form-hint">Web address</p>
+                    <input type="url" class="form-control" id="url" name="resource[url]" value="{{ resource.url }}">
                 </div>
                 <div class="form-group">
                     <input type="submit" class="button" value="Submit">
@@ -39,17 +29,14 @@ Edit resource
         </section>
     </div>
 </main>
-{% endblock %}
-
-{% block body_end %}
-{{ super() }}
+{% endblock %} {% block body_end %} {{ super() }}
 <script>
-    $("#resource-form").submit(function(e) {
-        e.preventDefault();
+$("#resource-form").submit(function(e) {
+    e.preventDefault();
 
-        var data = $('#resource-form').serializeObject();
+    var data = $('#resource-form').serializeObject();
 
-        $.ajax({
+    $.ajax({
             type: "PUT",
             url: '/api/projects/{{ projectId }}/resource/' + data.resource.id,
             contentType: "application/json",
@@ -63,7 +50,6 @@ Edit resource
         .fail(function(jqXHR) {
             alert('There was an error updating the link. ' + jqXHR.responseText);
         });
-    });
-
+});
 </script>
 {% endblock %}

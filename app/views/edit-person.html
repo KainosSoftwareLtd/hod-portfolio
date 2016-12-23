@@ -1,35 +1,27 @@
-{% extends "layout.html" %}
-
-{% block pageTitle %}
-Edit team members
-{% endblock %}
-
-{% block content %}
-
+{% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
-
     <div class="grid-row">
-        <section style="padding-top:30px;">
-
-            <h1 class="form-title heading-large">
-                Edit Person
-            </h1>
-
+        <section class="column-two-thirds">
+            <h1 class="form-title font-xlarge">Edit {{ person.name }}</h1>
+            <p>
+                <a class="font-xsmall" href="/projects/{{ projectId }}/{{ projectName | slugify }}/edit-our-team">Our team</a>
+            </p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
             {% include "includes/person-form.html" %}
         </section>
     </div>
 </main>
-{% endblock %}
-
-{% block body_end %}
-{{ super() }}
+{% endblock %} {% block body_end %} {{ super() }}
 <script>
-    $("#person-form").submit(function(e) {
-        e.preventDefault();
+$("#person-form").submit(function(e) {
+    e.preventDefault();
 
-        var data = $('#person-form').serializeObject();
+    var data = $('#person-form').serializeObject();
 
-        $.ajax({
+    $.ajax({
             type: "PUT",
             url: '/api/projects/{{ projectId }}/person/team/' + data.person.id,
             contentType: "application/json",
@@ -43,7 +35,6 @@ Edit team members
         .fail(function(jqXHR) {
             alert('There was an error while updating person. ' + jqXHR.responseText);
         });
-    });
-
+});
 </script>
 {% endblock %}

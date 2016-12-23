@@ -106,6 +106,33 @@ $risk-colour: $orange;
   strong {font-size:24px; font-weight:700}
 }
 
+.phase, .health {
+  display: inline-block;
+  color: white;
+  font-weight: normal;
+  text-transform: none;
+  padding: 2px 8px 0;
+}
+
+.health.block {
+  margin: 8px;
+}
+
+.location strong {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.health strong {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.phase strong {
+  font-size: 24px;
+  font-weight: 700;
+}
+
 .phase-history {
   clear:both;
   margin-top:30px;
@@ -137,10 +164,21 @@ $risk-colour: $orange;
 .circle.beta      {background-color:$beta-colour;}
 .circle.live      {background-color:$live-colour;}
 
+.phase.pipeline   {background-color:$pipeline-colour;}
+.phase.discovery {background-color:$discovery-colour;}
+.phase.alpha     {background-color:$alpha-colour;}
+.phase.beta      {background-color:$beta-colour;}
+.phase.live      {background-color:$live-colour;}
+
 .circle.good      {background-color:$good-colour;}
 .circle.fair      {background-color:$fair-colour;}
 .circle.risk      {background-color:$risk-colour;}
 .circle.unknown   {background-color:grey;}
+
+.health.good      {background-color:$good-colour;}
+.health.fair      {background-color:$fair-colour;}
+.health.risk      {background-color:$risk-colour;}
+.health.unknown   {background-color:grey;}
 
 .phase_modifier {
   font-size:16px;
@@ -151,7 +189,7 @@ $risk-colour: $orange;
   color:white;
 }
 .phase-circle, .health-circle {
-  width: 150px;
+  width: 100px;
   position:relative;
 }
 .circle-label {
@@ -165,12 +203,10 @@ $risk-colour: $orange;
   font-size:24px;
 }
 .circle {
-  background:red;
   color:white;
   width:100%;
   height:0;
   padding-top:100%;
-  border-radius:50% 50%;
   display:inline-block;
   margin:0;
 }
