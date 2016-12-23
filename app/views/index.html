@@ -39,7 +39,7 @@
 	{% for name in row_order %}
 
 		{% set item = data[name] %}
-		<h2 class="heading-large service-area">{{ name | title }}</h2>
+		<h2 class="font-large service-area">{{ name | title }}</h2>
 
 		{% if view == 'priority' %}
 		<p>{{ priority_descriptions[name] }}</p>

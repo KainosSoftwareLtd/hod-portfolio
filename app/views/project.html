@@ -16,11 +16,16 @@
         <section class="column-two-thirds">
             <p class="font-medium">Useful Links</p>
             <p>            
-                {% if data["resources"] %}
+                {% if data["resources"].length > 0 %}
                 <ul class="link-list">
                     {% for resource in data["resources"] %}
-                    <li><a href="{{ resource['url'] }}">{{ resource["name"] }}</a></li> {% endfor %}
+                    <li><a href="{{ resource['url'] }}">{{ resource["name"] }}</a></li> 
+                    {% endfor %}
                 </ul>
+                {% else %}
+                <ul class="link-list">                    
+                    <li>We don't have any links for this project.</li>
+                </ul>                
                 {% endif %}
             </p>
             <p class="font-xsmall"> <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Manage links</a></p>
