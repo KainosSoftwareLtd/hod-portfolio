@@ -22,13 +22,22 @@ Project health summary
                     <td>Status</td>
                 </tr>
             </thead>
-            {% set types = ["overall", "engineering", "ops", "userResearch", "security", "delivery", "data"] %}
+            {% set types = {
+                    "overall":{label: "Overall"}, 
+                    "engineering": {label: "Engineering"}, 
+                    "ops": {label: "Operations"}, 
+                    "userResearch": {label: "User Research"}, 
+                    "security": {label: "Security"}, 
+                    "delivery": {label: "Delivery"}, 
+                    "data": {label: "Data"}
+                }
+            %}
 
-            {% for type in types %}
+            {% for type, details in types %}
                 {% if project.health[type] %}
                 <tr>
                     <td>
-                        <div><strong class="bold-small">{{ project.health[type].type | title }}</strong></div>
+                        <div><strong class="bold-small">{{ details.label | title }}</strong></div>
                         <a href="{{ project.health[type].link.url }}">
                             {{ project.health[type].link.name }}
                         </a>
@@ -67,12 +76,11 @@ Project health summary
                 <td>Status</td>
             </tr>
             </thead>
-            {% set types = ["overall", "engineering", "ops", "userResearch", "security", "delivery", "data"] %}
 
             {% for status in history %}
             <tr>
                 <td>
-                    <div><strong class="bold-small">{{ status.type | title }}</strong></div>
+                    <div><strong class="bold-small">{{ types[status.type].label | title }}</strong></div>
                     <a href="{{ status.link.url }}">
                         {{ status.link.name }}
                     </a>
