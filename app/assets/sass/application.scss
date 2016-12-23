@@ -164,6 +164,12 @@ $risk-colour: $orange;
 .circle.beta      {background-color:$beta-colour;}
 .circle.live      {background-color:$live-colour;}
 
+.phase.pipeline   {background-color:$pipeline-colour;}
+.phase.discovery {background-color:$discovery-colour;}
+.phase.alpha     {background-color:$alpha-colour;}
+.phase.beta      {background-color:$beta-colour;}
+.phase.live      {background-color:$live-colour;}
+
 .circle.good      {background-color:$good-colour;}
 .circle.fair      {background-color:$fair-colour;}
 .circle.risk      {background-color:$risk-colour;}
@@ -183,7 +189,7 @@ $risk-colour: $orange;
   color:white;
 }
 .phase-circle, .health-circle {
-  width: 150px;
+  width: 100px;
   position:relative;
 }
 .circle-label {

@@ -1,43 +1,31 @@
-{% extends "layout.html" %}
-
-{% block pageTitle %}
-    Edit Project
-{% endblock %}
-
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
     <div class="grid-row">
-        <section style="padding-top:30px;">
-            <h1 class="form-title heading-large">
-                Edit Project
-            </h1>
+        <section class="column-two-thirds">
+            <h1 class="form-title font-xlarge">{{ project.name }}</h1>
             {% include "includes/project-form.html" %}
         </section>
     </div>
 </main>
-{% endblock %}
-
-{% block body_end %}
-{{ super() }}
+{% endblock %} {% block body_end %} {{ super() }}
 <script>
 $("#projectForm").submit(function(e) {
     e.preventDefault();
     $.ajax({
-        type: "PUT",
-        url: '/api/projects/{{ project.id }}',
-        contentType: "application/json",
-        data: JSON.stringify($('#projectForm').serializeObject())
-    })
-    .done(function(response) {
-        alert(JSON.stringify(response.messages[0]));
-        window.location.href = '/';
-    })
-    .fail(function(jqXHR) {
-        alert('There was an error updating project. Details: \n\n' + jqXHR.responseText);
-    });
+            type: "PUT",
+            url: '/api/projects/{{ project.id }}',
+            contentType: "application/json",
+            data: JSON.stringify($('#projectForm').serializeObject())
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+            window.location.href = '/';
+        })
+        .fail(function(jqXHR) {
+            alert('There was an error updating project. Details: \n\n' + jqXHR.responseText);
+        });
 });
 
 $("select#phase").val("{{ project.phase }}");
-
 </script>
 {% endblock %}

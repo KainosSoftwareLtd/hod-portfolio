@@ -2,10 +2,10 @@
 <main id="content" role="main">
     <div class="grid-row">
         <section class="column-two-thirds">
-            <p class="font-large">{{ data.name }}</p>
+            <h1 class="font-xlarge">{{ data.name }}</h1>
             <p class="location font-xsmall">{{ data.location }}</p>
+            <p><a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">Change details</a> <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">Change health</a></p>
             <p>{{ data.description }}</p>
-            <p><a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">Edit project details</a> <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">Manage project health</a></p>
         </section>
         <section class="column-third">
             <p class="phase {{ data.phase | lower }}">phase <strong>{{ data.phase | title }}</strong></p>
@@ -14,21 +14,26 @@
     </div>
     <div class="grid-row">
         <section class="column-two-thirds">
-            <p class="font-medium">Useful Links</p>
-            <p>            
+            <h2 class="font-large">Useful Links</h2>
+            <p>
                 {% if data["resources"].length > 0 %}
                 <ul class="link-list">
                     {% for resource in data["resources"] %}
-                    <li><a href="{{ resource['url'] }}">{{ resource["name"] }}</a></li> 
+                    <li><a href="{{ resource['url'] }}">{{ resource["name"] }}</a></li>
                     {% endfor %}
                 </ul>
                 {% else %}
-                <ul class="link-list">                    
+                <ul class="link-list">
                     <li>We don't have any links for this project.</li>
-                </ul>                
+                </ul>
                 {% endif %}
             </p>
-            <p class="font-xsmall"> <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Manage links</a></p>
+            <p class="font-xsmall"> <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Change links</a></p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <h2 class="font-large">People</h2>
         </section>
     </div>
     <div class="grid-row">
@@ -83,19 +88,19 @@
         {% endmacro %}
         <!--MACRO FOR PEOPLE TABLE-->
         <section class="column-half">
-            <p class="font-medium">Kainos team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team">Add team members</a></p>
+            <p class="font-medium">Our team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team">Change team members</a></p>
             {{ peopleTable(data["ourTeam"], "Kainos") }}
             <p></p>
         </section>
         <section class="column-half">
-            <p class="font-medium">Client team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team">Add team members</a></p>
+            <p class="font-medium">Client team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team">Change team members</a></p>
             {{ peopleTable(data["clientTeam"], "Client") }}
             <p></p>
         </section>
     </div>
     <div class="grid-row">
         <section class="column-third">
-            <p class="font-mdeium">Project history</p>
+            <h2 class="font-large">Project history</h2>
             <div class="phase-history">
                 {% for phase in phase_order %} {% if data["phase-history"][phase].length %}
                 <div class="phase-history-item border-{{phase}} txt-{{phase}}">

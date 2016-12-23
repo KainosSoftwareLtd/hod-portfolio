@@ -1,45 +1,33 @@
-{% extends "layout.html" %}
-
-{% block pageTitle %}
-	Add Project
-{% endblock %}
-
-{% block content %}
+{% extends "layout.html" %} {% block pageTitle %} Add Project {% endblock %} {% block content %}
 <main id="content" role="main">
-	<div class="grid-row">
-		<section style="padding-top:30px;">
-			<h1 class="form-title heading-large">
-				Add Project
-			</h1>
-			{% include "includes/project-form.html" %}
-		</section>
-	</div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <h1 class="form-title font-xlarge">Add Project</h1>
+            {% include "includes/project-form.html" %}
+        </section>
+    </div>
 </main>
-{% endblock %}
-
-{% block body_end %}
-{{ super() }}
+{% endblock %} {% block body_end %} {{ super() }}
 <script>
 $("#projectForm").submit(function(e) {
     e.preventDefault();
     $.ajax({
-        type: "POST",
-        url: '/api/projects',
-        contentType: "application/json",
-        data: JSON.stringify($('#projectForm').serializeObject())
-    })
-    .done(function(response) {
-        alert(JSON.stringify(response.messages[0])); 
-    })
-    .fail(function(jqXHR, textStatus) {
-        alert('There was an error adding project. ' + textStatus);
-    })
-	.always(function() {
-		window.location.href = '/';
-	});
+            type: "POST",
+            url: '/api/projects',
+            contentType: "application/json",
+            data: JSON.stringify($('#projectForm').serializeObject())
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+        })
+        .fail(function(jqXHR, textStatus) {
+            alert('There was an error adding project. ' + textStatus);
+        })
+        .always(function() {
+            window.location.href = '/';
+        });
 });
 
 $("select#phase").val("{{ project.phase }}");
-
 </script>
 {% endblock %}

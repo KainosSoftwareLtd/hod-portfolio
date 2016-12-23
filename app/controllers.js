@@ -660,6 +660,7 @@ Controller.prototype.handleEditResource = function (req, res) {
         var resource = _.find(project.resources, {id: resourceId});
 
         res.render('edit-resource', {
+            projectName: project.name,
             projectId: projectId,
             resource: resource
         });

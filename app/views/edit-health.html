@@ -1,107 +1,77 @@
-{% extends "layout.html" %}
-
-{% block pageTitle %}
-Edit project health
-{% endblock %}
-
-{% block content %}
-
+{% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
-
     <div class="grid-row">
-        <section style="padding-top:30px;">
-
-            <h1 class="form-title heading-large">
-                Edit project health
-            </h1>
-
-            <div class="grid-row">
-                <section class="column-half">
-                    <h2 class="heading-medium">Edit health status for <a href="/projects/{{ project.id }}/{{ project.name | slugify }}">{{ project.name }}</a></h2>
-                    <form class="form" id="healthStatusForm">
-
-                        <!-- type -->
-                        <div class="form-group">
-                            <label class="form-label-bold" for="type">
-                                Healthcheck Type
-                            </label>
-
-                            <select class="form-control" name="health[type]" id="type">
-                                <option value="overall">Overall</option>
-                                <option value="engineering">Engineering</option>
-                                <option value="ops">Ops</option>
-                                <option value="userResearch">User Research</option>
-                                <option value="security">Security</option>
-                                <option value="delivery">Delivery</option>
-                                <option value="data">Data</option>
-                            </select>
-                        </div>
-
-                        <!-- status -->
-                        <div class="form-group">
-                            <label class="form-label-bold" for="status">
-                                Healthcheck Status
-                                <span class="form-hint">
-                                    Health of the project
-                                </span>
-                            </label>
-
-                            <select class="form-control" name="health[status]" id="status">
-                                <option value="good">Good</option>
-                                <option value="fair">Fair</option>
-                                <option value="risk">Risk</option>
-                                <option value="unknown">Unknown</option>
-                            </select>
-                        </div>
-
-                        <!-- comment -->
-                        <div class="form-group">
-                            <label class="form-label-bold" for="comment">
-                                Comment
-                                <span class="form-hint">
-                                    Reason for the health status change
-                                </span>
-                            </label>
-                            <textarea class="form-control" id="comment" name="health[comment]" maxlength="500">{{ project.health.comment }}</textarea>
-                        </div>
-
-                        <!-- link title-->
-                        <div class="form-group">
-                            <label class="form-label-bold" for="name">
-                                Healthcheck Link
-                                <span class="form-hint">
-                                    Title of the link
-                                </span>
-                            </label>
-                            <input type="text" name="health[link][name]" id="name" placeholder="Example Title"></input>
-                                <span class="form-hint">
-                                    Web address of the link
-                                </span>
-                            <input type="url" name="health[link][url]" placeholder="http://example.com/"></input>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="submit" class="button" value="Submit">
-                        </div>
-                    </form>
-                </section>
-
-            </div>
+        <section class="column-two-thirds">
+            <h1 class="form-title font-xlarge">Update {{ project.name }} health</h1>
+            <p>
+                <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/display-health">Health page</a>
+            </p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <form class="form" id="healthStatusForm">
+                <!-- type -->
+                <div class="form-group">
+                    <label class="form-label-bold" for="type">
+                        Healthcheck Type
+                    </label>
+                    <select class="form-control" name="health[type]" id="type">
+                        <option value="overall">Overall</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="ops">Ops</option>
+                        <option value="userResearch">User Research</option>
+                        <option value="security">Security</option>
+                        <option value="delivery">Delivery</option>
+                        <option value="data">Data</option>
+                    </select>
+                </div>
+                <!-- status -->
+                <div class="form-group">
+                    <label class="form-label-bold" for="status">Healthcheck Status
+                        <span class="form-hint">Health of the project</span>
+                    </label>
+                    <select class="form-control" name="health[status]" id="status">
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="risk">Risk</option>
+                        <option value="unknown">Unknown</option>
+                    </select>
+                </div>
+                <!-- comment -->
+                <div class="form-group">
+                    <label class="form-label-bold" for="comment">Comment
+                        <span class="form-hint">Reason for the health status change</span>
+                    </label>
+                    <textarea class="form-control" id="comment" name="health[comment]" maxlength="500">{{ project.health.comment }}</textarea>
+                </div>
+                <!-- link title-->
+                <div class="form-group">
+                    <label class="form-label-bold" for="name">Link to Additional Info
+                        <span class="form-hint">Description of the link</span>
+                    </label>
+                    <input type="text" name="health[link][name]" id="name" placeholder="Example Title"></input>
+                    <label class="form-label-bold" for="url">URL
+                        <span class="form-hint">Location of additional info</span>
+                    </label>
+                    <input type="url" name="health[link][url]" placeholder="http://example.org/" id="url"></input>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="button" value="Submit">
+                </div>
+            </form>
         </section>
     </div>
 </main>
-{% endblock %}
-
-{% block body_end %}
-{{ super() }}
+{% endblock %} {% block body_end %} {{ super() }}
 <script src="/public/javascripts/jquery.plugin.min.js"></script>
 <script src="/public/javascripts/jquery.maxlength.min.js"></script>
 <script>
-    $("#healthStatusForm").submit(function(e) {
-        e.preventDefault();
-        var formData = JSON.stringify($('#healthStatusForm').serializeObject());
-        console.log(formData)
-        $.ajax({
+$("#healthStatusForm").submit(function(e) {
+    e.preventDefault();
+    var formData = JSON.stringify($('#healthStatusForm').serializeObject());
+    console.log(formData)
+    $.ajax({
             type: "PUT",
             url: '/api/projects/{{ project.id }}/health',
             contentType: "application/json",
@@ -109,16 +79,18 @@ Edit project health
         })
         .done(function(response) {
             alert(JSON.stringify(response.messages[0]));
-            window.location.href = '/projects/{{ project.id }}/{{ project.name | slugify }}';
+            window.location.href = '/projects/{{ project.id }}/{{ project.name | slugify }}/display-health';
         })
         .fail(function(jqXHR) {
             alert('There was an error updating health status. Details: \n\n' + jqXHR.responseText);
         });
-    });
+});
 
-    $("select#type").val("overall");
-    $("select#status").val("{{ project.health.overall.status }}");
+$("select#type").val("overall");
+$("select#status").val("{{ project.health.overall.status }}");
 
-    $('#comment').maxlength({max: 500});
+$('#comment').maxlength({
+    max: 500
+});
 </script>
 {% endblock %}
