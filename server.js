@@ -5,7 +5,6 @@ var path = require('path'),
     cookieParser = require('cookie-parser'),
     flash = require('connect-flash'),
     express = require('express'),
-    browserSync = require('browser-sync'),
     nunjucks = require('express-nunjucks'),
     _ = require('underscore'),
     routes = require(__dirname + '/app/routes.js'),
@@ -55,7 +54,6 @@ app.use(favicon(path.join(__dirname, 'govuk_modules', 'govuk_template', 'assets'
 
 // send assetPath to all views
 app.use(function(req, res, next) {
-    // res.locals.assetPath="/public/";
     res.locals.asset_path = "/public/";
     next();
 });
@@ -91,42 +89,6 @@ if (typeof(routes) != "function") {
     app.use("/", authRoutes);
 }
 
-// auto render any view that exists
-app.get(/^\/([^.]+)$/, function(req, res) {
-    var path = (req.params[0]);
-
-    // remove the trailing slash because it seems nunjucks doesn't expect it.
-    if (path.substr(-1) === '/') path = path.substr(0, path.length - 1);
-
-    res.render(path, req.data, function(err, html) {
-        if (err) {
-            res.render(path + "/index", req.data, function(err2, html) {
-                if (err2) {
-                    res.status(404).send(path + '<br />' + err + '<br />' + err2);
-                } else {
-                    res.end(html);
-                }
-            });
-        } else {
-            res.end(html);
-        }
-    });
-});
-
 // start the app
-if (env === 'production') {
-    app.listen(port);
-} else {
-    // for development use browserSync as well
-    app.listen(port, function() {
-        browserSync({
-            proxy: 'localhost:' + port,
-            files: ['public/**/*.{js,css}', 'app/views/**/*.html'],
-            ghostmode: { clicks: true, forms: true, scroll: true },
-            open: false,
-            port: (+port + 1), //cast the port to a number to avoid appending 1 to a string
-        });
-    });
-}
-
+app.listen(port);
 log.info('Listening on port ' + port);

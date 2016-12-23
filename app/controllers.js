@@ -24,12 +24,13 @@ var phase_order = ['pipeline', 'discovery', 'alpha', 'beta', 'live'];
 
 // JSON data of a project
 Controller.prototype.handleApiProjectId = function(req, res) {
-    var data = projectCache.getById(req.params.id);
-    if (data) {
-        res.json(data);
-    } else {
-        res.json({ error: 'ID not found' });
-    }
+    projectCache.getById(req.params.id, function(err, data) {
+        if (data) {
+            res.json(data);
+        } else {
+            res.json({ error: 'ID not found' });
+        }
+    });
 };
 
 // JSON data of a project
@@ -39,7 +40,7 @@ Controller.prototype.handleApiAddProject = function(req, res) {
     newProject.setPhase(req.body.phase);
     
     projectDao.addProject(newProject, function(err, project) {
-        log.trace('Adding project: ' + JSON.stringify(project));
+        log.trace('Adding project: ' + project.name);
         if(err) {
             log.debug('Error adding project with id = ' + project.id);
 
@@ -49,7 +50,7 @@ Controller.prototype.handleApiAddProject = function(req, res) {
         } else {
             log.debug('Project with id = ' + project.id + ' has been added');
 
-            projectCache.refreshProjectCache();
+            projectCache.refreshProject(project.id);
             apiUtils.handleResultSet(res, 200, 
                 new ApiResponse({projectId: project.id}, ['The project has been added'])
             );
@@ -76,34 +77,34 @@ Controller.prototype.handleApiAddResource = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.addResourceToProject(project, newResource, function(err, resource) {
-        log.trace('Adding a resource: ' + resource.role);
-        if(err) {
-            log.debug('Error adding resource with id = ' + resource.id);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error adding resource'])
+    projectCache.getById(req.params.projectId, function (error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Resource with id = ' + resource.id + ' has been added to ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({resourceId: resource.id}, ['Resource has been added'])
-            );
         }
+
+        projectDao.addResourceToProject(project, newResource, function(err, resource) {
+            log.trace('Adding a resource: ' + resource.role);
+            if(err) {
+                log.debug('Error adding resource with id = ' + resource.id);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error adding resource'])
+                );
+                return;
+            } else {
+                log.info('Resource with id = ' + resource.id + ' has been added to ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({resourceId: resource.id}, ['Resource has been added'])
+                );
+            }
+        });
     });
 };
 
@@ -126,33 +127,33 @@ Controller.prototype.handleApiRemoveResource = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.removeResourceFromProject(project, resourceId, function(err, project) {
-        if(err) {
-            log.debug('Error removing resource with id = ' + resourceId);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error adding resource'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Resource with id = ' + resourceId + ' has been removed from ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({resourceId: resourceId}, ['Resource has been removed'])
-            );
         }
+
+        projectDao.removeResourceFromProject(project, resourceId, function(err, project) {
+            if(err) {
+                log.debug('Error removing resource with id = ' + resourceId);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error adding resource'])
+                );
+                return;
+            } else {
+                log.info('Resource with id = ' + resourceId + ' has been removed from ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({resourceId: resourceId}, ['Resource has been removed'])
+                );
+            }
+        });
     });
 };
 
@@ -176,34 +177,34 @@ Controller.prototype.handleApiUpdateResource = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.updateResourceInProject(project, resourceData, function(err, resource) {
-        log.trace('Updating a resource: ' + resource.id);
-        if(err) {
-            log.debug('Error updating resource with id = ' + resource.id);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error updating resource'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Resource with id = ' + resource.id + ' has been updated in ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({resourceId: resource.id}, ['Resource has been updated'])
-            );
         }
+
+        projectDao.updateResourceInProject(project, resourceData, function(err, resource) {
+            log.trace('Updating a resource: ' + resource.id);
+            if(err) {
+                log.debug('Error updating resource with id = ' + resource.id);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error updating resource'])
+                );
+                return;
+            } else {
+                log.info('Resource with id = ' + resource.id + ' has been updated in ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({resourceId: resource.id}, ['Resource has been updated'])
+                );
+            }
+        });
     });
 };
 
@@ -230,34 +231,34 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.addOurPersonToProject(project, newPerson, function(err, person) {
-        log.trace('Adding a person: ' + person.role);
-        if(err) {
-            log.debug('Error adding person with id = ' + person.id);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error adding person'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Person with id = ' + person.id + ' has been added to ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({personId: person.id}, ['Team member has been added'])
-            );
         }
+
+        projectDao.addOurPersonToProject(project, newPerson, function(err, person) {
+            log.trace('Adding a person: ' + person.role);
+            if(err) {
+                log.debug('Error adding person with id = ' + person.id);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error adding person'])
+                );
+                return;
+            } else {
+                log.info('Person with id = ' + person.id + ' has been added to ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({personId: person.id}, ['Team member has been added'])
+                );
+            }
+        });
     });
 };
 
@@ -281,34 +282,34 @@ Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.updateOurPersonInProject(project, personData, function(err, person) {
-        log.trace('Updating a person: ' + person.id);
-        if(err) {
-            log.debug('Error updating person with id = ' + person.id);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error updating person'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Person with id = ' + person.id + ' has been updated in ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({personId: person.id}, ['Team member has been updated'])
-            );
         }
+
+        projectDao.updateOurPersonInProject(project, personData, function(err, person) {
+            log.trace('Updating a person: ' + person.id);
+            if(err) {
+                log.debug('Error updating person with id = ' + person.id);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error updating person'])
+                );
+                return;
+            } else {
+                log.info('Person with id = ' + person.id + ' has been updated in ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({personId: person.id}, ['Team member has been updated'])
+                );
+            }
+        });
     });
 };
 
@@ -331,33 +332,33 @@ Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.removeOurPersonFromProject(project, personId, function(err, project) {
-        if(err) {
-            log.debug('Error removing person with id = ' + personId);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error adding person'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Person with id = ' + personId + ' has been removed from ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({personId: personId}, ['Team member has been removed'])
-            );
         }
+
+        projectDao.removeOurPersonFromProject(project, personId, function(err, project) {
+            if(err) {
+                log.debug('Error removing person with id = ' + personId);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error adding person'])
+                );
+                return;
+            } else {
+                log.info('Person with id = ' + personId + ' has been removed from ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({personId: personId}, ['Team member has been removed'])
+                );
+            }
+        });
     });
 };
 
@@ -384,34 +385,34 @@ Controller.prototype.handleApiAddClientTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.addClientToProject(project, newPerson, function(err, person) {
-        log.trace('Adding a person: ' + person.role);
-        if(err) {
-            log.debug('Error adding person with id = ' + person.id);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error adding person'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Person with id = ' + person.id + ' has been added to ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({personId: person.id}, ['Client team member has been added'])
-            );
         }
+
+        projectDao.addClientToProject(project, newPerson, function(err, person) {
+            log.trace('Adding a person: ' + person.role);
+            if(err) {
+                log.debug('Error adding person with id = ' + person.id);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error adding person'])
+                );
+                return;
+            } else {
+                log.info('Person with id = ' + person.id + ' has been added to ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({personId: person.id}, ['Client team member has been added'])
+                );
+            }
+        });
     });
 };
 
@@ -435,34 +436,34 @@ Controller.prototype.handleApiUpdateClientTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.updateClientInProject(project, personData, function(err, person) {
-        log.trace('Updating a person: ' + person.id);
-        if(err) {
-            log.debug('Error updating person with id = ' + person.id);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error updating person'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Person with id = ' + person.id + ' has been updated in ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({personId: person.id}, ['Client team member has been updated'])
-            );
         }
+
+        projectDao.updateClientInProject(project, personData, function(err, person) {
+            log.trace('Updating a person: ' + person.id);
+            if(err) {
+                log.debug('Error updating person with id = ' + person.id);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error updating person'])
+                );
+                return;
+            } else {
+                log.info('Person with id = ' + person.id + ' has been updated in ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({personId: person.id}, ['Client team member has been updated'])
+                );
+            }
+        });
     });
 };
 
@@ -485,33 +486,33 @@ Controller.prototype.handleApiRemoveClientTeamMember = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    projectDao.removeClientFromProject(project, personId, function(err, project) {
-        if(err) {
-            log.debug('Error removing person with id = ' + personId);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error removing person'])
+    var project = projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Person with id = ' + personId + ' has been removed from ' + project.id);
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({personId: personId}, ['Client team member has been removed'])
-            );
         }
+
+        projectDao.removeClientFromProject(project, personId, function(err, project) {
+            if(err) {
+                log.debug('Error removing person with id = ' + personId);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error removing person'])
+                );
+                return;
+            } else {
+                log.info('Person with id = ' + personId + ' has been removed from ' + project.id);
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({personId: personId}, ['Client team member has been removed'])
+                );
+            }
+        });
     });
 };
 
@@ -534,106 +535,96 @@ Controller.prototype.handleApiUpdateHealthStatus = function(req, res) {
         return;
     }
 
-    var project = projectCache.getById(req.params.projectId);
-
-    if(!project) {
-        var err = "Project with id " + req.params.projectId + " does not exist";
-        log.error(err);
-        apiUtils.handleResultSet(res, 422,
-            new ApiResponse(null, [err])
-        );
-        return;
-    }
-
-    project.setHealth(health.type, health.status,
-        { name: req.user.displayName, email: req.user.email }, 
-        health.comment, health.link.name, health.link.url
-    );
-
-    projectDao.addProject(project, function(err, person) {
-        log.trace('Updating project health status to: ' + health.status);
-        if(err) {
-            log.debug('Error updating project health status for project with id = ' + project.id);
-
-            apiUtils.handleResultSet(res, 500,
-                new ApiResponse(null, ['Error updating project health status'])
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            var err = "Project with id " + req.params.projectId + " does not exist";
+            log.error(err);
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, [err])
             );
             return;
-        } else {
-            log.info('Project with id = ' + project.id + ' has been updated with new health status');
-
-            projectCache.refreshProjectCache();
-            apiUtils.handleResultSet(res, 200,
-                new ApiResponse({health: health}, ['Project health status has been updated'])
-            );
         }
+
+        project.setHealth(health.type, health.status,
+            { name: req.user.displayName, email: req.user.email },
+            health.comment, health.link.name, health.link.url
+        );
+
+        projectDao.addProject(project, function(err, person) {
+            log.trace('Updating project health status to: ' + health.status);
+            if(err) {
+                log.debug('Error updating project health status for project with id = ' + project.id);
+
+                apiUtils.handleResultSet(res, 500,
+                    new ApiResponse(null, ['Error updating project health status'])
+                );
+                return;
+            } else {
+                log.info('Project with id = ' + project.id + ' has been updated with new health status');
+
+                projectCache.refreshProject(project.id);
+                apiUtils.handleResultSet(res, 200,
+                    new ApiResponse({health: health}, ['Project health status has been updated'])
+                );
+            }
+        });
     });
 };
 
 // JSON data of a project
 Controller.prototype.handleApiEditProject = function(req, res) {
-    var project = projectCache.getById(req.params.projectId);
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            log.debug('Error updating project. Project with given ID was not found.');
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, ['Error updating project. Project with given ID was not found.'])
+            );
+        } else {
+            project.setName(req.body.name);
+            project.setDescription(req.body.description);
+            project.setLocation(req.body.location);
+            project.setPhase(req.body.phase);
 
-    if(!project) {
-        log.debug('Error updating project. Project with given ID was not found.');
-        apiUtils.handleResultSet(res, 422, 
-            new ApiResponse(null, ['Error updating project. Project with given ID was not found.'])
-        );
-    } else {
-        project.setName(req.body.name);
-        project.setDescription(req.body.description);
-        project.setLocation(req.body.location);
-        project.setPhase(req.body.phase);
+            projectDao.addProject(project, function(err, editedProject) {
+                log.trace('Updating project: ' + JSON.stringify(project));
+                if(err) {
+                    log.debug('Error updating project with id = ' + project.id);
 
-        projectDao.addProject(project, function(err, editedProject) {
-            log.trace('Updating project: ' + JSON.stringify(project));
-            if(err) {
-                log.debug('Error updating project with id = ' + project.id);
-    
-                apiUtils.handleResultSet(res, 500, 
-                    new ApiResponse(null, ['Error updating project'])
-                );
-            } else {
-                log.debug('Project with id = ' + editedProject.id + ' has been updated');
-    
-                projectCache.refreshProjectCache();
-                apiUtils.handleResultSet(res, 200, 
-                    new ApiResponse({projectId: editedProject.id}, ['The project has been updated'])
-                );
-            }
-        });
-    }
+                    apiUtils.handleResultSet(res, 500,
+                        new ApiResponse(null, ['Error updating project'])
+                    );
+                } else {
+                    log.debug('Project with id = ' + editedProject.id + ' has been updated');
+
+                    projectCache.refreshProject(editedProject.id);
+                    apiUtils.handleResultSet(res, 200,
+                        new ApiResponse({projectId: editedProject.id}, ['The project has been updated'])
+                    );
+                }
+            });
+        }
+    });
 };
 
 // All the data as JSON
 Controller.prototype.handleApi = function(req, res) {
-    res.json(projectCache.getAll());
+    projectCache.getAll(function(err, data) {
+        res.json(data);
+    });
 };
 
 // Project info
 Controller.prototype.handleProjectIdSlug = function(req, res) {
-    var data = projectCache.getById(req.params.id);
-    res.render('project', {
-        "data": data,
-        "phase_order": phase_order
-    });
-};
-
-// Prototype version of project info 
-Controller.prototype.handleSlugPrototype = function(req, res) {
-    var data = projectCache.getById(req.params.id);
-    if (typeof data.prototype == 'undefined') {
-        res.render('no-prototype', {
-            "data": data
+    projectCache.getById(req.params.id, function(error, data) {
+        res.render('project', {
+            "data": data,
+            "phase_order": phase_order
         });
-    } else {
-        res.redirect(data.prototype);
-    }
+    });
 };
 
 // Add project form
 Controller.prototype.handleAddProject = function(req, res) {
-    var id = req.params.id;
     res.render('add-project');
 };
 
@@ -646,12 +637,12 @@ Controller.prototype.handleAddProject = function(req, res) {
 Controller.prototype.handleEditResources = function (req, res) {
     var id = req.params.id;
 
-    var project = projectCache.getById(id);
-
-    res.render('edit-resources', {
-        projectName: project.name,
-        projectId: id,
-        resources: project.resources
+    projectCache.getById(id, function(error, project) {
+        res.render('edit-resources', {
+            projectName: project.name,
+            projectId: id,
+            resources: project.resources
+        });
     });
 };
 
@@ -665,12 +656,13 @@ Controller.prototype.handleEditResource = function (req, res) {
     var projectId = req.params.projectId;
     var resourceId = req.params.resourceId;
 
-    var project = projectCache.getById(projectId);
-    var resource = _.find(project.resources, {id: resourceId});
+    projectCache.getById(projectId, function(error, project) {
+        var resource = _.find(project.resources, {id: resourceId});
 
-    res.render('edit-resource', {
-        projectId: projectId,
-        resource: resource
+        res.render('edit-resource', {
+            projectId: projectId,
+            resource: resource
+        });
     });
 };
 
@@ -683,12 +675,12 @@ Controller.prototype.handleEditResource = function (req, res) {
 Controller.prototype.handleEditOurTeam = function (req, res) {
     var id = req.params.id;
 
-    var project = projectCache.getById(id);
-
-    res.render('edit-our-team', {
-        projectName: project.name,
-        projectId: id,
-        teamMembers: project.ourTeam
+    var project = projectCache.getById(id, function(error, project) {
+        res.render('edit-our-team', {
+            projectName: project.name,
+            projectId: id,
+            teamMembers: project.ourTeam
+        });
     });
 };
 
@@ -702,13 +694,14 @@ Controller.prototype.handleEditTeamMember = function (req, res) {
     var projectId = req.params.projectId;
     var personId = req.params.personId;
 
-    var project = projectCache.getById(projectId);
-    var person = _.find(project.ourTeam, {id: personId});
+    projectCache.getById(projectId, function(error, project) {
+        var person = _.find(project.ourTeam, {id: personId});
 
-    res.render('edit-person', {
-        projectName: project.name,
-        projectId: projectId,
-        person: person
+        res.render('edit-person', {
+            projectName: project.name,
+            projectId: projectId,
+            person: person
+        });
     });
 };
 
@@ -721,12 +714,12 @@ Controller.prototype.handleEditTeamMember = function (req, res) {
 Controller.prototype.handleEditClientTeam = function (req, res) {
     var id = req.params.id;
 
-    var project = projectCache.getById(id);
-
-    res.render('edit-client-team', {
-        projectName: project.name,
-        projectId: id,
-        teamMembers: project.clientTeam
+    projectCache.getById(id, function(error, project) {
+        res.render('edit-client-team', {
+            projectName: project.name,
+            projectId: id,
+            teamMembers: project.clientTeam
+        });
     });
 };
 
@@ -740,13 +733,14 @@ Controller.prototype.handleEditClientTeamMember = function (req, res) {
     var projectId = req.params.projectId;
     var personId = req.params.personId;
 
-    var project = projectCache.getById(projectId);
-    var person = _.find(project.clientTeam, {id: personId});
+    projectCache.getById(projectId, function(error, project) {
+        var person = _.find(project.clientTeam, {id: personId});
 
-    res.render('edit-client', {
-        projectName: project.name,
-        projectId: projectId,
-        person: person
+        res.render('edit-client', {
+            projectName: project.name,
+            projectId: projectId,
+            person: person
+        });
     });
 };
 
@@ -759,11 +753,11 @@ Controller.prototype.handleEditClientTeamMember = function (req, res) {
 Controller.prototype.handleEditHealthStatus = function (req, res) {
     var id = req.params.id;
 
-    var project = projectCache.getById(id);
-
-    res.render('edit-health', {
-        project: project,
-        convertDate: utils.convertDate
+    projectCache.getById(id, function(error, project) {
+        res.render('edit-health', {
+            project: project,
+            convertDate: utils.convertDate
+        });
     });
 };
 
@@ -776,20 +770,24 @@ Controller.prototype.handleEditHealthStatus = function (req, res) {
 Controller.prototype.handleDisplayHealthStatus = function (req, res) {
     var id = req.params.id;
 
-    var project = projectCache.getById(id);
+    projectCache.getById(id, function(error, project) {
+        var healthHistory = _.chain(project.healthStatusHistory).map(_.values).flatten().sortBy("date").reverse().value();
 
-    res.render('display-health', {
-        project: project,
-        convertDate: utils.convertDate
+        res.render('display-health', {
+            project: project,
+            history: healthHistory,
+            convertDate: utils.convertDate
+        });
     });
 };
 
 // Edit project form
 Controller.prototype.handleEditProject = function(req, res) {
     var id = req.params.id;
-    var project = projectCache.getById(id);
-    res.render('edit-project', {
-        project: project
+    projectCache.getById(id, function(error, project) {
+        res.render('edit-project', {
+            project: project
+        });
     });
 };
 
@@ -802,23 +800,28 @@ Controller.prototype.handleEditProject = function(req, res) {
 Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, viewType) {
     this.router.get(path, connect.ensureLoggedIn(), function(req, res) {
         var view = viewType ? viewType : groupBy;
-        var projectList = [];
-        Object.keys(projectCache.getAll()).forEach(function(ID) {
-            projectList.push(projectCache.getById(ID));
-        });
-        var data = filterPhaseIfPresent(projectList, req.query.phase);
-        data = _.groupBy(data, groupBy);
-        var new_data = indexify(data);
-        var phases = _.countBy(projectList, 'phase');
-        rowOrder = prepareRowOrder(rowOrder, data);
 
-        res.render('index', {
-            "data": new_data,
-            "phase": req.query.phase,
-            "counts": phases,
-            "view": view,
-            "row_order": rowOrder,
-            "phase_order": phase_order
+        projectCache.getAll(function(err, projectMap) {
+            var projectList = [];
+
+            _.each(projectMap, function (proj) {
+                projectList.push(proj)
+            });
+
+            var data = filterPhaseIfPresent(projectList, req.query.phase);
+            data = _.groupBy(data, groupBy);
+            var new_data = indexify(data);
+            var phases = _.countBy(projectList, 'phase');
+            rowOrder = prepareRowOrder(rowOrder, data);
+
+            res.render('index', {
+                "data": new_data,
+                "phase": req.query.phase,
+                "counts": phases,
+                "view": view,
+                "row_order": rowOrder,
+                "phase_order": phase_order
+            });
         });
     });
 };
