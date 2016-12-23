@@ -65,7 +65,7 @@
       </section>
 
       <div class="grid-row">
-          <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Resources</a></h2>
+          <h2 class="heading-medium"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Useful Links</a></h2>
           {% if data["resources"] %}
             {% for resource in data["resources"] %}
               <a href = "{{ resource['url'] }}">{{ resource["name"] }}</a><br/>

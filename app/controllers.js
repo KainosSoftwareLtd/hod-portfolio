@@ -623,19 +623,6 @@ Controller.prototype.handleProjectIdSlug = function(req, res) {
     });
 };
 
-// Prototype version of project info 
-Controller.prototype.handleSlugPrototype = function(req, res) {
-    projectCache.getById(req.params.id, function(error, data) {
-        if (typeof data.prototype == 'undefined') {
-            res.render('no-prototype', {
-                "data": data
-            });
-        } else {
-            res.redirect(data.prototype);
-        }
-    });
-};
-
 // Add project form
 Controller.prototype.handleAddProject = function(req, res) {
     res.render('add-project');

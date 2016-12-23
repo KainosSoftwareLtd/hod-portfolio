@@ -47,7 +47,6 @@ router.get('/projects/:id/:slug/edit-client-team', connect.ensureLoggedIn(), con
 router.get('/projects/:projectId/:slug/person/client/:personId/edit', connect.ensureLoggedIn(), controller.handleEditClientTeamMember);
 router.get('/projects/:id/:slug/edit', connect.ensureLoggedIn(), controller.handleEditProject);
 router.get('/projects/:id/:slug', connect.ensureLoggedIn(), controller.handleProjectIdSlug);
-router.get('/projects/:id/:slug/prototype', connect.ensureLoggedIn(), controller.handleSlugPrototype);
 
 router.get('/api', connect.ensureLoggedIn(), controller.handleApi);
 router.put('/api/projects/:projectId', connect.ensureLoggedIn(), controller.handleApiEditProject);
