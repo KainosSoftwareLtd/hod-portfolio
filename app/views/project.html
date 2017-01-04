@@ -4,6 +4,12 @@
         <section class="column-two-thirds">
             <h1 class="font-xlarge">{{ data.name }}</h1>
             <p class="location font-xsmall">{{ data.location }}</p>
+            {% if data.isFinished %}
+                <p class="health good font-xsmall" title="This project was finished">
+                    <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                    Finished
+                </p>
+            {% endif %}
             <p><a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">Change details</a> <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">Change health</a></p>
             <p>{{ data.description }}</p>
         </section>

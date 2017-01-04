@@ -32,6 +32,7 @@ module.exports = class Project {
     setLocation(str) { this.location = str; }
     setDepartment(str) { this.department = str; }
     setAgency(str) { this.agency = str; }
+    setIsFinished(bool) { this.isFinished = bool; }
     setHealth(type, status, user, comment, linkTitle, link) {
         var resource = null;
         if(linkTitle && link) {
