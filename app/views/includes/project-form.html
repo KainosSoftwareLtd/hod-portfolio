@@ -17,6 +17,29 @@
         <input type="text" class="form-control" id="location" name="location" value="{{ project.location }}">
     </div>
 
+    <div class="form-group">
+        <label class="form-label-bold" for="finished-radio-group">
+            Finished
+        </label>
+        <fieldset class="inline">
+            <span class="form-hint">
+                Is the project finished?
+            </span>
+            <label class="block-label selection-button-radio" for="radio-inline-1">
+                <input id="radio-inline-1" type="radio" name="isFinished" value="true" 
+                    {{ "checked" if project.isFinished }}
+                >
+                Yes
+            </label>
+            <label class="block-label selection-button-radio" for="radio-inline-2">
+                <input id="radio-inline-2" type="radio" name="isFinished" value=""
+                    {{ "" if project.isFinished else "checked" }}
+                >
+                No
+            </label>
+        </fieldset>
+    </div>
+
     <!-- Description -->
     <div class="form-group">
         <label class="form-label-bold" for="description">
