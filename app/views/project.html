@@ -16,6 +16,12 @@
         <section class="column-third">
             <p class="phase {{ data.phase | lower }}">phase <strong>{{ data.phase | title }}</strong></p>
             <p class="health {{ data.health.overall.status | lower }}">health <strong>{{ data.health.overall.status | title }}</strong></p>
+            {% if data.customer %}
+                <div class="customer">
+                    <h2 class="font-medium">Customer</h2>
+                    <p>{{ data.customer }}</p>
+                </div>
+            {% endif %}
         </section>
     </div>
     <div class="grid-row">
