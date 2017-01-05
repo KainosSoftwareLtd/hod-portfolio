@@ -39,6 +39,7 @@ Controller.prototype.handleApiAddProject = function(req, res) {
     newProject.setLocation(req.body.location);
     newProject.setPhase(req.body.phase);
     newProject.setIsFinished(req.body.isFinished);
+    newProject.setCustomer(req.body.customer);
     
     projectDao.addProject(newProject, function(err, project) {
         log.trace('Adding project: ' + project.name);
@@ -586,6 +587,7 @@ Controller.prototype.handleApiEditProject = function(req, res) {
             project.setLocation(req.body.location);
             project.setPhase(req.body.phase);
             project.setIsFinished(req.body.isFinished);
+            project.setCustomer(req.body.customer);
 
             projectDao.addProject(project, function(err, editedProject) {
                 log.trace('Updating project: ' + JSON.stringify(project));

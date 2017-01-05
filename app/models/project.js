@@ -33,6 +33,7 @@ module.exports = class Project {
     setDepartment(str) { this.department = str; }
     setAgency(str) { this.agency = str; }
     setIsFinished(bool) { this.isFinished = bool; }
+    setCustomer(str) { this.customer = str; }
     setHealth(type, status, user, comment, linkTitle, link) {
         var resource = null;
         if(linkTitle && link) {
