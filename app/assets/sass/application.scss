@@ -242,3 +242,22 @@ $risk-colour: $orange;
 .customer h2 {
   font-weight: bold;
 }
+
+.phase-form-group {
+  float: none;
+}
+
+.phase-entry {
+  border-top: solid 3px;
+  background-color: whitesmoke;
+  margin-left: -10px;
+  padding: 10px;
+}
+
+.top-15 {
+  margin-top: 15px;
+}
+
+.highlight-danger {
+  background-color: #f2dede;
+}

@@ -13,21 +13,25 @@
         <form class="form" id="phases-form">
             {% for phase in phase_order %} {% if project["phaseHistory"][phase].length %}
             <div class="phase-history-item border-{{ phase }} txt-{{ phase }}">
-                <h3><a href="#" class="tag tag-history {{ phase }}">{{ phase }}</a></h3> 
+                <h3>
+                    <a href="#" class="tag tag-history {{ phase }}">{{ phase }}</a> 
+                </h3>
                 {% for item in project["phaseHistory"][phase] %}
-                    <div id="entry-{{ phase }}-{{ loop.index }}" style="background-color: lightgray">
-                        <p class="font-medium">{{ item.label }}</p>
-                        <a href="#" onclick="removeEntry('entry-{{ phase }}-{{ loop.index }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i>Remove</a>
+                    <div id="entry-{{ phase }}-{{ loop.index }}" class="phase-entry">
+                        <h3 class="bold-small">{{ item.label }}
+                            <a href="#" class="remove-btn font-xsmall" onclick="removeEntry('entry-{{ phase }}-{{ loop.index }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i>Remove </a>
+                        </h3>
                         <input type="hidden" name="phaseHistory[{{ phase }}][][label]" value="{{ item.label }}">
-                        <div class="form-group">
-                            <label for="year-{{ phase }}-{{ loop.index }}" class="form-label-bold">Year</label>
+
+                        <div class="form-group phase-form-group top-15">
+                            <label for="year-{{ phase }}-{{ loop.index }}" class="form-label">Year</label>
                             <input type="number" name="phaseHistory[{{ phase }}][][year]" min="1900" max="2099" step="1" value="{{ item.year }}" id="year-{{ phase }}-{{ loop.index }}">
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label-bold" for="month-{{ phase }}-{{ loop.index }}">Month</label>
+                        <div class="form-group phase-form-group">
+                            <label class="form-label" for="month-{{ phase }}-{{ loop.index }}">Month</label>
 
-                            <select id="month-{{ phase }}-{{ loop.index }}" class="form-control month" name="phaseHistory[{{ phase }}][][month]" data-selected-val="{{ item.month }}">
+                            <select id="month-{{ phase }}-{{ loop.index }}" class="form-control form-control-1-4 month" name="phaseHistory[{{ phase }}][][month]" data-selected-val="{{ item.month }}">
                                 <option value="January">January</option>
                                 <option value="February">February</option>
                                 <option value="March">March</option>
@@ -50,7 +54,7 @@
             <div class="form-group">
                 <input type="submit" class="button" value="Submit">
             </div>
-            
+
         </form>
         </section>
     </div>
@@ -84,8 +88,19 @@ $("select.month").each(function(){
 });
 
 function removeEntry(id) {
-    $("#" + id).remove();
+    if(confirm('Remove this entry?')) {
+        $("#" + id).remove();
+    }
 }
+
+// highlight an entry when 'Remove' button is hovered over
+$('.remove-btn').hover( 
+    function(){
+        $(this).closest('.phase-entry').addClass("highlight-danger");
+    },
+    function(){
+        $(this).closest('.phase-entry').removeClass("highlight-danger");
+});
 
 </script>
 {% endblock %}
