@@ -13,7 +13,7 @@ module.exports = class Project {
         this.healthStatusHistory = {};
         this.health = {};
         this.resources = [];
-        this["phase-history"] = {};
+        this["phaseHistory"] = {};
 
         // setting defaults - this project was designed not to work without them...
         this.facing = "user";
@@ -55,29 +55,39 @@ module.exports = class Project {
     setOurTeam(ourTeam) { this.ourTeam = ourTeam; }
     setClientTeam(clientTeam) { this.clientTeam = clientTeam; }
     setPhase(phase) {
+        var now = new Date(); // current date
         // set project phase history completed record
         if(this.phase !== phase) {
-            if(!this["phase-history"][this.phase] && this.phase) {
-                this["phase-history"][this.phase] = [];
+            if(!this["phaseHistory"][this.phase] && this.phase) {
+                this["phaseHistory"][this.phase] = [];
             }
 
             if(this.phase) {
-                this["phase-history"][this.phase].push({label: "Completed", date: new Date().toLocaleDateString("en-GB", { year: 'numeric', month: 'long' })});
+                this["phaseHistory"][this.phase].push({
+                    label: "Completed", 
+                    year: now.getFullYear(), 
+                    month: now.toLocaleString('en-GB', { month: "long" })
+                });
             }
         }
 
         // set project phase history started record
-        if(!this["phase-history"][phase]) {
-            this["phase-history"][phase] = [];
-        }
+        if(!this["phaseHistory"][phase]) {
+            this["phaseHistory"][phase] = [];
 
-        this["phase-history"][phase].push({label: "Started", date: new Date().toLocaleDateString("en-GB", { year: 'numeric', month: 'long' })});
+            this["phaseHistory"][phase].push({
+                label: "Started", 
+                year: now.getFullYear(), 
+                month: now.toLocaleString('en-GB', { month: "long" })
+            });
+        }
 
         this.phase = phase;
 
     }
     setResources(resources) { this.resources = resources; }
     setHealthStatusHistory(array) { this.healthStatusHistory = array; }
+    setPhaseHistory(phaseHistory) { this.phaseHistory = phaseHistory; }
 
     addToOurTeam(Person) {
         this.ourTeam.push(Person);

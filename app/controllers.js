@@ -610,6 +610,38 @@ Controller.prototype.handleApiEditProject = function(req, res) {
     });
 };
 
+// Edit history of changes in phases of a project
+Controller.prototype.handleApiUpdatePhaseHistory = function(req, res) {
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            log.debug('Error updating project. Project with given ID was not found.');
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, ['Error updating project. Project with given ID was not found.'])
+            );
+        } else {
+            project.setPhaseHistory(req.body.phaseHistory);
+
+            projectDao.addProject(project, function(err, editedProject) {
+                log.trace('Updating project history: ' + JSON.stringify(project));
+                if(err) {
+                    log.debug('Error updating history of a project with id = ' + project.id);
+
+                    apiUtils.handleResultSet(res, 500,
+                        new ApiResponse(null, ['Error updating project history'])
+                    );
+                } else {
+                    log.debug('History of a project with id = ' + editedProject.id + ' has been updated');
+
+                    projectCache.refreshProject(editedProject.id);
+                    apiUtils.handleResultSet(res, 200,
+                        new ApiResponse({projectId: editedProject.id}, ['The project history has been updated'])
+                    );
+                }
+            });
+        }
+    });
+};
+
 // All the data as JSON
 Controller.prototype.handleApi = function(req, res) {
     projectCache.getAll(function(err, data) {
@@ -667,6 +699,23 @@ Controller.prototype.handleEditResource = function (req, res) {
             projectName: project.name,
             projectId: projectId,
             resource: resource
+        });
+    });
+};
+
+/**
+ * Render Edit phase history form
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditPhaseHistory = function (req, res) {
+    var projectId = req.params.projectId;
+
+    projectCache.getById(projectId, function(error, project) {
+        res.render('edit-phase-history', {
+            project: project,
+            phase_order: phase_order
         });
     });
 };

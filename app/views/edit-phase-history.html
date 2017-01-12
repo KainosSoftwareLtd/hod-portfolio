@@ -1,0 +1,91 @@
+{% extends "layout.html" %} {% block content %}
+<main id="content" role="main">
+    <div class="grid-row">
+        <section class="column-two-thirds">
+            <h1 class="form-title font-xlarge">Edit Phase History</h1>
+            <p>
+                <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/"> Back to project page</a>
+            </p>
+        </section>
+    </div>
+    <div class="grid-row">
+        <section class="column-two-thirds">
+        <form class="form" id="phases-form">
+            {% for phase in phase_order %} {% if project["phaseHistory"][phase].length %}
+            <div class="phase-history-item border-{{ phase }} txt-{{ phase }}">
+                <h3><a href="#" class="tag tag-history {{ phase }}">{{ phase }}</a></h3> 
+                {% for item in project["phaseHistory"][phase] %}
+                    <div id="entry-{{ phase }}-{{ loop.index }}" style="background-color: lightgray">
+                        <p class="font-medium">{{ item.label }}</p>
+                        <a href="#" onclick="removeEntry('entry-{{ phase }}-{{ loop.index }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i>Remove</a>
+                        <input type="hidden" name="phaseHistory[{{ phase }}][][label]" value="{{ item.label }}">
+                        <div class="form-group">
+                            <label for="year-{{ phase }}-{{ loop.index }}" class="form-label-bold">Year</label>
+                            <input type="number" name="phaseHistory[{{ phase }}][][year]" min="1900" max="2099" step="1" value="{{ item.year }}" id="year-{{ phase }}-{{ loop.index }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label-bold" for="month-{{ phase }}-{{ loop.index }}">Month</label>
+
+                            <select id="month-{{ phase }}-{{ loop.index }}" class="form-control month" name="phaseHistory[{{ phase }}][][month]" data-selected-val="{{ item.month }}">
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %} {% endfor %}
+
+            <div class="form-group">
+                <input type="submit" class="button" value="Submit">
+            </div>
+            
+        </form>
+        </section>
+    </div>
+</main>
+{% endblock %}
+{% block body_end %} {{ super() }}
+<script>
+
+$("#phases-form").submit(function(e) {
+    e.preventDefault();
+    var formData = JSON.stringify($('#phases-form').serializeObject());
+    console.log(formData)
+    $.ajax({
+            type: "PUT",
+            url: '/api/projects/{{ project.id }}/phase-history',
+            contentType: "application/json",
+            data: formData
+        })
+        .done(function(response) {
+            alert(JSON.stringify(response.messages[0]));
+            window.location.href = '/projects/{{ project.id }}/{{ project.name | slugify }}';
+        })
+        .fail(function(jqXHR) {
+            alert('There was an error updating project history .Details: \n\n' + jqXHR.responseText);
+        });
+});
+
+// select the month specified in the data-selected-val attribute
+$("select.month").each(function(){ 
+    $(this).val($(this).attr('data-selected-val'));
+});
+
+function removeEntry(id) {
+    $("#" + id).remove();
+}
+
+</script>
+{% endblock %}
