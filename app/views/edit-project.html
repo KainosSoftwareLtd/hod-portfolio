@@ -3,7 +3,13 @@
     <div class="grid-row">
         <section class="column-two-thirds">
             <h1 class="form-title font-xlarge">{{ project.name }}</h1>
-            {% include "includes/project-form.html" %}
+            
+            <form class="form" id="projectForm">
+                {% include "includes/project-form.html" %}
+                <div class="form-group">
+                    <input type="submit" class="button" value="Submit">
+                </div>
+            </form>
         </section>
     </div>
 </main>

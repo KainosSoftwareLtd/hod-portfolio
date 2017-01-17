@@ -63,6 +63,7 @@ router.delete('/api/projects/:projectId/person/client/:personId', connect.ensure
 router.put('/api/projects/:projectId/person/client/:personId', connect.ensureLoggedIn(), controller.handleApiUpdateClientTeamMember);
 router.put('/api/projects/:projectId/resource/:resourceId', connect.ensureLoggedIn(), controller.handleApiUpdateResource);
 router.put('/api/projects/:projectId/phase-history', connect.ensureLoggedIn(), controller.handleApiUpdatePhaseHistory);
+router.delete('/api/projects/:projectId/phase-history', connect.ensureLoggedIn(), controller.handleApiDeletePhaseHistory);
 router.post('/api/projects', connect.ensureLoggedIn(), controller.handleApiAddProject);
 
 module.exports = router;

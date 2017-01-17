@@ -2,54 +2,78 @@
 <main id="content" role="main">
     <div class="grid-row">
         <section class="column-two-thirds">
-            <h1 class="form-title font-xlarge">Edit Phase History</h1>
+            <h1 class="form-title font-xlarge">Manage Phase History</h1>
             <p>
-                <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/"> Back to project page</a>
+                <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/"> 
+                    Back to project page
+                </a>
             </p>
         </section>
     </div>
     <div class="grid-row">
         <section class="column-two-thirds">
         <form class="form" id="phases-form">
-            {% for phase in phase_order %} {% if project["phaseHistory"][phase].length %}
-            <div class="phase-history-item border-{{ phase }} txt-{{ phase }}">
-                <h3>
-                    <a href="#" class="tag tag-history {{ phase }}">{{ phase }}</a> 
-                </h3>
-                {% for item in project["phaseHistory"][phase] %}
-                    <div id="entry-{{ phase }}-{{ loop.index }}" class="phase-entry">
-                        <h3 class="bold-small">{{ item.label }}
-                            <a href="#" class="remove-btn font-xsmall" onclick="removeEntry('entry-{{ phase }}-{{ loop.index }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i>Remove </a>
-                        </h3>
-                        <input type="hidden" name="phaseHistory[{{ phase }}][][label]" value="{{ item.label }}">
 
-                        <div class="form-group phase-form-group top-15">
-                            <label for="year-{{ phase }}-{{ loop.index }}" class="form-label">Year</label>
-                            <input type="number" name="phaseHistory[{{ phase }}][][year]" min="1900" max="2099" step="1" value="{{ item.year }}" id="year-{{ phase }}-{{ loop.index }}">
-                        </div>
-
-                        <div class="form-group phase-form-group">
-                            <label class="form-label" for="month-{{ phase }}-{{ loop.index }}">Month</label>
-
-                            <select id="month-{{ phase }}-{{ loop.index }}" class="form-control form-control-1-4 month" name="phaseHistory[{{ phase }}][][month]" data-selected-val="{{ item.month }}">
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
-                        </div>
-                    </div>
-                {% endfor %}
+            <div class="form-group">
+                <label class="form-label-bold" for="phase">Phase</label>
+                <span class="form-hint">
+                    For which phase would you like to add or modify an entry?
+                </span>
+                <select class="form-control" name="phase" id="phase">
+                    <option value="pipeline">Pipeline</option>
+                    <option value="discovery">Discovery</option>
+                    <option value="alpha">Alpha</option>
+                    <option value="beta">Beta</option>
+                    <option value="live">Live</option>
+                </select>
             </div>
-            {% endif %} {% endfor %}
+
+            <div class="form-group">
+                <label class="form-label-bold" for="finished-radio-group">
+                    Type
+                </label>
+                <fieldset class="inline">
+                    <span class="form-hint">
+                        Should the date below refer to the start or completion of the phase?
+                    </span>
+                    <label class="block-label selection-button-radio" for="radio-inline-1">
+                        <input id="radio-inline-1" type="radio" name="label" value="Started" required>
+                            Started
+
+                    </label>
+                    <label class="block-label selection-button-radio" for="radio-inline-2">
+                        <input id="radio-inline-2" type="radio" name="label" value="Completed">
+                            Completed
+                    </label>
+                </fieldset>
+            </div>
+
+            <div class="form-group">
+                <label for="year" class="form-label-bold">Year</label>
+                <input class="form-control" type="number" name="year" required 
+                    min="1900" max="2099" step="1" id="year">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-bold" for="month">Month</label>
+
+                <select id="month" name="month"
+                    class="form-control form-control-1-4 month">
+
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <input type="submit" class="button" value="Submit">
@@ -80,26 +104,6 @@ $("#phases-form").submit(function(e) {
         .fail(function(jqXHR) {
             alert('There was an error updating project history .Details: \n\n' + jqXHR.responseText);
         });
-});
-
-// select the month specified in the data-selected-val attribute
-$("select.month").each(function(){ 
-    $(this).val($(this).attr('data-selected-val'));
-});
-
-function removeEntry(id) {
-    if(confirm('Remove this entry?')) {
-        $("#" + id).remove();
-    }
-}
-
-// highlight an entry when 'Remove' button is hovered over
-$('.remove-btn').hover( 
-    function(){
-        $(this).closest('.phase-entry').addClass("highlight-danger");
-    },
-    function(){
-        $(this).closest('.phase-entry').removeClass("highlight-danger");
 });
 
 </script>

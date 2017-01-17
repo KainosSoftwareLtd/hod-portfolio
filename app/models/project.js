@@ -13,7 +13,7 @@ module.exports = class Project {
         this.healthStatusHistory = {};
         this.health = {};
         this.resources = [];
-        this["phaseHistory"] = {};
+        this.phaseHistory = {};
 
         // setting defaults - this project was designed not to work without them...
         this.facing = "user";
@@ -54,40 +54,17 @@ module.exports = class Project {
     setPriority(str) { this.priority = str; }
     setOurTeam(ourTeam) { this.ourTeam = ourTeam; }
     setClientTeam(clientTeam) { this.clientTeam = clientTeam; }
-    setPhase(phase) {
-        var now = new Date(); // current date
-        // set project phase history completed record
-        if(this.phase !== phase) {
-            if(!this["phaseHistory"][this.phase] && this.phase) {
-                this["phaseHistory"][this.phase] = [];
-            }
-
-            if(this.phase) {
-                this["phaseHistory"][this.phase].push({
-                    label: "Completed", 
-                    year: now.getFullYear(), 
-                    month: now.toLocaleString('en-GB', { month: "long" })
-                });
-            }
-        }
-
-        // set project phase history started record
-        if(!this["phaseHistory"][phase]) {
-            this["phaseHistory"][phase] = [];
-
-            this["phaseHistory"][phase].push({
-                label: "Started", 
-                year: now.getFullYear(), 
-                month: now.toLocaleString('en-GB', { month: "long" })
-            });
-        }
-
-        this.phase = phase;
-
-    }
+    setPhase(phase) { this.phase = phase; }
     setResources(resources) { this.resources = resources; }
     setHealthStatusHistory(array) { this.healthStatusHistory = array; }
-    setPhaseHistory(phaseHistory) { this.phaseHistory = phaseHistory; }
+
+    setPhaseHistoryEntry(phase, label, month, year) {
+        this.phaseHistory[phase] = this.phaseHistory[phase] || {};
+        this.phaseHistory[phase][label] = {
+            year: year,
+            month: month
+        };
+    }
 
     addToOurTeam(Person) {
         this.ourTeam.push(Person);
@@ -125,6 +102,14 @@ module.exports = class Project {
         this.resources = _.reject(this.resources, function(resource) {
             return resource.id === id;
         });
+    }
+
+    removeFromPhaseHistory(phase, label) {
+        delete this.phaseHistory[phase][label];
+        // if the phase is empty, remove it
+        if (Object.getOwnPropertyNames(this.phaseHistory[phase]).length === 0) {
+            delete this.phaseHistory[phase];
+        }
     }
 
     static fromJson(data) {
