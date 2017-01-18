@@ -19,6 +19,7 @@ module.exports = class Project {
         this.facing = "user";
         this.priority = "Low";
         this.location = "Unknown";
+        this.setPhase('pipeline');
         this.health.overall = new HealthRecord(
             "overall",
             "unknown",
@@ -72,7 +73,7 @@ module.exports = class Project {
             this.phaseHistory['beta'] ? 'beta' :
             this.phaseHistory['alpha'] ? 'alpha' :
             this.phaseHistory['discovery'] ? 'discovery' :
-            this.phaseHistory['pipeline'] ? 'pipeline' : 'unknown';
+            this.phaseHistory['pipeline'] ? 'pipeline' : 'pipeline';
     }
 
     addToOurTeam(Person) {
