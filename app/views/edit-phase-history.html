@@ -90,7 +90,6 @@
 $("#phases-form").submit(function(e) {
     e.preventDefault();
     var formData = JSON.stringify($('#phases-form').serializeObject());
-    console.log(formData)
     $.ajax({
             type: "PUT",
             url: '/api/projects/{{ project.id }}/phase-history',

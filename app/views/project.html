@@ -121,7 +121,9 @@
                     {% for label, item in data.phaseHistory[phase] | dictsort | reverse %}
                         <p>
                             {{ label }} &mdash; {{ item.month }} {{ item.year }}
-                            <button onclick="removeFromHistory('{{ phase }}', '{{ label }}')"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            <button class="clickable" onclick="removeFromHistory('{{ phase }}', '{{ label }}')">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
                         </p>
                     {% endfor %}
                 </div>

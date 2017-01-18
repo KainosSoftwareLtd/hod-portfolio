@@ -64,6 +64,15 @@ module.exports = class Project {
             year: year,
             month: month
         };
+        this.setPhase(this.getLatestPhaseName());
+    }
+
+    getLatestPhaseName() {
+        return this.phaseHistory['live'] ? 'live' :
+            this.phaseHistory['beta'] ? 'beta' :
+            this.phaseHistory['alpha'] ? 'alpha' :
+            this.phaseHistory['discovery'] ? 'discovery' :
+            this.phaseHistory['pipeline'] ? 'pipeline' : 'unknown';
     }
 
     addToOurTeam(Person) {
@@ -110,6 +119,7 @@ module.exports = class Project {
         if (Object.getOwnPropertyNames(this.phaseHistory[phase]).length === 0) {
             delete this.phaseHistory[phase];
         }
+        this.setPhase(this.getLatestPhaseName());
     }
 
     static fromJson(data) {
