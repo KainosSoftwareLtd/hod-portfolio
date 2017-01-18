@@ -113,11 +113,18 @@
     <div class="grid-row">
         <section class="column-third">
             <h2 class="font-large">Project history</h2>
+            <p><a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-phase-history">Manage project history</a></p>
             <div class="phase-history">
-                {% for phase in phase_order %} {% if data["phase-history"][phase].length %}
+                {% for phase in phase_order %} {% if data.phaseHistory[phase] %}
                 <div class="phase-history-item border-{{phase}} txt-{{phase}}">
-                    <h3><a href="#" class="tag tag-history {{phase}}">{{phase}}</a></h3> {% for item in data["phase-history"][phase] %}
-                    <p>{{ item.label }} &mdash; {{item.date}}</p>
+                    <h3><a href="#" class="tag tag-history {{phase}}">{{ phase }}</a></h3> 
+                    {% for label, item in data.phaseHistory[phase] | dictsort | reverse %}
+                        <p>
+                            {{ label }} &mdash; {{ item.month }} {{ item.year }}
+                            <button class="clickable" onclick="removeFromHistory('{{ phase }}', '{{ label }}')">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </p>
                     {% endfor %}
                 </div>
                 {% endif %} {% endfor %}
@@ -125,4 +132,26 @@
         </section>
     </div>
 </main>
+{% endblock %} 
+{% block body_end %} 
+    {{ super() }}
+    <script>
+        function removeFromHistory(phase, label) {
+            if(confirm("Delete the '" + label + "' entry in the " + phase + " phase?")) {
+                $.ajax({
+                        type: "DELETE",
+                        url: '/api/projects/{{ data.id }}/phase-history',
+                        contentType: "application/json",
+                        data: JSON.stringify({phase: phase, label: label})
+                    })
+                    .done(function(response) {
+                        alert(JSON.stringify(response.messages[0]));
+                        location.reload();
+                    })
+                    .fail(function(jqXHR) {
+                        alert('There was an error removing an entry from project history. ' + jqXHR.responseText);
+                });
+            }
+        }
+    </script>
 {% endblock %}

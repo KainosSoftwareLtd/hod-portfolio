@@ -37,7 +37,7 @@ Controller.prototype.handleApiProjectId = function(req, res) {
 Controller.prototype.handleApiAddProject = function(req, res) {
     let newProject = new Project(req.body.name, req.body.description);
     newProject.setLocation(req.body.location);
-    newProject.setPhase(req.body.phase);
+    newProject.setPhaseHistoryEntry(req.body.phase, "Started", req.body.month, req.body.year);
     newProject.setIsFinished(req.body.isFinished);
     newProject.setCustomer(req.body.customer);
     
@@ -585,12 +585,11 @@ Controller.prototype.handleApiEditProject = function(req, res) {
             project.setName(req.body.name);
             project.setDescription(req.body.description);
             project.setLocation(req.body.location);
-            project.setPhase(req.body.phase);
             project.setIsFinished(req.body.isFinished);
             project.setCustomer(req.body.customer);
 
             projectDao.addProject(project, function(err, editedProject) {
-                log.trace('Updating project: ' + JSON.stringify(project));
+                log.trace('Updating project with id = ' + project.id);
                 if(err) {
                     log.debug('Error updating project with id = ' + project.id);
 
@@ -603,6 +602,73 @@ Controller.prototype.handleApiEditProject = function(req, res) {
                     projectCache.refreshProject(editedProject.id);
                     apiUtils.handleResultSet(res, 200,
                         new ApiResponse({projectId: editedProject.id}, ['The project has been updated'])
+                    );
+                }
+            });
+        }
+    });
+};
+
+// Create or overwrite an entry in phase history
+Controller.prototype.handleApiUpdatePhaseHistory = function(req, res) {
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            log.debug('Error updating project history. Project with given ID was not found.');
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, ['Error updating project history. Project with given ID was not found.'])
+            );
+        } else {
+            project.setPhaseHistoryEntry(req.body.phase, req.body.label, req.body.month, req.body.year);
+
+            projectDao.addProject(project, function(err, editedProject) {
+                log.trace('Updating project history. ID of the project: ' + project.id);
+                if(err) {
+                    log.debug('Error updating history of a project with id = ' + project.id);
+
+                    apiUtils.handleResultSet(res, 500,
+                        new ApiResponse(null, ['Error updating project history'])
+                    );
+                } else {
+                    log.debug('History of a project with id = ' + editedProject.id + ' has been updated');
+
+                    projectCache.refreshProject(editedProject.id);
+                    apiUtils.handleResultSet(res, 200,
+                        new ApiResponse({projectId: editedProject.id}, ['The project history has been updated'])
+                    );
+                }
+            });
+        }
+    });
+};
+
+// Delete an entry from phase history
+Controller.prototype.handleApiDeletePhaseHistory = function(req, res) {
+    projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            log.debug('Error removing from project history. Project with given ID was not found.');
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, ['Error removing from project history. Project with given ID was not found.'])
+            );
+        } else {
+            project.removeFromPhaseHistory(req.body.phase, req.body.label);
+
+            projectDao.addProject(project, function(err, editedProject) {
+                log.trace('Removing an entry from phase history. ' +
+                    'Label: "' + req.body.label + '" ' +
+                    'Phase: "' + req.body.phase + '"');
+
+                if(err) {
+                    log.debug('Error removing an entry from the history of a project with id = ' + project.id);
+
+                    apiUtils.handleResultSet(res, 500,
+                        new ApiResponse(null, ['Error removing an entry from project history'])
+                    );
+                } else {
+                    log.debug('History of a project with id = ' + editedProject.id + ' has been updated');
+
+                    projectCache.refreshProject(editedProject.id);
+                    apiUtils.handleResultSet(res, 200,
+                        new ApiResponse({projectId: editedProject.id}, ['An entry from project history has been removed'])
                     );
                 }
             });
@@ -667,6 +733,23 @@ Controller.prototype.handleEditResource = function (req, res) {
             projectName: project.name,
             projectId: projectId,
             resource: resource
+        });
+    });
+};
+
+/**
+ * Render Edit phase history form
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditPhaseHistory = function (req, res) {
+    var projectId = req.params.projectId;
+
+    projectCache.getById(projectId, function(error, project) {
+        res.render('edit-phase-history', {
+            project: project,
+            phase_order: phase_order
         });
     });
 };

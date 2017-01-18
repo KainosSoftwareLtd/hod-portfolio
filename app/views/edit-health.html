@@ -70,7 +70,6 @@
 $("#healthStatusForm").submit(function(e) {
     e.preventDefault();
     var formData = JSON.stringify($('#healthStatusForm').serializeObject());
-    console.log(formData)
     $.ajax({
             type: "PUT",
             url: '/api/projects/{{ project.id }}/health',
