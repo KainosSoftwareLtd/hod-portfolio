@@ -19,6 +19,7 @@ module.exports = class Project {
         this.facing = "user";
         this.priority = "Low";
         this.location = "Unknown";
+        this.isFinished = false;
         this.setPhase('pipeline');
         this.health.overall = new HealthRecord(
             "overall",

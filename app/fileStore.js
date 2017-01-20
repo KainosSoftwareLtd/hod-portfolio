@@ -45,11 +45,6 @@ FileStore.getAllProjects = function(done) {
             });
 
             data.Contents.forEach(function(file) {
-                if (file.Key === 'defaults.json') {
-                    downloadFinished();
-                    return;
-                }
-
                 getS3FileContents(file, function(err, data) {
                     if (err) {
                         log.error(err, err.stack);

@@ -99,7 +99,9 @@ $("#person-form").submit(function(e) {
         })
         .fail(function(jqXHR, textStatus) {
             alert('There was an error adding person. ' + jqXHR.responseText);
+            $("#submit-btn").prop('disabled', false);
         });
+    $("#submit-btn").prop('disabled', true);
 });
 
 function addTeamMember() {
