@@ -896,6 +896,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
                 projectList.push(proj)
             });
 
+            projectList = showFinishedProjectsIfRequested(projectList, req.cookies.showFinished);
             var data = filterPhaseIfPresent(projectList, req.query.phase);
             data = _.groupBy(data, groupBy);
             var new_data = indexify(data);
@@ -905,6 +906,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
             res.render('index', {
                 "data": new_data,
                 "phase": req.query.phase,
+                "showFinished": req.cookies.showFinished,
                 "counts": phases,
                 "view": view,
                 "row_order": rowOrder,
@@ -954,6 +956,15 @@ function indexify(data) {
 function filterPhaseIfPresent(data, phaseName) {
     if (typeof phaseName !== "undefined" && phaseName !== "all") {
         data = _.where(data, { "phase": phaseName });
+    }
+    return data;
+}
+
+// If showFinished is falsy, trim unfinished projects
+// Otherwise return unmodified data
+function showFinishedProjectsIfRequested(data, showFinished) {
+    if (!showFinished) {
+        data = _.where(data, { "isFinished": false });
     }
     return data;
 }

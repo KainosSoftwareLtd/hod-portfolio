@@ -61,7 +61,7 @@
                         <input type="url" class="form-control" id="url" name="url">
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="button" value="Submit">
+                        <input id="submit-btn" type="submit" class="button" value="Submit">
                     </div>
                 </form>
             </div>
@@ -88,7 +88,9 @@ $("#add-new-resource-form").submit(function(e) {
         })
         .fail(function(jqXHR) {
             alert('There was an error adding link. ' + jqXHR.responseText);
+            $("#submit-btn").prop('disabled', false);
         });
+    $("#submit-btn").prop('disabled', true);
 });
 
 function addResource() {

@@ -10,6 +10,14 @@
             <!-- {% if view != 'priority' %}(<a href="/priority">order by priority</a>){% endif %} -->
             {% if view != 'health' %}(<a href="/health">order by health</a>){% endif %}
         </p>
+
+        <label class="form-checkbox" for="checkbox-show-finished">
+            <input id="checkbox-show-finished" name="contact-by-text-phone" 
+                type="checkbox" value="true"
+                {{ "checked" if showFinished else "" }}>
+                Show finished projects
+        </label>
+
         </section>
     </div>
     <div class="grid-row">
@@ -47,4 +55,16 @@
     </div>
     {% endfor %}
 </main>
+{% endblock %} {% block body_end %} {{ super() }}
+<script>
+   $("#checkbox-show-finished").change(function() {
+        if(this.checked) {
+            Cookies.set("showFinished", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showFinished");
+        }
+        location.reload();
+    }); 
+</script>
 {% endblock %}
+
