@@ -45,23 +45,27 @@ FileStore.getAllProjects = function(done) {
             });
 
             data.Contents.forEach(function(file) {
-                getS3FileContents(file, function(err, data) {
-                    if (err) {
-                        log.error(err, err.stack);
-                        errors.push(err);
-                    } else {
-                        var jsonData = JSON.parse(data);
-                        if(typeof jsonData.health === 'string') {
-                            jsonData.health = {
-                                overall: {type: "overall", status: jsonData.health.toLowerCase() }
+                if (file.Key.endsWith('.json')) {
+                    getS3FileContents(file, function(err, data) {
+                        if (err) {
+                            log.error(err, err.stack);
+                            errors.push(err);
+                        } else {
+                            var jsonData = JSON.parse(data);
+                            if(typeof jsonData.health === 'string') {
+                                jsonData.health = {
+                                    overall: {type: "overall", status: jsonData.health.toLowerCase() }
+                                }
                             }
+
+                            projects.push(jsonData);
                         }
 
-                        projects.push(jsonData);
-                    }
-
+                        downloadFinished();
+                    });
+                } else {
                     downloadFinished();
-                });
+                }
             });
         }
     });
