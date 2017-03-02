@@ -585,7 +585,7 @@ Controller.prototype.handleApiEditProject = function(req, res) {
             project.setName(req.body.name);
             project.setDescription(req.body.description);
             project.setLocation(req.body.location);
-            project.setIsFinished(req.body.isFinished);
+            project.setIsFinished(req.body.isFinished === "true");
             project.setCustomer(req.body.customer);
 
             projectDao.addProject(project, function(err, editedProject) {

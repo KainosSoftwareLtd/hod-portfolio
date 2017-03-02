@@ -163,6 +163,8 @@ module.exports = class Project {
             });
         }
 
+        p.setIsFinished(p.isFinished == true);
+
         return p;
     }
 }
