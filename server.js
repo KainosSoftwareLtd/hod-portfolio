@@ -64,9 +64,9 @@ if (!process.env.COOKIE_SECRET) {
     log.warn('COOKIE_SECRET is not set. Unsafe cookie secret will be used instead.');
 }
 app.use(cookieParser(process.env.COOKIE_SECRET || "unsafe-secret-CHANGE-ME"));
-app.use(session({ cookie: { 
+app.use(session({ cookie: {
     maxAge: 15 * 60 * 1000 // 15 minutes
-}})); 
+}}));
 app.use(flash());
 
 // all routes will have access to this flash message
@@ -88,6 +88,9 @@ if (typeof(routes) != "function") {
     app.use("/", routes);
     app.use("/", authRoutes);
 }
+
+// set ga tracking id
+app.locals.ga_id = process.env.GA_ID;
 
 // start the app
 app.listen(port);
