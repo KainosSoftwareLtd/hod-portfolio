@@ -869,6 +869,26 @@ Controller.prototype.handleDisplayHealthStatus = function (req, res) {
     });
 };
 
+/**
+ * Render Edit project health status
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleDisplayHealthHistory = function (req, res) {
+    var id = req.params.id;
+
+    projectCache.getById(id, function(error, project) {
+        var healthHistory = _.chain(project.healthStatusHistory).map(_.values).flatten().sortBy("date").reverse().value();
+
+        res.render('display-health-history', {
+            project: project,
+            history: healthHistory,
+            convertDate: utils.convertDate
+        });
+    });
+};
+
 // Edit project form
 Controller.prototype.handleEditProject = function(req, res) {
     var id = req.params.id;

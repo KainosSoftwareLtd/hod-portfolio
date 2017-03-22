@@ -184,6 +184,15 @@ $risk-colour: $orange;
   color: white;
 }
 
+.health-block-small {
+  display: inline-block;
+  @include box-sizing(content-box);
+  margin: 2px;
+  padding: 5px;
+  border: none;
+  color: white;
+}
+
 .health-block a {
   text-decoration: none;
   color: inherit;

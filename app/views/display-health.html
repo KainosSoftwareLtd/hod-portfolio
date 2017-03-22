@@ -3,6 +3,9 @@
     <div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-xlarge">{{ project.name }} Health <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h1>
+            <p>
+                <a class="font-xsmall link-back" href="/projects/{{ project.id }}/{{ project.name | slugify }}/">Back</a>
+            </p>
         </div>
     </div>
     <div class="grid-row">
@@ -10,7 +13,7 @@
           {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %}
           {% for type, details in types %}
             {% if project.health[type] %}
-              <span class="health-block bold-xlarge {{ project.health[type].status | lower }}">{{ details.label | title }}</span>
+              <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/display-health/#{{ details.label | title }}"><span class="health-block bold-xlarge {{ project.health[type].status | lower }}">{{ details.label | title }}</span></a>
             {% endif %}
           {% endfor %}
         </div>
@@ -21,47 +24,30 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Healthcheck Type</th>
-                        <th>Status</th>
-                        <th>Comment</th>
-                        <th>Author and Date</th>
+                        <th colspan="2">&nbsp;</th>                        
                     </tr>
                 </thead>
                 {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %}
                 {% for type, details in types %}
                   {% if project.health[type] %}
                 <tr>
-                    <td>{{ details.label | title }}</td>
-                    <td>{{ project.health[type].status | title }}</td>
-                    <td><p>{{ project.health[type].comment }}</p> {% if project.health[type].link.url %}<p>More detail: <a href="{{ project.health[type].link.url }}" target="_blank">{{ project.health[type].link.name }}</a></p>{% endif %}</td>
-                    <td>{{ project.health[type].user.name }}{% if project.health[type].date %}, {{ convertDate(project.health[type].date) }} {% endif %}</td>
+                    <td class="font-medium"><a name="{{ details.label | title }}"></a>
+                      <span class="health-block-small {{ project.health[type].status | lower }}">{{ details.label | title }}</span></td>
+                    <td>
+                      <p>{{ project.health[type].user.name }} {% if project.health[type].date %}, {{ convertDate(project.health[type].date) }} {% endif %}</p>
+                      {% if project.health[type].comment %}<p class="font-small">{{ project.health[type].comment }}</p>{% endif %}
+                      <p class="font-xsmall">{% if project.health[type].link.url %}<a href="{{ project.health[type].link.url }}" target="_blank">{{ project.health[type].link.name }}</a> {% endif %} </p>
+                    </td>
                 </tr>
                 {% endif %}
               {% endfor %}
             </table>
         </div>
-    </div>
-    <div class="grid-row">
-        <div class="column-full">
-            <h2 class="heading-large">Health update history</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Healthcheck Type</th>
-                        <th>Status</th>
-                        <th>Comment</th>
-                        <th>Author and Date</th>
-                    </tr>
-                </thead>
-                {% for status in history %}
-                <tr>
-                    <td>{{ types[status.type].label | title }}</td>
-                    <td>{{ status.status | title}}</td>
-                    <td><p>{{ status.comment }}</p> {% if status.link.url %}<p>More detail: <a href="{{ status.link.url }}" target="_blank">{{ status.link.name }}</a></p>{% endif %}</td>
-                    <td>{{ status.user.name }}{% if status.date %}, {{ convertDate(status.date) }} {% endif %}</td>
-                </tr>
-                {% endfor %}
-            </table>
+        <div class="grid-row">
+            <div class="column-two-thirds">
+              &nbsp;
+              <p><a class="bold-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/display-health-history">Previous Updates</a></p>
+            </div>
         </div>
     </div>
 </main>
