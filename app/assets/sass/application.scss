@@ -170,15 +170,39 @@ $risk-colour: $orange;
 .phase.beta      {background-color:$beta-colour;}
 .phase.live      {background-color:$live-colour;}
 
-.circle.good      {background-color:$good-colour;}
-.circle.fair      {background-color:$fair-colour;}
-.circle.risk      {background-color:$risk-colour;}
-.circle.unknown   {background-color:grey;}
-
 .health.good      {background-color:$good-colour;}
 .health.fair      {background-color:$fair-colour;}
 .health.risk      {background-color:$risk-colour;}
 .health.unknown   {background-color:grey;}
+
+.health-block {
+  display: inline-block;
+  @include box-sizing(content-box);
+  margin: 10px;
+  padding: 20px;
+  border: none;
+  color: white;
+}
+
+.health-block a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.health-block a.visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+.health-block a.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.good      {background-color:$good-colour;}
+.fair      {background-color:$fair-colour;}
+.risk      {background-color:$risk-colour;}
+.unknown   {background-color:grey;}
 
 .phase_modifier {
   font-size:16px;

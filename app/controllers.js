@@ -40,20 +40,20 @@ Controller.prototype.handleApiAddProject = function(req, res) {
     newProject.setPhaseHistoryEntry(req.body.phase, "Started", req.body.month, req.body.year);
     newProject.setIsFinished(req.body.isFinished);
     newProject.setCustomer(req.body.customer);
-    
+
     projectDao.addProject(newProject, function(err, project) {
         log.trace('Adding project: ' + project.name);
         if(err) {
             log.debug('Error adding project with id = ' + project.id);
 
-            apiUtils.handleResultSet(res, 500, 
+            apiUtils.handleResultSet(res, 500,
                 new ApiResponse(null, ['Error adding project'])
             );
         } else {
             log.debug('Project with id = ' + project.id + ' has been added');
 
             projectCache.refreshProject(project.id);
-            apiUtils.handleResultSet(res, 200, 
+            apiUtils.handleResultSet(res, 200,
                 new ApiResponse({projectId: project.id}, ['The project has been added'])
             );
         }
@@ -918,7 +918,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
 
 /**
  * Prepare row order
- * 
+ *
  * @param  {String[]} [rowOrder] list that forces the order of values by which the projects are grouped
  * @param  {Object[]} data projects
  * @return {String[]} list showing the order of values by which the projects are grouped
@@ -951,7 +951,7 @@ function indexify(data) {
     return new_data;
 }
 
-// If phaseName was provided, trim projects that don't belong to that phase 
+// If phaseName was provided, trim projects that don't belong to that phase
 // Otherwise return unmodified data
 function filterPhaseIfPresent(data, phaseName) {
     if (typeof phaseName !== "undefined" && phaseName !== "all") {

@@ -1,76 +1,42 @@
 {% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
     <div class="grid-row">
-        <section class="column-two-thirds">
-            <h1 class="font-xlarge">{{ project.name }} Health</h1>
-            <p class="location font-xsmall">{{ project.location }}</p>
-            <p><a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}"> Back to project page</a> <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">Update Health</a>
-            </p>
-            <p>The overall health of "{{ project.name }}" can be seen above, with a listing of individual state outlined below. Scroll further to view the history of changes. You can update the status from the link above.</p>
-        </section>
-        <section class="column-third">
-            <p class="phase {{ project.phase | lower }}">phase <strong>{{ project.phase | title }}</strong></p>
-            <p class="health {{ project.health.overall.status | lower }}">health <strong>{{ project.health.overall.status | title }}</strong></p>
-        </section>
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">{{ project.name }} Health <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h1>
+        </div>
     </div>
     <div class="grid-row">
-        <section class="column-full">
-            <h2 class="font-large">{{ project.name }} current state</h2>
-        </section>
+        <div>
+          {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %}
+          {% for type, details in types %}
+            {% if project.health[type] %}
+              <span class="health-block bold-xlarge {{ project.health[type].status | lower }}">{{ details.label | title }}</span>
+            {% endif %}
+          {% endfor %}
+        </div>
     </div>
-    {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %} {% for type, details in types %} {% if project.health[type] %}
-    <div class="grid-row" style="padding-top: 20px">
-        <section class="column-fifth">
-            <div class="health-circle">
-                <strong class="bold-small">{{ details.label | title }}</strong>
-                <p class="circle {{ project.health[type].status | lower }}"></p>
-                <p class="circle-label">{{ project.health[type].status | title }}</p>
-            </div>
-        </section>
-        <section class="column-four-fifths">
-                <p>{{ project.health[type].comment }}</p>
-                <p class="font-xsmall"><a href="{{ project.health[type].link.url }}">{{ project.health[type].link.name }}</a> {{ project.health[type].user.name }} {{ convertDate(project.health[type].date) }} </p>
-        </section>
-    </div>
-    <hr/>
-    {% endif %} {% endfor %}    
     <div class="grid-row">
-        <section class="column-full">
-            <h2 class="font-large">Previous {{ project.name }} health states</h2>
+        <div class="column-full">
+            <h2 class="heading-large">Health update detail</h2>
             <table>
                 <thead>
                     <tr>
-                        <td>Healthcheck Type and Link</td>
-                        <td>Author and Date</td>
-                        <td>Comment</td>
-                        <td>Status</td>
+                        <th>Healthcheck Type</th>
+                        <th>Status</th>
+                        <th>Comment</th>
+                        <th>Author and Date</th>
                     </tr>
                 </thead>
                 {% for status in history %}
                 <tr>
-                    <td>
-                        <div><strong class="bold-small">{{ types[status.type].label | title }}</strong></div>
-                        <a href="{{ status.link.url }}">
-                        {{ status.link.name }}
-                    </a>
-                    </td>
-                    <td>
-                        <a href="mailto:{{ status.user.email}}">
-                        {{ status.user.name }}
-                    </a> {% if status.date %}
-                        <div>{{ convertDate(status.date) }}</div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div>{{ status.comment }}</div>
-                    </td>
-                    <td>
-                        <div class="health {{ status.status | lower }}">{{ status.status | title}}</div>
-                    </td>
+                    <td>{{ types[status.type].label | title }}</td>
+                    <td>{{ status.status | title}}</td>
+                    <td><p>{{ status.comment }}</p> <p>More detail <a href="{{ status.link.url }}" target="_blank">{{ status.link.name }}</a></p></td>
+                    <td>{{ status.user.name }}{% if status.date %}, {{ convertDate(status.date) }} {% endif %}</td>
                 </tr>
                 {% endfor %}
             </table>
-        </section>
+        </div>
     </div>
 </main>
 {% endblock %}

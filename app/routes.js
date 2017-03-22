@@ -19,10 +19,10 @@ var priority_order = [
 ];
 
 var health_order = [
-  'good',
-  'fair',
+  'unknown',
   'risk',
-  'unknown'
+  'fair',
+  'good'
 ];
 
 var healthGroupFunc = function(p) {
