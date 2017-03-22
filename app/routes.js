@@ -30,10 +30,10 @@ var healthGroupFunc = function(p) {
 };
 
 var controller = new controllers(router);
-controller.setupIndexPageRoute('location', ['/', '/location']);
+controller.setupIndexPageRoute('location', '/location');
 controller.setupIndexPageRoute('agency', '/agency');
 controller.setupIndexPageRoute('theme', '/theme');
-controller.setupIndexPageRoute(healthGroupFunc, '/health', health_order, 'health');
+controller.setupIndexPageRoute(healthGroupFunc, ['/', '/health'], health_order, 'health');
 controller.setupIndexPageRoute('priority', '/priority', priority_order);
 
 router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProject);
