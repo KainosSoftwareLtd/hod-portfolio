@@ -17,7 +17,33 @@
     </div>
     <div class="grid-row">
         <div class="column-full">
-            <h2 class="heading-large">Health update detail</h2>
+            <h2 class="heading-large">Health details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Healthcheck Type</th>
+                        <th>Status</th>
+                        <th>Comment</th>
+                        <th>Author and Date</th>
+                    </tr>
+                </thead>
+                {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %}
+                {% for type, details in types %}
+                  {% if project.health[type] %}
+                <tr>
+                    <td>{{ details.label | title }}</td>
+                    <td>{{ project.health[type].status | title }}</td>
+                    <td><p>{{ project.health[type].comment }}</p> {% if project.health[type].link.url %}<p>More detail: <a href="{{ project.health[type].link.url }}" target="_blank">{{ project.health[type].link.name }}</a></p>{% endif %}</td>
+                    <td>{{ project.health[type].user.name }}{% if project.health[type].date %}, {{ convertDate(project.health[type].date) }} {% endif %}</td>
+                </tr>
+                {% endif %}
+              {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="grid-row">
+        <div class="column-full">
+            <h2 class="heading-large">Health update history</h2>
             <table>
                 <thead>
                     <tr>
@@ -31,7 +57,7 @@
                 <tr>
                     <td>{{ types[status.type].label | title }}</td>
                     <td>{{ status.status | title}}</td>
-                    <td><p>{{ status.comment }}</p> <p>More detail <a href="{{ status.link.url }}" target="_blank">{{ status.link.name }}</a></p></td>
+                    <td><p>{{ status.comment }}</p> {% if status.link.url %}<p>More detail: <a href="{{ status.link.url }}" target="_blank">{{ status.link.name }}</a></p>{% endif %}</td>
                     <td>{{ status.user.name }}{% if status.date %}, {{ convertDate(status.date) }} {% endif %}</td>
                 </tr>
                 {% endfor %}
