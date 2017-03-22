@@ -1,52 +1,38 @@
 {% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
     <div class="grid-row">
-        <section class="column-two-thirds">
-            <h1 class="font-xlarge">{{ data.name }}</h1>
-            <p class="location font-xsmall">{{ data.location }}</p>
-            {% if data.isFinished %}
-                <p class="health good font-xsmall" title="This project was finished">
-                    <i class="fa fa-flag-checkered" aria-hidden="true"></i>
-                    Finished
-                </p>
-            {% endif %}
-            <p><a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">Change details</a> <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">Change health</a></p>
-            <p>{{ data.description }}</p>
-        </section>
-        <section class="column-third">
-            <p class="phase {{ data.phase | lower }}">phase <strong>{{ data.phase | title }}</strong></p>
-            <p class="health {{ data.health.overall.status | lower }}">health <strong>{{ data.health.overall.status | title }}</strong></p>
-            {% if data.customer %}
-                <div class="customer">
-                    <h2 class="font-medium">Customer</h2>
-                    <p>{{ data.customer }}</p>
-                </div>
-            {% endif %}
-        </section>
+      <div class="column-two-thirds">
+          <h1 class="heading-xlarge">{{ data.name }} <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h1>
+          <p class="lede">{{ data.description }}</p>
+      </div>
+      <div class="column-quarter">
+          <span class="health-block bold-xlarge {{ data.health.overall.status | lower }}"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">{{ data.health.overall.status | title }}</a>&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health"><i class="fa fa-eye" aria-hidden="true"></i></a></span>
+      </div>
     </div>
     <div class="grid-row">
-        <section class="column-two-thirds">
-            <h2 class="font-large">Useful Links</h2>
-            <p>
-                {% if data["resources"].length > 0 %}
-                <ul class="link-list">
-                    {% for resource in data["resources"] %}
-                    <li><a href="{{ resource['url'] }}">{{ resource["name"] }}</a></li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <ul class="link-list">
-                    <li>We don't have any links for this project.</li>
-                </ul>
-                {% endif %}
-            </p>
-            <p class="font-xsmall"> <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">Change links</a></p>
-        </section>
+        <div class="column-two-thirds">
+            <h2 class="heading-large">Useful Links <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h3>
+        </div>
     </div>
     <div class="grid-row">
-        <section class="column-two-thirds">
-            <h2 class="font-large">People</h2>
-        </section>
+        <div class="column-two-thirds">
+          {% if data["resources"].length > 0 %}
+              <table>
+                  {% for resource in data["resources"] %}
+                  <tr>
+                      <td><a href="{{ resource['url'] }}" target="_blank">{{ resource["name"] }} </a></td>
+                  </tr>
+                  {% endfor %}
+                </table>
+          {% else %}
+          <p>We don't have any links for this project.</p>
+          {% endif %}
+        </div>
+    </div>
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h2 class="heading-large">People</h3>
+        </div>
     </div>
     <div class="grid-row">
         <!--MACRO FOR PEOPLE TABLE-->
@@ -56,18 +42,18 @@
             <table>
                 <thead>
                     <tr>
-                        <td>Role</td>
-                        <td>Name</td>
-                        <td>
+                        <th>Role</th>
+                        <th>Name</th>
+                        <th>
                             <!-- column for "more" buttons -->
-                        </td>
+                        </th>
                     </tr>
                 </thead>
                 {% for teamMember in peopleData %}
                 <tr>
                     <td>{{ teamMember.role}}</td>
                     <td>{{ teamMember.name }}</td>
-                    <td data-collapsable-parent="{{ teamName + loop.index }}" class="clickable">[+]</td>
+                    <td data-collapsable-parent="{{ teamName + loop.index }}" class="clickable"><i class="fa fa-plus-square-o" aria-hidden="true"></i></td>
                 </tr>
                 <tr>
                     <td data-collapsable-child="{{ teamName + loop.index }}" colspan="3">
@@ -100,24 +86,24 @@
         {% endmacro %}
         <!--MACRO FOR PEOPLE TABLE-->
         <section class="column-half">
-            <p class="font-medium">Our team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team">Change team members</a></p>
+            <p class="font-medium">Our team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></p>
             {{ peopleTable(data["ourTeam"], "Kainos") }}
             <p></p>
         </section>
         <section class="column-half">
-            <p class="font-medium">Client team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team">Change team members</a></p>
+            <p class="font-medium">Client team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></p>
             {{ peopleTable(data["clientTeam"], "Client") }}
             <p></p>
         </section>
     </div>
+
     <div class="grid-row">
         <section class="column-third">
-            <h2 class="font-large">Project history</h2>
-            <p><a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-phase-history">Manage project history</a></p>
+            <h2 class="heading-large">Project history <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-phase-history"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
             <div class="phase-history">
                 {% for phase in phase_order %} {% if data.phaseHistory[phase] %}
                 <div class="phase-history-item border-{{phase}} txt-{{phase}}">
-                    <h3><a href="#" class="tag tag-history {{phase}}">{{ phase }}</a></h3> 
+                    <h3><a href="#" class="tag tag-history {{phase}}">{{ phase }}</a></h3>
                     {% for label, item in data.phaseHistory[phase] | dictsort | reverse %}
                         <p>
                             {{ label }} &mdash; {{ item.month }} {{ item.year }}
@@ -132,8 +118,8 @@
         </section>
     </div>
 </main>
-{% endblock %} 
-{% block body_end %} 
+{% endblock %}
+{% block body_end %}
     {{ super() }}
     <script>
         function removeFromHistory(phase, label) {
