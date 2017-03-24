@@ -26,7 +26,8 @@ var health_order = [
 ];
 
 var healthGroupFunc = function(p) {
-    return p.health.overall ? p.health.overall.status : 'unknown';
+  let currentHealth = p.health.overall ? p.health.overall.status : null;
+  return _.contains(health_order, currentHealth) ? currentHealth: 'unknown';
 };
 
 var controller = new controllers(router);

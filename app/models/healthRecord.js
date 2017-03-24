@@ -5,7 +5,7 @@ var ResourceLink = require('./resourceLink');
 module.exports = class HealthRecord {
     constructor(type, status, user, comment, resourceLink) {
         this.type = type;
-        this.status = status;
+        this.status = status ? status.toLowerCase(): 'unknown';
         this.comment = comment;
         this.date = Date.now();
         this.link = resourceLink;
@@ -15,7 +15,7 @@ module.exports = class HealthRecord {
     }
 
     setId(str) { this.id = str; }
-    setStatus(str) { this.status = str; }
+    setStatus(str) { this.status = str ? str.toLowerCase(): 'unknown'; }
     setComment(str) { this.comment = str; }
     setDate(timestamp) { this.date = timestamp; }
     setUser(user) { this.user = {name: user.displayName, email: user.email}; }
@@ -24,6 +24,7 @@ module.exports = class HealthRecord {
 
     static fromJson(data) {
         var hr = new HealthRecord();
+        data.status = data.status ? data.status.toLowerCase(): 'unknown';
         Object.assign(hr, data);
 
         if (data.link) {
