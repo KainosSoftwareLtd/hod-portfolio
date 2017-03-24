@@ -191,6 +191,8 @@ $risk-colour: $orange;
   padding: 5px;
   border: none;
   color: white;
+  width: 100%;
+  text-align: center;
 }
 
 .health-block a {
@@ -274,4 +276,9 @@ $risk-colour: $orange;
 
 .customer h2 {
   font-weight: bold;
+}
+
+.health-label-cell {
+  text-align: center;
+  width: 20%;
 }

@@ -17,10 +17,9 @@
                         <th colspan="2">&nbsp;</th>
                     </tr>
                 </thead>
-                {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %}
                 {% for status in history %}
                 <tr>
-                    <td class="font-medium"><a name="{{ types[status.type].label | title }}"></a>
+                    <td class="font-medium health-label-cell"><a name="{{ healthCheckTypes[status.type].label | title }}">  {{ healthCheckTypes[status.type].label | title }} </a>
                       <span class="health-block-small {{ status.status | lower }}">{{ status.status | title}}</span></td>
                     <td>
                       <p>{{ status.user.name }} {% if status.date %}, {{ convertDate(status.date) }} {% endif %}</p>

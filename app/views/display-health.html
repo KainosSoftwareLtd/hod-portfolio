@@ -10,8 +10,7 @@
     </div>
     <div class="grid-row">
         <div>
-          {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %}
-          {% for type, details in types %}
+          {% for type, details in healthCheckTypes %}
             {% if project.health[type] %}
               <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/display-health/#{{ details.label | title }}"><span class="health-block bold-xlarge {{ project.health[type].status | lower }}">{{ details.label | title }}</span></a>
             {% endif %}
@@ -24,14 +23,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="2">&nbsp;</th>                        
+                        <th colspan="2">&nbsp;</th>
                     </tr>
                 </thead>
-                {% set types = { "overall":{label: "Overall"}, "engineering": {label: "Engineering"}, "ops": {label: "Operations"}, "userResearch": {label: "User Research"}, "security": {label: "Security"}, "delivery": {label: "Delivery"}, "data": {label: "Data"} } %}
-                {% for type, details in types %}
+                {% for type, details in healthCheckTypes %}
                   {% if project.health[type] %}
                 <tr>
-                    <td class="font-medium"><a name="{{ details.label | title }}"></a>
+                    <td class="font-medium health-label-cell"><a name="{{ details.label | title }}"></a>
                       <span class="health-block-small {{ project.health[type].status | lower }}">{{ details.label | title }}</span></td>
                     <td>
                       <p>{{ project.health[type].user.name }} {% if project.health[type].date %}, {{ convertDate(project.health[type].date) }} {% endif %}</p>
