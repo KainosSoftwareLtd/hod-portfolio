@@ -29,7 +29,7 @@
                 {% for type, details in healthCheckTypes %}
                   {% if project.health[type] %}
                 <tr>
-                    <td class="font-medium"><a name="{{ details.label | title }}"></a>
+                    <td class="font-medium health-label-cell"><a name="{{ details.label | title }}"></a>
                       <span class="health-block-small {{ project.health[type].status | lower }}">{{ details.label | title }}</span></td>
                     <td>
                       <p>{{ project.health[type].user.name }} {% if project.health[type].date %}, {{ convertDate(project.health[type].date) }} {% endif %}</p>
