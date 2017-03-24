@@ -21,6 +21,16 @@ function Controller(router) {
 // A way to force the ordering of the phases.
 var phase_order = ['pipeline', 'discovery', 'alpha', 'beta', 'live'];
 
+var healthCheckTypes =  {
+    "overall": {label: "Overall"},
+    "commercial": {label: "Commercial"},
+    "engineering": {label: "Engineering"},
+    "ops": {label: "Operations"},
+    "userResearch": {label: "User Research"},
+    "security": {label: "Security"},
+    "delivery": {label: "Delivery"},
+    "data": {label: "Data"}
+}
 
 // JSON data of a project
 Controller.prototype.handleApiProjectId = function(req, res) {
@@ -844,7 +854,8 @@ Controller.prototype.handleEditHealthStatus = function (req, res) {
     projectCache.getById(id, function(error, project) {
         res.render('edit-health', {
             project: project,
-            convertDate: utils.convertDate
+            convertDate: utils.convertDate,
+            healthCheckTypes: healthCheckTypes
         });
     });
 };
@@ -864,7 +875,8 @@ Controller.prototype.handleDisplayHealthStatus = function (req, res) {
         res.render('display-health', {
             project: project,
             history: healthHistory,
-            convertDate: utils.convertDate
+            convertDate: utils.convertDate,
+            healthCheckTypes: healthCheckTypes
         });
     });
 };
@@ -884,7 +896,8 @@ Controller.prototype.handleDisplayHealthHistory = function (req, res) {
         res.render('display-health-history', {
             project: project,
             history: healthHistory,
-            convertDate: utils.convertDate
+            convertDate: utils.convertDate,
+            healthCheckTypes: healthCheckTypes
         });
     });
 };

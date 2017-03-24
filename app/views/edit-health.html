@@ -17,13 +17,9 @@
                         Healthcheck Type
                     </label>
                     <select class="form-control" name="health[type]" id="type">
-                        <option value="overall">Overall</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="ops">Ops</option>
-                        <option value="userResearch">User Research</option>
-                        <option value="security">Security</option>
-                        <option value="delivery">Delivery</option>
-                        <option value="data">Data</option>
+                        {% for healthType, details in healthCheckTypes %}
+                            <option value="{{ healthType }}">{{ details.label }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <!-- status -->
