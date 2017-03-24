@@ -944,11 +944,13 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
  * @return {String[]} list showing the order of values by which the projects are grouped
  */
 function prepareRowOrder(rowOrder, data) {
-    rowOrder = [];
-    _.each(data, function(value, key, list) {
-        rowOrder.push(key);
-    });
-    rowOrder.sort();
+    if (!rowOrder || rowOrder.length === 0) {
+        rowOrder = [];
+        _.each(data, function(value, key, list) {
+            rowOrder.push(key);
+        });
+        rowOrder.sort();
+    }
 
     return rowOrder;
 }
