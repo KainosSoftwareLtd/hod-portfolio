@@ -94,11 +94,11 @@ $("#person-form").submit(function(e) {
             data: JSON.stringify(data.person)
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             location.reload();
         })
         .fail(function(jqXHR, textStatus) {
-            alert('There was an error adding person. ' + jqXHR.responseText);
+            //alert('There was an error adding person. ' + jqXHR.responseText);
             $("#submit-btn").prop('disabled', false);
         });
     $("#submit-btn").prop('disabled', true);
@@ -121,11 +121,11 @@ function removeTeamMember(personId) {
             contentType: "application/json"
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             location.reload();
         })
         .fail(function(jqXHR) {
-            alert('There was an error adding person. ' + jqXHR.responseText);
+            //alert('There was an error adding person. ' + jqXHR.responseText);
         });
 }
 </script>

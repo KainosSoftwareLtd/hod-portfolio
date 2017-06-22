@@ -1,17 +1,21 @@
 {% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
     <div class="grid-row">
+          <h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1>
+          <p>{{ data.description }}</p>
+    </div>
+    <div class="grid-row">
       <div class="column-two-thirds">
-          <h1 class="heading-xlarge">{{ data.name }} <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h1>
-          <p class="lede">{{ data.description }}</p>
+        <h2 class="heading-large">Project overall Health&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">update health status</a></h2>
       </div>
-      <div class="column-quarter">
-          <span class="health-block bold-xlarge {{ data.health.overall.status | lower }}"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">{{ data.health.overall.status | title }}</a>&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health"><i class="fa fa-eye" aria-hidden="true"></i></a></span>
+      <div class="column-two-thirds">
+          <span class="health-block bold-xlarge {{ data.health.overall.status | lower }}"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">{{ data.health.overall.status | title }}</a>&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">view details</a>
+          <p class="font-medium">{{ data.health.overall.comment }}</p></span>
       </div>
     </div>
     <div class="grid-row">
         <div class="column-two-thirds">
-            <h2 class="heading-large">Useful Links <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h3>
+            <h2 class="heading-large">Useful Links&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">edit</i></a></h3>
         </div>
     </div>
     <div class="grid-row">
@@ -86,12 +90,12 @@
         {% endmacro %}
         <!--MACRO FOR PEOPLE TABLE-->
         <section class="column-half">
-            <p class="font-medium">Our team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></p>
+            <p class="font-medium">Our team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-our-team">edit</a></p>
             {{ peopleTable(data["ourTeam"], "Kainos") }}
             <p></p>
         </section>
         <section class="column-half">
-            <p class="font-medium">Client team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></p>
+            <p class="font-medium">Client team <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-client-team">edit</a></p>
             {{ peopleTable(data["clientTeam"], "Client") }}
             <p></p>
         </section>
@@ -99,7 +103,7 @@
 
     <div class="grid-row">
         <section class="column-third">
-            <h2 class="heading-large">Project history <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-phase-history"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
+            <h2 class="heading-large">Project history <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-phase-history">edit</a></h2>
             <div class="phase-history">
                 {% for phase in phase_order %} {% if data.phaseHistory[phase] %}
                 <div class="phase-history-item border-{{phase}} txt-{{phase}}">
@@ -131,11 +135,11 @@
                         data: JSON.stringify({phase: phase, label: label})
                     })
                     .done(function(response) {
-                        alert(JSON.stringify(response.messages[0]));
+                        //alert(JSON.stringify(response.messages[0]));
                         location.reload();
                     })
                     .fail(function(jqXHR) {
-                        alert('There was an error removing an entry from project history. ' + jqXHR.responseText);
+                        //alert('There was an error removing an entry from project history. ' + jqXHR.responseText);
                 });
             }
         }

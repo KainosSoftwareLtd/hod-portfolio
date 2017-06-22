@@ -1,21 +1,10 @@
 {% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
     <div class="grid-row">
-        <div class="column-two-thirds">
-            <h1 class="heading-xlarge">{{ project.name }} Health <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h1>
-            <p>
-                <a class="font-xsmall link-back" href="/projects/{{ project.id }}/{{ project.name | slugify }}/">Back</a>
-            </p>
-        </div>
+            <h1 class="heading-xlarge">{{ project.name }} Health&nbsp;<a class="font-xsmall link-back" href="/projects/{{ project.id }}/{{ project.name | slugify }}/">Back</a></h1>
     </div>
     <div class="grid-row">
-        <div>
-          {% for type, details in healthCheckTypes %}
-            {% if project.health[type] %}
-              <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/display-health/#{{ details.label | title }}"><span class="health-block bold-xlarge {{ project.health[type].status | lower }}">{{ details.label | title }}</span></a>
-            {% endif %}
-          {% endfor %}
-        </div>
+          <p><a href="/projects/{{ project.id }}/{{ project.name | slugify }}/edit-health">update health status</a></p>
     </div>
     <div class="grid-row">
         <div class="column-full">
@@ -29,12 +18,12 @@
                 {% for type, details in healthCheckTypes %}
                   {% if project.health[type] %}
                 <tr>
-                    <td class="font-medium health-label-cell"><a name="{{ details.label | title }}"></a>
-                      <span class="health-block-small {{ project.health[type].status | lower }}">{{ details.label | title }}</span></td>
-                    <td>
+                    <td class="health-label-cell">
                       <p>{{ project.health[type].user.name }} {% if project.health[type].date %}, {{ convertDate(project.health[type].date) }} {% endif %}</p>
-                      {% if project.health[type].comment %}<p class="font-small">{{ project.health[type].comment }}</p>{% endif %}
-                      <p class="font-xsmall">{% if project.health[type].link.url %}<a href="{{ project.health[type].link.url }}" target="_blank">{{ project.health[type].link.name }}</a> {% endif %} </p>
+                      <span class="health-block bold-xlarge {{ project.health[type].status | lower }}">{{ details.label | title }}
+                      <p class="font-medium">{{ project.health[type].status | title }}</p>
+                      <p class="font-small">{{ project.health[type].comment }}</p></span>
+                      <p class="font-xsmall">{% if project.health[type].link.url %}More Detail: <a href="{{ project.health[type].link.url }}" target="_blank">{{ project.health[type].link.name }}</a> {% endif %} </p>
                     </td>
                 </tr>
                 {% endif %}

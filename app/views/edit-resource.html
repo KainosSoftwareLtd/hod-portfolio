@@ -44,11 +44,11 @@ $("#resource-form").submit(function(e) {
 
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             window.location.href = '/projects/{{ projectId }}/edit-resource';
         })
         .fail(function(jqXHR) {
-            alert('There was an error updating the link. ' + jqXHR.responseText);
+            //alert('There was an error updating the link. ' + jqXHR.responseText);
         });
 });
 </script>

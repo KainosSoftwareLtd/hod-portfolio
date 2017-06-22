@@ -97,11 +97,11 @@ $("#phases-form").submit(function(e) {
             data: formData
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             window.location.href = '/projects/{{ project.id }}/{{ project.name | slugify }}';
         })
         .fail(function(jqXHR) {
-            alert('There was an error updating project history .Details: \n\n' + jqXHR.responseText);
+            //alert('There was an error updating project history .Details: \n\n' + jqXHR.responseText);
         });
 });
 
