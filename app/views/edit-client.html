@@ -29,11 +29,11 @@ $("#person-form").submit(function(e) {
 
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             window.location.href = '/projects/{{ projectId }}/{{ projectName | slugify }}/edit-client-team';
         })
         .fail(function(jqXHR) {
-            alert('There was an error while updating person. ' + jqXHR.responseText);
+            //alert('There was an error while updating person. ' + jqXHR.responseText);
         });
 });
 </script>

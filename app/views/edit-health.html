@@ -73,11 +73,11 @@ $("#healthStatusForm").submit(function(e) {
             data: formData
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             window.location.href = '/projects/{{ project.id }}/{{ project.name | slugify }}/display-health';
         })
         .fail(function(jqXHR) {
-            alert('There was an error updating health status. Details: \n\n' + jqXHR.responseText);
+            //alert('There was an error updating health status. Details: \n\n' + jqXHR.responseText);
         });
 });
 

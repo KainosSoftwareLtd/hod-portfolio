@@ -83,11 +83,11 @@ $("#add-new-resource-form").submit(function(e) {
 
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             location.reload();
         })
         .fail(function(jqXHR) {
-            alert('There was an error adding link. ' + jqXHR.responseText);
+            //alert('There was an error adding link. ' + jqXHR.responseText);
             $("#submit-btn").prop('disabled', false);
         });
     $("#submit-btn").prop('disabled', true);
@@ -105,11 +105,11 @@ function removeResource(resourceId) {
             contentType: "application/json"
         })
         .done(function(response) {
-            alert(JSON.stringify(response.messages[0]));
+            //alert(JSON.stringify(response.messages[0]));
             location.reload();
         })
         .fail(function(jqXHR) {
-            alert('There was an error removing link. ' + jqXHR.responseText);
+            //alert('There was an error removing link. ' + jqXHR.responseText);
         });
 }
 </script>
