@@ -12,26 +12,14 @@
 
     <div class="column-one-third">
       <h2 class="heading-large">Immediate</h2>
-      <p>
-        <ol class="list">
-          <li>1. Danger</li>
-          <li>2. Doom</li>
-        </ol>
-      </p>
+        <p>1. Someone has left the gas on and forgot about it.</p>
       <h2 class="heading-large">4 to 8 Weeks</h2>
-      <p>
-        <ol class="list">
-          <li>3. Deadline</li>
-          <li>4. Nigthmare</li>
-        </ol>
-      </p>
+        <p>2. 42 New people joining the project.</p>
+        <p>3. Lots of Holidays this month.</p>
+        <p>4. Node version goes out of LTS.</p>
       <h2 class="heading-large">8 Weeks +</h2>
-      <p>
-        <ol class="list">
-          <li>5. Disaster</li>
-          <li>6. Failure</li>
-        </ol>
-      </p>
+        <p>5. Product Roadmap incomplete.</p>
+        <p>6. Brand Relaunch.</p>
     </div>
 
   </div>
@@ -62,10 +50,12 @@ window.onload = function() {
   // drawMaintainAspectRectangle(ctx,height,width,0.1,'#666666');
   drawCrosshairs(ctx,height,width);
   drawQuadrants(ctx, height, width, 0.8);
-  drawNumbers(ctx, 303, 300, 1);
+  drawNumbers(ctx, 280, 340, 1);
   drawNumbers(ctx, 200, 240, 2);
   drawNumbers(ctx, 400, 240, 3);
   drawNumbers(ctx, 400, 440, 4);
+  drawNumbers(ctx, 120, 540, 5);
+  drawNumbers(ctx, 200, 640, 6);
 }
 
 var drawNumbers = function(ctx, x, y,number){
