@@ -881,6 +881,21 @@ Controller.prototype.handleDisplayHealthStatus = function (req, res) {
     });
 };
 
+Controller.prototype.handleDisplayRiskRadar = function (req, res) {
+    var id = req.params.id;
+
+    projectCache.getById(id, function(error, project) {
+        var healthHistory = _.chain(project.healthStatusHistory).map(_.values).flatten().sortBy("date").reverse().value();
+
+        res.render('risk-radar', {
+            project: project,
+            history: healthHistory,
+            convertDate: utils.convertDate,
+            healthCheckTypes: healthCheckTypes
+        });
+    });
+};
+
 /**
  * Render Edit project health status
  *

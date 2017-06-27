@@ -1,0 +1,126 @@
+{% extends "layout.html" %} {% block content %}
+<main id="content" role="main">
+  <div class="grid-row">
+    <h1 class="heading-xlarge">{{ project.name }} Risk Radar&nbsp;<a class="font-xsmall link-back" href="/projects/{{ project.id }}/{{ project.name | slugify }}/">Back</a></h1>
+  </div>
+  <div class="example example-grid">
+    <div class="grid-row">
+
+    <div class="column-two-thirds">
+      <canvas id="riskRadar" width="600" height="758" style="background-color:#ffffff">Bad times, browser doesn't support canvas. You can't see the radar.</canvas>
+    </div>
+
+    <div class="column-one-third">
+      <h2 class="heading-large">Immediate</h2>
+      <p>
+        <ol class="list">
+          <li>1. Danger</li>
+          <li>2. Doom</li>
+        </ol>
+      </p>
+      <h2 class="heading-large">4 to 8 Weeks</h2>
+      <p>
+        <ol class="list">
+          <li>3. Deadline</li>
+          <li>4. Nigthmare</li>
+        </ol>
+      </p>
+      <h2 class="heading-large">8 Weeks +</h2>
+      <p>
+        <ol class="list">
+          <li>5. Disaster</li>
+          <li>6. Failure</li>
+        </ol>
+      </p>
+    </div>
+
+  </div>
+
+  </div>
+</main>
+
+<script>
+window.onload = function() {
+  var canvas = document.getElementById('riskRadar');
+  var ctx = canvas.getContext('2d');
+  var height = 758;
+  var width = 600;
+
+  canvas.addEventListener('mousemove', function(event) {
+    if (event.region) {
+      alert('hit region: ' + event.region);
+    }
+  });
+  // drawMaintainAspectRectangle(ctx,height,width,0.9,'#cccccc');
+  drawMaintainAspectRectangle(ctx,height,width,0.8,'#cccccc');
+  // drawMaintainAspectRectangle(ctx,height,width,0.7,'#cccccc');
+  // drawMaintainAspectRectangle(ctx,height,width,0.6,'#cccccc');
+  drawMaintainAspectRectangle(ctx,height,width,0.5,'#cccccc');
+  // drawMaintainAspectRectangle(ctx,height,width,0.4,'#bbbbbb');
+  // drawMaintainAspectRectangle(ctx,height,width,0.3,'#666666');
+  drawMaintainAspectRectangle(ctx,height,width,0.2,'#666666');
+  // drawMaintainAspectRectangle(ctx,height,width,0.1,'#666666');
+  drawCrosshairs(ctx,height,width);
+  drawQuadrants(ctx, height, width, 0.8);
+  drawNumbers(ctx, 303, 300, 1);
+  drawNumbers(ctx, 200, 240, 2);
+  drawNumbers(ctx, 400, 240, 3);
+  drawNumbers(ctx, 400, 440, 4);
+}
+
+var drawNumbers = function(ctx, x, y,number){
+  var xOffset = x-6;
+  var yOffset = y+7;
+
+  ctx.beginPath();
+  ctx.fillStyle = '#000000'
+  ctx.arc(x, y, 15, 0, Math.PI * 2, true);  // Left eye
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '24px nta, Arial, sans-serif';
+  ctx.fillStyle = '#FFFFFF'
+  ctx.fillText(number, xOffset, yOffset);
+  ctx.closePath();
+}
+
+var drawQuadrants = function(ctx, height, width, percentage) {
+  shapeWidth = width * percentage;
+  shapeHeight = height * percentage;
+  xPosition = (width - shapeWidth) / 2;
+  yPosition = (height - shapeHeight) / 2;
+  yBottomPosition = yPosition + shapeHeight;
+
+  ctx.font = '24px nta, Arial, sans-serif';
+  ctx.fillStyle = '#555555'
+  ctx.fillText('Delivery', xPosition, yPosition);
+  ctx.fillText('People', shapeWidth, yPosition );
+  ctx.fillText('Product', xPosition, yBottomPosition);
+  ctx.fillText('Technology', shapeWidth, yBottomPosition);
+  ctx.closePath();
+}
+
+var drawMaintainAspectRectangle = function (ctx, height, width, percentage, color){
+  ctx.strokeStyle = color;
+  shapeWidth = width * percentage;
+  shapeHeight = height * percentage;
+  yPosition = (height - shapeHeight) / 2;
+  xPosition = (width - shapeWidth) / 2;
+  ctx.strokeRect(xPosition,yPosition,shapeWidth,shapeHeight);
+}
+
+var drawCrosshairs = function(ctx, height, width){
+  ctx.beginPath();
+  ctx.strokeStyle = '#000000'
+  center = width / 2;
+  middle = height /2;
+
+  ctx.moveTo(0, middle);
+  ctx.lineTo(width,middle);
+
+  ctx.moveTo(center, 0);
+  ctx.lineTo(center,height);
+
+  ctx.stroke();
+}
+</script>
+{% endblock %}
