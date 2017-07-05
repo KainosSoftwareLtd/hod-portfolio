@@ -20,6 +20,8 @@
       <h2 class="heading-large">8 Weeks +</h2>
         <p>5. Product Roadmap incomplete.</p>
         <p>6. Brand Relaunch.</p>
+
+        <a class="font-xsmall" href="/projects/{{ project.id }}/{{ project.name | slugify }}/risk-radar-full-screen">full screen view</a>
     </div>
 
   </div>
@@ -31,34 +33,51 @@
 window.onload = function() {
   var canvas = document.getElementById('riskRadar');
   var ctx = canvas.getContext('2d');
-  var height = 758;
-  var width = 600;
+  var height = canvas.height;
+  var width = canvas.width;
+  var gridDetails = buildGrid(ctx, height, width);
+  gridDetails.height = height;
+  gridDetails.width = width;
 
-  canvas.addEventListener('mousemove', function(event) {
-    if (event.region) {
-      alert('hit region: ' + event.region);
-    }
-  });
-  // drawMaintainAspectRectangle(ctx,height,width,0.9,'#cccccc');
-  drawMaintainAspectRectangle(ctx,height,width,0.8,'#cccccc');
-  // drawMaintainAspectRectangle(ctx,height,width,0.7,'#cccccc');
-  // drawMaintainAspectRectangle(ctx,height,width,0.6,'#cccccc');
-  drawMaintainAspectRectangle(ctx,height,width,0.5,'#cccccc');
-  // drawMaintainAspectRectangle(ctx,height,width,0.4,'#bbbbbb');
-  // drawMaintainAspectRectangle(ctx,height,width,0.3,'#666666');
-  drawMaintainAspectRectangle(ctx,height,width,0.2,'#666666');
-  // drawMaintainAspectRectangle(ctx,height,width,0.1,'#666666');
-  drawCrosshairs(ctx,height,width);
-  drawQuadrants(ctx, height, width, 0.8);
-  drawNumbers(ctx, 280, 340, 1);
-  drawNumbers(ctx, 200, 240, 2);
-  drawNumbers(ctx, 400, 240, 3);
-  drawNumbers(ctx, 400, 440, 4);
-  drawNumbers(ctx, 120, 540, 5);
-  drawNumbers(ctx, 200, 640, 6);
+  //Draw Risks Section by Section
+  // drawRisks(ctx, "1.1", [1],height,width,0.9);
+  // drawRisks(ctx, "2.1", [2],height,width,0.9);
+  // drawRisks(ctx, "2.2", [3],height,width,0.9);
+  // drawRisks(ctx, "2.4", [4],height,width,0.9);
+  // drawRisks(ctx, "3.3", [5,6],height,width,0.9);
 }
 
-var drawNumbers = function(ctx, x, y,number){
+var buildGrid = function(ctx,height,width){
+  var gridDetails = {};
+  gridDetails.outerRectangle = drawMaintainAspectRectangle(ctx,height,width,0.9,'#cccccc');
+  gridDetails.centerRectangle = drawMaintainAspectRectangle(ctx,height,width,0.6,'#cccccc');
+  gridDetails.innerRectangle = drawMaintainAspectRectangle(ctx,height,width,0.3,'#666666');
+
+  gridDetails.crosshairs = drawCrosshairs(ctx,height,width);
+  drawQuadrants(ctx, height, width, 0.8);
+  return gridDetails;
+}
+
+var drawRisks = function(ctx,section, numbers, height, width, percentage){
+  switch (section) {
+      case "1.1":
+      y = 320;
+      for (var i = 0; i < numbers.length; i++) {
+        drawNumber(ctx, 250, y, numbers[i]);
+        y = y + 10;
+      }
+      case "3.3":
+        y = 540;
+        for (var i = 0; i < numbers.length; i++) {
+          drawNumber(ctx, 90, y, numbers[i]);
+          y = y + 50;
+        }
+      break;
+    default:
+  }
+}
+
+var drawNumber = function(ctx, x, y,number){
   var xOffset = x-6;
   var yOffset = y+7;
 
@@ -89,28 +108,33 @@ var drawQuadrants = function(ctx, height, width, percentage) {
   ctx.closePath();
 }
 
-var drawMaintainAspectRectangle = function (ctx, height, width, percentage, color){
+var drawMaintainAspectRectangle = function (ctx, height, width, percentage, color) {
+  var rectangle = {};
   ctx.strokeStyle = color;
-  shapeWidth = width * percentage;
-  shapeHeight = height * percentage;
-  yPosition = (height - shapeHeight) / 2;
-  xPosition = (width - shapeWidth) / 2;
-  ctx.strokeRect(xPosition,yPosition,shapeWidth,shapeHeight);
+  rectangle.shapeWidth = width * percentage;
+  rectangle.shapeHeight = height * percentage;
+  rectangle.yPosition = (height - rectangle.shapeHeight) / 2;
+  rectangle.xPosition = (width - rectangle.shapeWidth) / 2;
+  ctx.strokeRect(rectangle.xPosition,rectangle.yPosition,rectangle.shapeWidth,rectangle.shapeHeight);
+  return rectangle;
 }
 
 var drawCrosshairs = function(ctx, height, width){
   ctx.beginPath();
   ctx.strokeStyle = '#000000'
-  center = width / 2;
-  middle = height /2;
+  var crosshairs = {
+    center: width / 2,
+    middle: height /2
+  }
 
-  ctx.moveTo(0, middle);
-  ctx.lineTo(width,middle);
+  ctx.moveTo(0, crosshairs.middle);
+  ctx.lineTo(width,crosshairs.middle);
 
-  ctx.moveTo(center, 0);
-  ctx.lineTo(center,height);
+  ctx.moveTo(crosshairs.center, 0);
+  ctx.lineTo(crosshairs.center,height);
 
   ctx.stroke();
+  return crosshairs;
 }
 </script>
 {% endblock %}

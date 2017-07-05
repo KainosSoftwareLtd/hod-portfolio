@@ -45,6 +45,7 @@ router.get('/projects/:projectId/:slug/edit-phase-history', connect.ensureLogged
 router.get('/projects/:id/:slug/display-health', connect.ensureLoggedIn(), controller.handleDisplayHealthStatus);
 router.get('/projects/:id/:slug/display-health-history', connect.ensureLoggedIn(), controller.handleDisplayHealthHistory);
 router.get('/projects/:id/:slug/risk-radar', connect.ensureLoggedIn(), controller.handleDisplayRiskRadar);
+router.get('/projects/:id/:slug/risk-radar-full-screen', connect.ensureLoggedIn(), controller.handleDisplayRiskRadarFullScreen);
 router.get('/projects/:projectId/:slug/resource/:resourceId/edit', connect.ensureLoggedIn(), controller.handleEditResource);
 router.get('/projects/:projectId/:slug/person/team/:personId/edit', connect.ensureLoggedIn(), controller.handleEditTeamMember);
 router.get('/projects/:id/:slug/edit-client-team', connect.ensureLoggedIn(), controller.handleEditClientTeam);
