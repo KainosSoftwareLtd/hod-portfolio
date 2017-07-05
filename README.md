@@ -43,3 +43,14 @@ To enable google Analytics, set the following environment variables
 ```
 GA_ID = XX-XXXXXXX-X
 ```
+
+### Docker Instructions
+Build docker image locally
+```
+docker build -t knos/project-dashboard .
+```
+
+To run, ensure your environment variables are set as outlined above, you can use -e to do this with the command below, this will map localhost port 8090 to 8090 on the running container
+```
+docker run -p 8090:8090 -d knos/project-dashboard
+```
