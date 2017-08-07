@@ -12,7 +12,7 @@
         </p>
 
         <label class="form-checkbox" for="checkbox-show-finished">
-            <input id="checkbox-show-finished" name="contact-by-text-phone" 
+            <input id="checkbox-show-finished" name="contact-by-text-phone"
                 type="checkbox" value="true"
                 {{ "checked" if showFinished else "" }}>
                 Show finished projects
@@ -43,11 +43,11 @@
         <section class="column-fifth">
             {% if item[phase] %} {% for bit in item[phase]['user'] %}
             <ul class="link-list border-{{phase}}">
-                <li><a href="/projects/{{ bit.id }}/{{ bit.name | slugify }}">{{ bit.name }}</a></li>
+                <li><a href="/projects/{{ bit.id }}/{{ bit.name | slugify }}">{{ bit.customer }} - {{ bit.name }}</a></li>
             </ul>
             {% endfor %} {% for bit in item[phase]['internal'] %}
             <ul class="link-list border-internal">
-                <li><a href="/projects/{{ bit.id }}/{{ bit.name | slugify }}">{{ bit.name }}</a></li>
+                <li><a href="/projects/{{ bit.id }}/{{ bit.name | slugify }}">{{ bit.customer }} - {{ bit.name }}</a></li>
             </ul>
             {% endfor %} {% else %}&nbsp;{% endif %}
         </section>
@@ -64,7 +64,7 @@
             Cookies.remove("showFinished");
         }
         location.reload();
-    }); 
+    });
 </script>
 {% endblock %}
 
