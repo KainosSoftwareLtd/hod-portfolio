@@ -232,7 +232,9 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
     newPerson.setMobile(req.body.mobile);
     newPerson.setSkype(req.body.skype);
     newPerson.setSlack(req.body.slack);
-
+	newPerson.setIsSalesOwner(req.body.isSalesOwner === "true");
+	newPerson.setIsTechDelOwner(req.body.person.isTechDelOwner === "true");
+ 
     log.info('Adding a new team member to project ID: ' + req.params.projectId);
 
     if(!req.params.projectId) {
@@ -283,7 +285,9 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
 Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
     let personData = Person.fromJson(req.body.person);
     personData.setId(req.params.personId);
-
+  	personData.setIsSalesOwner(req.body.person.isSalesOwner === "true");
+	personData.setIsTechDelOwner(req.body.person.isTechDelOwner === "true");
+	
     log.info('Updating a team member in project ID: ' + req.params.projectId);
 
     if(!req.params.projectId) {

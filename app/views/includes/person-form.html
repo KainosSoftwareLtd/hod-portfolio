@@ -13,6 +13,53 @@
                 <p class="form-hint">Person role</p>
                 <input type="text" class="form-control" id="role" name="person[role]" value="{{ person.role }}">
             </div>
+			
+			<div class="form-group">
+				<label class="form-label-bold" for="radio-inline-1">
+					Sales Owner
+				</label>
+				<fieldset class="inline">
+					<span class="form-hint">
+						Is the user the Sales owner?
+					</span>
+					<label class="block-label selection-button-radio" for="radio-inline-1">
+						<input id="radio-inline-1" type="radio" name="person[isSalesOwner]" value="true" 
+							{{ "checked" if person.isSalesOwner }}
+						>
+						Yes
+					</label>
+					<label class="block-label selection-button-radio" for="radio-inline-2">
+						<input id="radio-inline-2" type="radio" name="person[isSalesOwner]" value=""
+							{{ "" if person.isSalesOwner else "checked" }}
+						>
+						No
+					</label>
+				</fieldset>
+			</div>		
+			
+			<div class="form-group">
+				<label class="form-label-bold" for="radio-inline-1">
+					Tech/Del Owner
+				</label>
+				<fieldset class="inline">
+					<span class="form-hint">
+						Is the user the Tech/Del owner?
+					</span>
+					<label class="block-label selection-button-radio" for="radio-inline-1">
+						<input id="radio-inline-1" type="radio" name="person[isTechDelOwner]" value="true" 
+							{{ "checked" if person.isTechDelOwner }}
+						>
+						Yes
+					</label>
+					<label class="block-label selection-button-radio" for="radio-inline-2">
+						<input id="radio-inline-2" type="radio" name="person[isTechDelOwner]" value=""
+							{{ "" if person.isTechDelOwner else "checked" }}
+						>
+						No
+					</label>
+				</fieldset>
+			</div>		
+			
             <div class="form-group">
                 <label class="form-label-bold" for="email">Email</label>
                 <p class="form-hint">Person email</p>

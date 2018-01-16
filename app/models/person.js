@@ -7,6 +7,9 @@ module.exports = class Person {
         this.role = role;
 
         this.id = utils.generateGUID();
+		
+		this.isSalesOwner = false;
+		this.isTechDelOwner = false;
     }
 
     setId(str) { this.id = str; }
@@ -16,6 +19,8 @@ module.exports = class Person {
     setMobile(str) { this.mobile = str; }
     setSkype(str) { this.skype = str; }
     setSlack(str) { this.slack = str; }
+	setIsSalesOwner(bool) { this.isSalesOwner = bool; }
+	setIsTechDelOwner(bool) { this.isTechDelOwner = bool; }
 
     static fromJson(data) {
         var p = new Person();
@@ -24,7 +29,9 @@ module.exports = class Person {
         if (!p.id) { // if Object.assign removed the id
             p.id = utils.generateGUID();
         }
-
+		p.setIsSalesOwner(p.isSalesOwner == true);
+		p.setIsTechDelOwner(p.isTechDelOwner == true);
+		
         return p;
     }
 }
