@@ -32,6 +32,25 @@ var healthCheckTypes =  {
     "data": {label: "Data"}
 }
 
+var sectorTypes =  {
+    "unknown": {label: "Unknown"},
+    "seven": {label: "Seven"},
+	"eustace": {label: "Eustace"},
+    "other": {label: "Other"}
+}
+
+var departmentTypes =  {
+    "unknown": {label: "Unknown"},
+    "dept": {label: "Dept"},
+    "other": {label: "Other"}
+}
+
+var agencyTypes =  {
+    "unknown": {label: "Unknown"},
+    "agency": {label: "Agency"},
+    "other": {label: "Other"}
+}
+
 // JSON data of a project
 Controller.prototype.handleApiProjectId = function(req, res) {
     projectCache.getById(req.params.id, function(err, data) {
@@ -50,6 +69,21 @@ Controller.prototype.handleApiAddProject = function(req, res) {
     newProject.setPhaseHistoryEntry(req.body.phase, "Started", req.body.month, req.body.year);
     newProject.setIsFinished(req.body.isFinished);
     newProject.setCustomer(req.body.customer);
+	
+	newProject.setSector(req.body.sector);
+    newProject.setDepartment(req.body.department);
+    newProject.setAgency(req.body.agency);
+	
+	newProject.setIsExemplar(req.body.isExemplar);
+	newProject.setIsCaseStudy(req.body.isCaseStudy);
+	newProject.setIsDeliveryPartner(req.body.isDeliveryPartner);
+	newProject.setIsMultiSupplier(req.body.isMultiSupplier);
+	newProject.setIsConsultancy(req.body.isConsultancy);
+	newProject.setIsColocated(req.body.isColocated);
+	newProject.setIsMigration(req.body.isMigration);
+	newProject.setIsManagedCloud(req.body.isManagedCloud);
+	newProject.setIsEnablement(req.body.isEnablement);
+	newProject.setIsUserResearch(req.body.isUserResearch);
 
     projectDao.addProject(newProject, function(err, project) {
         log.trace('Adding project: ' + project.name);
@@ -601,6 +635,22 @@ Controller.prototype.handleApiEditProject = function(req, res) {
             project.setLocation(req.body.location);
             project.setIsFinished(req.body.isFinished === "true");
             project.setCustomer(req.body.customer);
+		
+			project.setSector(req.body.sector);
+			project.setDepartment(req.body.department);
+			project.setAgency(req.body.agency);
+			
+			project.setIsExemplar(req.body.isExemplar === "true");
+			project.setIsCaseStudy(req.body.isCaseStudy === "true");
+			project.setIsDeliveryPartner(req.body.isDeliveryPartner === "true");
+			project.setIsMultiSupplier(req.body.isMultiSupplier === "true");
+			project.setIsConsultancy(req.body.isConsultancy === "true");
+			project.setIsColocated(req.body.isColocated === "true");
+			project.setIsMigration(req.body.isMigration === "true");
+			project.setIsManagedCloud(req.body.isManagedCloud === "true");
+			project.setIsEnablement(req.body.isEnablement === "true");
+			project.setIsUserResearch(req.body.isUserResearch === "true");
+	
 
             projectDao.addProject(project, function(err, editedProject) {
                 log.trace('Updating project with id = ' + project.id);
@@ -633,7 +683,7 @@ Controller.prototype.handleApiUpdatePhaseHistory = function(req, res) {
             );
         } else {
             project.setPhaseHistoryEntry(req.body.phase, req.body.label, req.body.month, req.body.year);
-
+			
             projectDao.addProject(project, function(err, editedProject) {
                 log.trace('Updating project history. ID of the project: ' + project.id);
                 if(err) {
@@ -702,7 +752,10 @@ Controller.prototype.handleProjectIdSlug = function(req, res) {
     projectCache.getById(req.params.id, function(error, data) {
         res.render('project', {
             "data": data,
-            "phase_order": phase_order
+            "phase_order": phase_order,
+			sectorTypes: sectorTypes,
+			departmentTypes: departmentTypes,
+			agencyTypes: agencyTypes
         });
     });
 };
@@ -911,7 +964,10 @@ Controller.prototype.handleEditProject = function(req, res) {
     var id = req.params.id;
     projectCache.getById(id, function(error, project) {
         res.render('edit-project', {
-            project: project
+            project: project,
+			sectorTypes: sectorTypes,
+			departmentTypes: departmentTypes,
+			agencyTypes: agencyTypes
         });
     });
 };

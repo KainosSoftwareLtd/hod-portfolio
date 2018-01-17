@@ -61,3 +61,275 @@
     </label>
     <textarea class="form-control" id="description" name="description">{{ project.description }}</textarea>
 </div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="sector">
+		Sector
+		<span class="form-hint">
+			Sector of the project
+		</span>
+	</label>
+	<select id="sector" class="form-control sector" name="sector">
+		{% for sectorType, details in sectorTypes %}
+			<option value="{{ sectorType }}" {% if project.sector == sectorType %}selected{% endif %}>{{ details.label }}</option>
+		{% endfor %}	
+	</select>
+</div>					
+
+<div class="form-group">
+	<label class="form-label-bold" for="department">
+		Department
+		<span class="form-hint">
+			Department of the project
+		</span>
+	</label>
+	<select id="department" class="form-control department" name="department">
+		{% for deptType, details in departmentTypes %}
+			<option value="{{ deptType }}" {% if project.department == deptType %}selected{% endif %}>{{ details.label }}</option>
+		{% endfor %}
+	</select>			
+</div>					
+
+<div class="form-group">
+	<label class="form-label-bold" for="agency">
+		Agency
+		<span class="form-hint">
+			Agency of the project
+		</span>
+	</label>
+	<select id="agency" class="form-control agency" name="agency">
+		{% for agencyType, details in agencyTypes %}
+			<option value="{{ agencyType }}" {% if project.agency == agencyType %}selected{% endif %}>{{ details.label }}</option>
+		{% endfor %}
+	</select>
+</div>					
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Exemplar
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this an Exemplar project?
+		</span>
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isExemplar" value="true" 
+				{{ "checked" if project.isExemplar }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isExemplar" value=""
+				{{ "" if project.isExemplar else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>		
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Case Study
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Does this project have a Case Study?
+		</span>
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isCaseStudy" value="true" 
+				{{ "checked" if project.isCaseStudy }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isCaseStudy" value=""
+				{{ "" if project.isCaseStudy else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>		
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Delivery Partner
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Does this project have a Delivery Partner? (Delivered by a Kainos team)
+		</span>
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isDeliveryPartner" value="true" 
+				{{ "checked" if project.isDeliveryPartner }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isDeliveryPartner" value=""
+				{{ "" if project.isDeliveryPartner else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Multi-Supplier
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this project Multi-Supplier?
+		</span>
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isMultiSupplier" value="true" 
+				{{ "checked" if project.isMultiSupplier }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isMultiSupplier" value=""
+				{{ "" if project.isMultiSupplier else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Consultancy
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this a Consultancy project (Delivered by an individual or a few individuals providing specialist roles i.e. not a scrum team or Kainos led delivery.)
+		</span> 
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isConsultancy" value="true" 
+				{{ "checked" if project.isConsultancy }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isConsultancy" value=""
+				{{ "" if project.isConsultancy else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Co-located
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this project Co-located?
+		</span> 
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isColocated" value="true" 
+				{{ "checked" if project.isColocated }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isColocated" value=""
+				{{ "" if project.isColocated else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Migration
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this a Migration project?
+		</span> 
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isMigration" value="true" 
+				{{ "checked" if project.isMigration }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isMigration" value=""
+				{{ "" if project.isMigration else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Managed Cloud
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this a Managed Cloud project?
+		</span> 
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isManagedCloud" value="true" 
+				{{ "checked" if project.isManagedCloud }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isManagedCloud" value=""
+				{{ "" if project.isManagedCloud else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		Enablement
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this an Enablement project?
+		</span> 
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isEnablement" value="true" 
+				{{ "checked" if project.isEnablement }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isEnablement" value=""
+				{{ "" if project.isEnablement else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
+
+<div class="form-group">
+	<label class="form-label-bold" for="radio-inline-1">
+		User Research
+	</label>
+	<fieldset class="inline">
+		<span class="form-hint">
+			Is this a User Research project?
+		</span> 
+		<label class="block-label selection-button-radio" for="radio-inline-1">
+			<input id="radio-inline-1" type="radio" name="isUserResearch" value="true" 
+				{{ "checked" if project.isUserResearch }}
+			>
+			Yes
+		</label>
+		<label class="block-label selection-button-radio" for="radio-inline-2">
+			<input id="radio-inline-2" type="radio" name="isUserResearch" value=""
+				{{ "" if project.isUserResearch else "checked" }}
+			>
+			No
+		</label>
+	</fieldset>
+</div>
