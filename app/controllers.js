@@ -267,7 +267,7 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
     newPerson.setSkype(req.body.skype);
     newPerson.setSlack(req.body.slack);
 	newPerson.setIsSalesOwner(req.body.isSalesOwner === "true");
-	newPerson.setIsTechDelOwner(req.body.person.isTechDelOwner === "true");
+	newPerson.setIsTechDelOwner(req.body.isTechDelOwner === "true");
  
     log.info('Adding a new team member to project ID: ' + req.params.projectId);
 
