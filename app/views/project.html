@@ -1,68 +1,64 @@
 {% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
-    <div class="grid-row">	  
-		  <table>
-              
-		   <tr>
-                    <td>
-							<h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1>
-							<p>{{ data.description }}</p>
-					</td>
-					<td>
-						<!-- column for "more" buttons -->
-					</td>
-                    <td data-collapsable-parent="{{ data.name }}" class="clickable"><i class="fa fa-plus-square-o" aria-hidden="true"></i></td>
-                </tr>
-                <tr>
-                    <td data-collapsable-child="{{ data.name }}" colspan="3">
-                        <div class="grid-row">
-                            <section class="column-half">
-                                {% if data.sector %}
-                                <p>Sector: {{ sectorTypes[data.sector].label  }} </p>
-                                {% endif %} 
-								{% if data.department %}
-                                <p>Department: {{ departmentTypes[data.department].label }} </p>
-                                {% endif %}
-								{% if data.agency %}
-                                <p>Agency: {{ agencyTypes[data.agency].label }} </p>
-                                {% endif %}
-								{% if data.isExemplar %}
-                                <p>Exemplar: Y </p>
-                                {% endif %}
-								{% if data.isCaseStudy %}
-                                <p>Case Study: Y </p>
-                                {% endif %}
-								{% if data.isDeliveryPartner %}
-                                <p>Delivery Partner: Y </p>
-                                {% endif %}
-								{% if data.isMultiSupplier %}
-                                <p>Multi-Supplier: Y </p>
-                                {% endif %}
-                            </section>
-                            <section class="column-half">
-                                {% if data.isConsultancy %}
-                                <p>Consultancy: Y </p>
-                                {% endif %}
-								{% if data.isColocated %}
-                                <p>Co-located: Y </p>
-                                {% endif %}
-								{% if data.isMigration %}
-                                <p>Migration: Y </p>
-                                {% endif %}
-								{% if data.isManagedCloud %}
-                                <p>Managed Cloud: Y </p>
-                                {% endif %}
-								{% if data.isEnablement %}
-                                <p>Enablement: Y </p>
-                                {% endif %}
-								{% if data.isUserResearch %}
-                                <p>User Research: Y </p>
-                                {% endif %}								
-                            </section>
-                        </div>
-                    </td>
-                </tr>
-		    </table>
+    <div class="">	  
+		<table>
+			<tr>
+				<td>
+					</i><h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1> 
+					<p>{{ data.description }}</p>
+				</td>
+				<td data-collapsable-parent="{{ data.name }}" class="clickable"><i class="fa fa-plus-square-o" aria-hidden="true"></td>
+            </tr>
+			<tr>
+				<td data-collapsable-child="{{ data.name }}" colspan="2">
+					<div class="">
+						<section class="column-half">
+							{% if data.sector %}
+							<p>Sector: {{ sectorTypes[data.sector].label  }} </p>
+							{% endif %} 
+							{% if data.department %}
+							<p>Department: {{ departmentTypes[data.department].label }} </p>
+							{% endif %}
+							{% if data.agency %}
+							<p>Agency: {{ agencyTypes[data.agency].label }} </p>
+							{% endif %}
+							{% if data.isExemplar %}
+							<p>Exemplar: Y </p>
+							{% endif %}
+							{% if data.isCaseStudy %}
+							<p>Case Study: Y </p>
+							{% endif %}
+							{% if data.isDeliveryPartner %}
+							<p>Delivery Partner: Y </p>
+							{% endif %}
+							{% if data.isMultiSupplier %}
+							<p>Multi-Supplier: Y </p>
+							{% endif %}
+						</section>
+						<section class="column-half">
+							{% if data.isConsultancy %}
+							<p>Consultancy: Y </p>
+							{% endif %}
+							{% if data.isColocated %}
+							<p>Co-located: Y </p>
+							{% endif %}
+							{% if data.isMigration %}
+							<p>Migration: Y </p>
+							{% endif %}
+							{% if data.isManagedCloud %}
+							<p>Managed Cloud: Y </p>
+							{% endif %}
+							{% if data.isEnablement %}
+							<p>Enablement: Y </p>
+							{% endif %}
+							{% if data.isUserResearch %}
+							<p>User Research: Y </p>
+							{% endif %}								
+						</section>
+					</div>
+				</td>
+			</tr>
+		</table>
     </div>
     <div class="grid-row">
       <div class="column-two-thirds">
@@ -116,7 +112,7 @@
                 {% for teamMember in peopleData %}
                 <tr>
                     <td>{{ teamMember.role}}</td>
-                    <td>{{ teamMember.name }}</td>
+                    <td>{{ teamMember.name }} {% if teamMember.isSalesOwner %}(Sales Owner){% endif %}{% if teamMember.isTechDelOwner %}(Tech/Dev Owner){% endif %} </td>
                     <td data-collapsable-parent="{{ teamName + loop.index }}" class="clickable"><i class="fa fa-plus-square-o" aria-hidden="true"></i></td>
                 </tr>
                 <tr>
