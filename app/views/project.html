@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} {% block content %}	
 <main id="content" role="main">
     <div class="">	  
 		<table>
@@ -7,21 +7,28 @@
 					</i><h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1> 
 					<p>{{ data.description }}</p>
 				</td>
+				<td>  <!-- column for "more" buttons --></td>
+			 </tr>
+			 <tr>
+				<td>
+					<div class="grid-row">
+						<section class="column-third">
+							<label class="form-label-bold">Sector</label><p>{{ sectorTypes[data.sector].label  }}</p>
+						</section>
+						<section class="column-third">
+							<label class="form-label-bold">Department</label><p>{{ departmentTypes[data.department].label }}</p>
+						</section>
+						<section class="column-third">
+							<label class="form-label-bold">Agency</label><p>{{ agencyTypes[data.agency].label }}</p> 
+						</section>
+					</div>
+				</td>
 				<td data-collapsable-parent="{{ data.name }}" class="clickable"><i class="fa fa-plus-square-o" aria-hidden="true"></td>
             </tr>
 			<tr>
-				<td data-collapsable-child="{{ data.name }}" colspan="2">
-					<div class="">
-						<section class="column-half">
-							{% if data.sector %}
-							<p>Sector: {{ sectorTypes[data.sector].label  }} </p>
-							{% endif %} 
-							{% if data.department %}
-							<p>Department: {{ departmentTypes[data.department].label }} </p>
-							{% endif %}
-							{% if data.agency %}
-							<p>Agency: {{ agencyTypes[data.agency].label }} </p>
-							{% endif %}
+				<td data-collapsable-child="{{ data.name }}">
+					<div class="grid-row">
+						<section class="column-third">
 							{% if data.isExemplar %}
 							<p>Exemplar: Y </p>
 							{% endif %}
@@ -34,11 +41,11 @@
 							{% if data.isMultiSupplier %}
 							<p>Multi-Supplier: Y </p>
 							{% endif %}
-						</section>
-						<section class="column-half">
 							{% if data.isConsultancy %}
 							<p>Consultancy: Y </p>
 							{% endif %}
+						</section>
+						<section class="column-two-thirds">
 							{% if data.isColocated %}
 							<p>Co-located: Y </p>
 							{% endif %}
@@ -53,10 +60,13 @@
 							{% endif %}
 							{% if data.isUserResearch %}
 							<p>User Research: Y </p>
-							{% endif %}								
+							{% endif %}				
 						</section>
 					</div>
-				</td>
+				</td>	
+				<td data-collapsable-child="{{ data.name }}">
+					<div class="">  <!-- column for "more" buttons --></div>
+				</td>	
 			</tr>
 		</table>
     </div>
@@ -71,7 +81,7 @@
     </div>
     <div class="grid-row">
         <div class="column-two-thirds">
-            <h2 class="heading-large">Useful Links&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">edit</i></a></h3>
+            <h2 class="heading-large">Useful Links&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">edit</i></a></h2>
         </div>
     </div>
     <div class="grid-row">
@@ -91,7 +101,7 @@
     </div>
     <div class="grid-row">
         <div class="column-two-thirds">
-            <h2 class="heading-large">People</h3>
+            <h2 class="heading-large">People</h2>
         </div>
     </div>
     <div class="grid-row">

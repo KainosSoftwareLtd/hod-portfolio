@@ -1,3 +1,4 @@
+
 'use strict';
 var _ = require('underscore');
 var connect = require('connect-ensure-login');
@@ -988,8 +989,9 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
             _.each(projectMap, function (proj) {
                 projectList.push(proj)
             });
-
-            projectList = showFinishedProjectsIfRequested(projectList, req.cookies.showFinished);
+			
+			projectList = showFilteredProjectsAsRequested(projectList, req.cookies.showFinished, req.cookies.showSector, req.cookies.showDepartment, req.cookies.showAgency, req.cookies.showExemplar, req.cookies.showCaseStudy, req.cookies.showDeliveryPartner, req.cookies.showMultiSupplier, req.cookies.showConsultancy, req.cookies.showColocated, req.cookies.showMigration, req.cookies.showManagedCloud, req.cookies.showEnablement, req.cookies.showUserResearch);
+			
             var data = filterPhaseIfPresent(projectList, req.query.phase);
             data = _.groupBy(data, groupBy);
             var new_data = indexify(data);
@@ -1000,10 +1002,26 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
                 "data": new_data,
                 "phase": req.query.phase,
                 "showFinished": req.cookies.showFinished,
+				"showSector": req.cookies.showSector,
+				"showDepartment": req.cookies.showDepartment,
+				"showAgency": req.cookies.showAgency,
+				"showExemplar": req.cookies.showExemplar,
+				"showCaseStudy": req.cookies.showCaseStudy,
+				"showDeliveryPartner": req.cookies.showDeliveryPartner,
+				"showMultiSupplier": req.cookies.showMultiSupplier,
+				"showConsultancy": req.cookies.showConsultancy,
+				"showColocated": req.cookies.showColocated,
+				"showMigration": req.cookies.showMigration,
+				"showManagedCloud": req.cookies.showManagedCloud,
+				"showEnablement": req.cookies.showEnablement,
+				"showUserResearch": req.cookies.showUserResearch,
                 "counts": phases,
                 "view": view,
                 "row_order": rowOrder,
-                "phase_order": phase_order
+                "phase_order": phase_order,
+				sectorTypes: sectorTypes,
+				departmentTypes: departmentTypes,
+				agencyTypes: agencyTypes
             });
         });
     });
@@ -1062,6 +1080,61 @@ function showFinishedProjectsIfRequested(data, showFinished) {
         data = _.where(data, { "isFinished": false });
     }
     return data;
+}
+
+// If showFinished is false, trim unfinished projects
+// Otherwise return unmodified data
+function showFilteredProjectsAsRequested(data, showFinished, showSector, showDepartment, showAgency, showExemplar, showCaseStudy, showDeliveryPartner, showMultiSupplier, showConsultancy, showColocated, showMigration, showManagedCloud, showEnablement, showUserResearch) 
+{   	
+	if (!showFinished) {
+        data = _.where(data, { "isFinished": false });
+    }
+  
+	if (showSector != "N/A") {
+        data = _.where(data, { "sector": showSector });
+    }
+	
+	if (showDepartment != "N/A") {
+        data = _.where(data, { "department": showDepartment });
+    }
+  
+	if (showAgency != "N/A") {
+        data = _.where(data, { "agency": showAgency });
+    }
+	
+	if (showExemplar) {
+        data = _.where(data, { "isExemplar": true });
+    }
+	
+	if (showCaseStudy) {
+        data = _.where(data, { "isCaseStudy": true });
+    }
+	if (showDeliveryPartner) {
+        data = _.where(data, { "isDeliveryPartner": true });
+    }
+	if (showMultiSupplier) {
+        data = _.where(data, { "isMultiSupplier": true });
+    }
+	if (showConsultancy) {
+        data = _.where(data, { "isConsultancy": true });
+    }
+	if (showColocated) {
+        data = _.where(data, { "isColocated": true });
+    }
+	if (showMigration) {
+        data = _.where(data, { "isMigration": true });
+    }
+	if (showManagedCloud) {
+        data = _.where(data, { "isManagedCloud": true });
+    }
+	if (showEnablement) {
+        data = _.where(data, { "isEnablement": true });
+    }
+	if (showUserResearch) {
+        data = _.where(data, { "isUserResearch": true });
+    }
+	
+  return data;
 }
 
 module.exports = Controller;

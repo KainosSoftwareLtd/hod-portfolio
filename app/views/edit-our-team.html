@@ -15,8 +15,6 @@
                     <tr>
                         <td><strong>Role</strong></td>
                         <td><strong>Name</strong></td>
-						<td><strong>Sales</strong></td>
-						<td><strong>Tech/Del</strong></td>
                         <td>
                             <!-- column for "more" buttons -->
                         </td>
@@ -28,9 +26,7 @@
                 {% for teamMember in teamMembers %}
                 <tr>
                     <td>{{ teamMember.role}}</td>
-                    <td>{{ teamMember.name }}</td>
-					<td>{% if teamMember.isSalesOwner %}<p>Y</p>{% endif %}</td>
-					<td>{% if teamMember.isTechDelOwner %}<p>Y</p>{% endif %}</td>
+                    <td>{{ teamMember.name }} {% if teamMember.isSalesOwner %}(Sales Owner){% endif %}{% if teamMember.isTechDelOwner %}(Tech/Dev Owner){% endif %} </td>
                     <td data-collapsable-parent="team-member-{{ loop.index }}">[+]</td>
                     <td>
                         <a href="#" onclick="removeTeamMember('{{ teamMember.id }}')" style="margin-right:10px;"><i class="fa fa-times" aria-hidden="true"></i></a>
