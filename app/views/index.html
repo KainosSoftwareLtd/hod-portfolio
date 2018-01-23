@@ -1,7 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
-    <div class="grid-row">
-        <section class="column-two-thirds" />
+    <div class="grid-row">       
         <p>
             Our services, ordered by {{ view }}
             <!-- {% if view != 'agency' %}(<a href="/agency">order by agency</a>){% endif %} -->
@@ -10,16 +9,134 @@
             <!-- {% if view != 'priority' %}(<a href="/priority">order by priority</a>){% endif %} -->
             {% if view != 'health' %}(<a href="/health">order by health</a>){% endif %}
         </p>
-
-        <label class="form-checkbox" for="checkbox-show-finished">
-            <input id="checkbox-show-finished" name="contact-by-text-phone" 
-                type="checkbox" value="true"
-                {{ "checked" if showFinished else "" }}>
-                Show finished projects
-        </label>
-
-        </section>
+		<table>
+			<tr>
+				<td>
+					<label class="form-checkbox" for="checkbox-show-finished">
+						<input id="checkbox-show-finished" name="contact-by-text-phone" 
+							type="checkbox" value="true"
+							{{ "checked" if showFinished else "" }}>
+							Show finished projects
+					</label>
+				</td>
+				<!--<td></td>-->
+				<td data-collapsable-parent="filter" class="clickable"><a href="#">More filter options</a></td> 
+			 </tr>
+			<tr>
+				<td data-collapsable-child="filter" colspan="2">  
+				<!--<td>-->
+					<form action="#" class="form" id="filter-form">
+						<div class="grid-row">
+						
+						<div class="grid-row">
+						<section class="column-third">
+							<label class="form-control-1-2" for="select-filter-sector">
+								Sector
+							</label>
+							<select id="select-filter-sector" class="form-control-1-2 sector" name="sector">
+								<option value="N/A" {% if showSector == sectorType %}selected{% endif %}>N/A</option>
+								{% for sectorType, details in sectorTypes %}
+									<option value="{{ sectorType }}" {% if showSector == sectorType %}selected{% endif %}>{{ details.label }}</option>
+								{% endfor %}	
+							</select>
+							<label class="form-checkbox" for="checkbox-show-exemplar">
+								<input id="checkbox-show-exemplar" name="checkbox-show-exemplar" 
+									type="checkbox" value="true"
+									{{ "checked" if showExemplar else "" }}>
+									Exemplar
+							</label>
+							<label class="form-checkbox" for="checkbox-show-multisupplier">
+								<input id="checkbox-show-multisupplier" name="checkbox-show-multisupplier" 
+									type="checkbox" value="true"
+									{{ "checked" if showMultiSupplier else "" }}>
+									Multi-Supplier
+								</label>
+							<label class="form-checkbox" for="checkbox-show-migration">
+								<input id="checkbox-show-migration" name="checkbox-show-migration" 
+									type="checkbox" value="true"
+									{{ "checked" if showMigration else "" }}>
+									Migration
+								</label>
+							<label class="form-checkbox" for="checkbox-show-userresearch">
+								<input id="checkbox-show-userresearch" name="checkbox-show-userresearch" 
+									type="checkbox" value="true"
+									{{ "checked" if showUserResearch else "" }}>
+									User Research
+								</label>												
+						</section>
+						<section class="column-third">
+							<label class="form-control-1-2" for="select-filter-department">
+								Department
+							</label>
+							<select id="select-filter-department" class="form-control-1-2 department" name="select-filter-department">
+								<option value="N/A" {% if showDepartment == deptType %}selected{% endif %}>N/A</option>
+								{% for deptType, details in departmentTypes %}
+									<option value="{{ deptType }}" {% if showDepartment == deptType %}selected{% endif %}>{{ details.label }}</option>
+								{% endfor %}
+							</select>
+							<label class="form-checkbox" for="checkbox-show-casestudy">
+								<input id="checkbox-show-casestudy" name="checkbox-show-casestudy" 
+									type="checkbox" value="true"
+									{{ "checked" if showCaseStudy else "" }}>
+									Case Study
+							</label>
+							<label class="form-checkbox" for="checkbox-show-consultancy">
+								<input id="checkbox-show-consultancy" name="checkbox-show-consultancy" 
+									type="checkbox" value="true"
+									{{ "checked" if showConsultancy else "" }}>
+									Consultancy
+							</label>
+							<label class="form-checkbox" for="checkbox-show-managedcloud">
+								<input id="checkbox-show-managedcloud" name="checkbox-show-managedcloud" 
+									type="checkbox" value="true"
+									{{ "checked" if showManagedCloud else "" }}>
+									Managed Cloud
+							</label>
+						</section>
+						<section class="column-third">
+							<label class="form-control-1-2" for="select-filter-agency">
+								Agency
+							</label>
+							<select id="select-filter-agency" class="form-control-1-2 agency" name="select-filter-agency">
+								<option value="N/A" {% if showAgency == agencyType %}selected{% endif %}>N/A</option>
+								{% for agencyType, details in agencyTypes %}
+									<option value="{{ agencyType }}" {% if showAgency == agencyType %}selected{% endif %}>{{ details.label }}</option>
+								{% endfor %}
+							</select>
+							<label class="form-checkbox" for="checkbox-show-deliverypartner">
+								<input id="checkbox-show-deliverypartner" name="checkbox-show-deliverypartner" 
+									type="checkbox" value="true"
+									{{ "checked" if showDeliveryPartner else "" }}>
+									Delivery Partner
+							</label>
+							<label class="form-checkbox" for="checkbox-show-colocated">
+								<input id="checkbox-show-colocated" name="checkbox-show-colocated" 
+									type="checkbox" value="true"
+									{{ "checked" if showColocated else "" }}>
+									Co-located
+								</label>
+							<label class="form-checkbox" for="checkbox-show-enablement">
+								<input id="checkbox-show-enablement" name="checkbox-show-enablement" 
+									type="checkbox" value="true"
+									{{ "checked" if showEnablement else "" }}>
+									Enablement
+								</label>	
+						</section>
+					</div>
+							<section>
+								<div class="grid-row" style="float:right">
+									<input id="submit-btn" type="submit" class="button" value="Submit">
+									<input id="clearfilter-btn" name="Clear Filter" type="submit" class="button" value="Clear Filter">
+								</div>
+							</section>
+							
+						</div>
+					</form>
+				</td>	
+			</tr>
+		</table>
     </div>
+	 &nbsp;
     <div class="grid-row">
         {% for phase in phase_order %}
         <a href="?phase={{ phase }}">
@@ -65,6 +182,131 @@
         }
         location.reload();
     }); 
+		
+	$("#checkbox-show-exemplar").change(function() {		
+	 if(this.checked) {
+            Cookies.set("showExemplar", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showExemplar");
+        }
+    }); 
+	
+	$("#checkbox-show-casestudy").change(function() {		
+	 if(this.checked) {
+            Cookies.set("showCaseStudy", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showCaseStudy");
+        }
+    }); 
+	
+	$("#checkbox-show-deliverypartner").change(function() {	
+	 if(this.checked) {
+            Cookies.set("showDeliveryPartner", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showDeliveryPartner");
+        }
+    }); 
+	$("#checkbox-show-multisupplier").change(function() {	
+	 if(this.checked) {
+            Cookies.set("showMultiSupplier", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showMultiSupplier");
+        }
+    }); 
+	$("#checkbox-show-consultancy").change(function() {	
+	 if(this.checked) {
+            Cookies.set("showConsultancy", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showConsultancy");
+        }
+    }); 
+	$("#checkbox-show-colocated").change(function() {		
+	 if(this.checked) {
+            Cookies.set("showColocated", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showColocated");
+        }
+    }); 
+	$("#checkbox-show-migration").change(function() {		
+	 if(this.checked) {
+            Cookies.set("showMigration", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showMigration");
+        }
+    }); 
+	$("#checkbox-show-managedcloud").change(function() {	
+	 if(this.checked) {
+            Cookies.set("showManagedCloud", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showManagedCloud");
+        }
+    }); 
+	$("#checkbox-show-enablement").change(function() {	
+	 if(this.checked) {
+            Cookies.set("showEnablement", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showEnablement");
+        }
+    }); 
+	$("#checkbox-show-userresearch").change(function() {	
+	 if(this.checked) {
+            Cookies.set("showUserResearch", true); // provided by cookie.js
+        } else {
+            Cookies.remove("showUserResearch");
+        }
+    }); 
+	
+	$("#select-filter-sector").change(function() {	
+		Cookies.set("showSector", this.value); // provided by cookie.js
+    }); 
+	
+	$("#select-filter-department").change(function() {	
+		Cookies.set("showDepartment", this.value); // provided by cookie.js
+    });
+	
+	$("#select-filter-agency").change(function() {	
+		Cookies.set("showAgency", this.value); // provided by cookie.js
+    });
+
+	var buttonpressed; 
+	$("#clearfilter-btn").click(function() { 
+		buttonpressed = $(this).attr('value');
+	});
+
+	$("#filter-form").submit(function(e) {
+		e.preventDefault();
+
+		if (buttonpressed == "Clear Filter")
+		{
+			Cookies.remove("showExemplar");
+			Cookies.remove("showCaseStudy");
+			Cookies.remove("showDeliveryPartner");
+			Cookies.remove("showMultiSupplier");
+			Cookies.remove("showConsultancy");
+			Cookies.remove("showColocated");
+			Cookies.remove("showMigration");
+			Cookies.remove("showManagedCloud");
+			Cookies.remove("showEnablement");
+			Cookies.remove("showUserResearch");
+			Cookies.remove("showFilters");		
+			Cookies.set("showSector", "N/A")
+			Cookies.set("showDepartment", "N/A")
+			Cookies.set("showAgency", "N/A")
+			
+		} else {	
+			Cookies.set("showFilters", true); // provided by cookie.js
+		}
+		location.reload();
+	});
+	
+	$(document).ready(function() {
+	
+		if (Cookies.get("showFilters"))
+		{
+			$('[data-collapsable-child="filter"]').toggle('fast');
+		}
+	});
+	
 </script>
 {% endblock %}
 

@@ -1,8 +1,74 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} {% block content %}	
 <main id="content" role="main">
-    <div class="grid-row">
-          <h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1>
-          <p>{{ data.description }}</p>
+    <div class="">	  
+		<table>
+			<tr>
+				<td>
+					</i><h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1> 
+					<p>{{ data.description }}</p>
+				</td>
+				<td>  <!-- column for "more" buttons --></td>
+			 </tr>
+			 <tr>
+				<td>
+					<div class="grid-row">
+						<section class="column-third">
+							<label class="form-label-bold">Sector</label><p>{{ sectorTypes[data.sector].label  }}</p>
+						</section>
+						<section class="column-third">
+							<label class="form-label-bold">Department</label><p>{{ departmentTypes[data.department].label }}</p>
+						</section>
+						<section class="column-third">
+							<label class="form-label-bold">Agency</label><p>{{ agencyTypes[data.agency].label }}</p> 
+						</section>
+					</div>
+				</td>
+				<td data-collapsable-parent="{{ data.name }}" class="clickable"><i class="fa fa-plus-square-o" aria-hidden="true"></td>
+            </tr>
+			<tr>
+				<td data-collapsable-child="{{ data.name }}">
+					<div class="grid-row">
+						<section class="column-third">
+							{% if data.isExemplar %}
+							<p>Exemplar: Y </p>
+							{% endif %}
+							{% if data.isCaseStudy %}
+							<p>Case Study: Y </p>
+							{% endif %}
+							{% if data.isDeliveryPartner %}
+							<p>Delivery Partner: Y </p>
+							{% endif %}
+							{% if data.isMultiSupplier %}
+							<p>Multi-Supplier: Y </p>
+							{% endif %}
+							{% if data.isConsultancy %}
+							<p>Consultancy: Y </p>
+							{% endif %}
+						</section>
+						<section class="column-two-thirds">
+							{% if data.isColocated %}
+							<p>Co-located: Y </p>
+							{% endif %}
+							{% if data.isMigration %}
+							<p>Migration: Y </p>
+							{% endif %}
+							{% if data.isManagedCloud %}
+							<p>Managed Cloud: Y </p>
+							{% endif %}
+							{% if data.isEnablement %}
+							<p>Enablement: Y </p>
+							{% endif %}
+							{% if data.isUserResearch %}
+							<p>User Research: Y </p>
+							{% endif %}				
+						</section>
+					</div>
+				</td>	
+				<td data-collapsable-child="{{ data.name }}">
+					<div class="">  <!-- column for "more" buttons --></div>
+				</td>	
+			</tr>
+		</table>
     </div>
     <div class="grid-row">
       <div class="column-two-thirds">
@@ -15,7 +81,7 @@
     </div>
     <div class="grid-row">
         <div class="column-two-thirds">
-            <h2 class="heading-large">Useful Links&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">edit</i></a></h3>
+            <h2 class="heading-large">Useful Links&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-resources">edit</i></a></h2>
         </div>
     </div>
     <div class="grid-row">
@@ -35,7 +101,7 @@
     </div>
     <div class="grid-row">
         <div class="column-two-thirds">
-            <h2 class="heading-large">People</h3>
+            <h2 class="heading-large">People</h2>
         </div>
     </div>
     <div class="grid-row">
@@ -56,7 +122,7 @@
                 {% for teamMember in peopleData %}
                 <tr>
                     <td>{{ teamMember.role}}</td>
-                    <td>{{ teamMember.name }}</td>
+                    <td>{{ teamMember.name }} {% if teamMember.isSalesOwner %}(Sales Owner){% endif %}{% if teamMember.isTechDelOwner %}(Tech/Dev Owner){% endif %} </td>
                     <td data-collapsable-parent="{{ teamName + loop.index }}" class="clickable"><i class="fa fa-plus-square-o" aria-hidden="true"></i></td>
                 </tr>
                 <tr>

@@ -26,14 +26,26 @@ module.exports = class Project {
             "unknown",
             {name: "Added Automatically", email: ""},
             "Overall project health has not yet been set.");
+		
+		this.department = "Unknown";
+		this.agency = "Unknown";		
+		this.isExemplar = false;
+		this.isCaseStudy = false;
+		this.isDeliveryPartner = false;
+		this.isMultiSupplier = false;
+		this.isConsultancy = false;
+		this.isColocated = false;
+		this.isMigration = false;
+		this.isManagedCloud = false;
+		this.isEnablement = false;
+		this.isUserResearch = false;		
+		
     }
 
     setId(str) { this.id = str; }
     setName(str) { this.name = str; }
     setDescription(str) { this.description = str; }
     setLocation(str) { this.location = str; }
-    setDepartment(str) { this.department = str; }
-    setAgency(str) { this.agency = str; }
     setIsFinished(bool) { this.isFinished = bool; }
     setCustomer(str) { this.customer = str; }
     setHealth(type, status, user, comment, linkTitle, link) {
@@ -68,7 +80,22 @@ module.exports = class Project {
         };
         this.setPhase(this.getLatestPhaseName());
     }
-
+	
+	setSector(str) { this.sector = str; }
+    setDepartment(str) { this.department = str; }
+    setAgency(str) { this.agency = str; }
+	
+	setIsExemplar(bool) { this.isExemplar = bool; }
+	setIsCaseStudy(bool) { this.isCaseStudy = bool; }
+	setIsDeliveryPartner(bool) { this.isDeliveryPartner = bool; }
+	setIsMultiSupplier(bool) { this.isMultiSupplier = bool; }
+	setIsConsultancy(bool) { this.isConsultancy = bool; }
+	setIsColocated(bool) { this.isColocated = bool; }
+	setIsMigration(bool) { this.isMigration = bool; }
+	setIsManagedCloud(bool) { this.isManagedCloud = bool; }
+	setIsEnablement(bool) { this.isEnablement = bool; }
+	setIsUserResearch(bool) { this.isUserResearch = bool; }
+	
     getLatestPhaseName() {
         return this.phaseHistory['live'] ? 'live' :
             this.phaseHistory['beta'] ? 'beta' :
@@ -164,7 +191,18 @@ module.exports = class Project {
         }
 
         p.setIsFinished(p.isFinished == true);
-
+		
+		p.setIsExemplar(p.isExemplar == true);
+		p.setIsCaseStudy(p.isCaseStudy == true);
+		p.setIsDeliveryPartner(p.isDeliveryPartner == true);
+		p.setIsMultiSupplier(p.isMultiSupplier == true);
+		p.setIsConsultancy(p.isConsultancy == true);
+		p.setIsColocated(p.isColocated == true);
+		p.setIsMigration(p.isMigration == true);
+		p.setIsManagedCloud(p.isManagedCloud == true);
+		p.setIsEnablement(p.isEnablement == true);
+		p.setIsUserResearch(p.isUserResearch == true);
+		
         return p;
     }
 }

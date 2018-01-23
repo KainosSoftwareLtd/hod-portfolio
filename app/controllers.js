@@ -1,3 +1,4 @@
+
 'use strict';
 var _ = require('underscore');
 var connect = require('connect-ensure-login');
@@ -32,6 +33,25 @@ var healthCheckTypes =  {
     "data": {label: "Data"}
 }
 
+var sectorTypes =  {
+    "unknown": {label: "Unknown"},
+    "seven": {label: "Seven"},
+	"eustace": {label: "Eustace"},
+    "other": {label: "Other"}
+}
+
+var departmentTypes =  {
+    "unknown": {label: "Unknown"},
+    "dept": {label: "Dept"},
+    "other": {label: "Other"}
+}
+
+var agencyTypes =  {
+    "unknown": {label: "Unknown"},
+    "agency": {label: "Agency"},
+    "other": {label: "Other"}
+}
+
 // JSON data of a project
 Controller.prototype.handleApiProjectId = function(req, res) {
     projectCache.getById(req.params.id, function(err, data) {
@@ -50,6 +70,21 @@ Controller.prototype.handleApiAddProject = function(req, res) {
     newProject.setPhaseHistoryEntry(req.body.phase, "Started", req.body.month, req.body.year);
     newProject.setIsFinished(req.body.isFinished);
     newProject.setCustomer(req.body.customer);
+	
+	newProject.setSector(req.body.sector);
+    newProject.setDepartment(req.body.department);
+    newProject.setAgency(req.body.agency);
+	
+	newProject.setIsExemplar(req.body.isExemplar);
+	newProject.setIsCaseStudy(req.body.isCaseStudy);
+	newProject.setIsDeliveryPartner(req.body.isDeliveryPartner);
+	newProject.setIsMultiSupplier(req.body.isMultiSupplier);
+	newProject.setIsConsultancy(req.body.isConsultancy);
+	newProject.setIsColocated(req.body.isColocated);
+	newProject.setIsMigration(req.body.isMigration);
+	newProject.setIsManagedCloud(req.body.isManagedCloud);
+	newProject.setIsEnablement(req.body.isEnablement);
+	newProject.setIsUserResearch(req.body.isUserResearch);
 
     projectDao.addProject(newProject, function(err, project) {
         log.trace('Adding project: ' + project.name);
@@ -232,7 +267,9 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
     newPerson.setMobile(req.body.mobile);
     newPerson.setSkype(req.body.skype);
     newPerson.setSlack(req.body.slack);
-
+	newPerson.setIsSalesOwner(req.body.isSalesOwner === "true");
+	newPerson.setIsTechDelOwner(req.body.isTechDelOwner === "true");
+ 
     log.info('Adding a new team member to project ID: ' + req.params.projectId);
 
     if(!req.params.projectId) {
@@ -283,7 +320,9 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
 Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
     let personData = Person.fromJson(req.body.person);
     personData.setId(req.params.personId);
-
+  	personData.setIsSalesOwner(req.body.person.isSalesOwner === "true");
+	personData.setIsTechDelOwner(req.body.person.isTechDelOwner === "true");
+	
     log.info('Updating a team member in project ID: ' + req.params.projectId);
 
     if(!req.params.projectId) {
@@ -597,6 +636,22 @@ Controller.prototype.handleApiEditProject = function(req, res) {
             project.setLocation(req.body.location);
             project.setIsFinished(req.body.isFinished === "true");
             project.setCustomer(req.body.customer);
+		
+			project.setSector(req.body.sector);
+			project.setDepartment(req.body.department);
+			project.setAgency(req.body.agency);
+			
+			project.setIsExemplar(req.body.isExemplar === "true");
+			project.setIsCaseStudy(req.body.isCaseStudy === "true");
+			project.setIsDeliveryPartner(req.body.isDeliveryPartner === "true");
+			project.setIsMultiSupplier(req.body.isMultiSupplier === "true");
+			project.setIsConsultancy(req.body.isConsultancy === "true");
+			project.setIsColocated(req.body.isColocated === "true");
+			project.setIsMigration(req.body.isMigration === "true");
+			project.setIsManagedCloud(req.body.isManagedCloud === "true");
+			project.setIsEnablement(req.body.isEnablement === "true");
+			project.setIsUserResearch(req.body.isUserResearch === "true");
+	
 
             projectDao.addProject(project, function(err, editedProject) {
                 log.trace('Updating project with id = ' + project.id);
@@ -629,7 +684,7 @@ Controller.prototype.handleApiUpdatePhaseHistory = function(req, res) {
             );
         } else {
             project.setPhaseHistoryEntry(req.body.phase, req.body.label, req.body.month, req.body.year);
-
+			
             projectDao.addProject(project, function(err, editedProject) {
                 log.trace('Updating project history. ID of the project: ' + project.id);
                 if(err) {
@@ -698,7 +753,10 @@ Controller.prototype.handleProjectIdSlug = function(req, res) {
     projectCache.getById(req.params.id, function(error, data) {
         res.render('project', {
             "data": data,
-            "phase_order": phase_order
+            "phase_order": phase_order,
+			sectorTypes: sectorTypes,
+			departmentTypes: departmentTypes,
+			agencyTypes: agencyTypes
         });
     });
 };
@@ -907,7 +965,10 @@ Controller.prototype.handleEditProject = function(req, res) {
     var id = req.params.id;
     projectCache.getById(id, function(error, project) {
         res.render('edit-project', {
-            project: project
+            project: project,
+			sectorTypes: sectorTypes,
+			departmentTypes: departmentTypes,
+			agencyTypes: agencyTypes
         });
     });
 };
@@ -928,8 +989,9 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
             _.each(projectMap, function (proj) {
                 projectList.push(proj)
             });
-
-            projectList = showFinishedProjectsIfRequested(projectList, req.cookies.showFinished);
+			
+			projectList = showFilteredProjectsAsRequested(projectList, req.cookies.showFinished, req.cookies.showSector, req.cookies.showDepartment, req.cookies.showAgency, req.cookies.showExemplar, req.cookies.showCaseStudy, req.cookies.showDeliveryPartner, req.cookies.showMultiSupplier, req.cookies.showConsultancy, req.cookies.showColocated, req.cookies.showMigration, req.cookies.showManagedCloud, req.cookies.showEnablement, req.cookies.showUserResearch);
+			
             var data = filterPhaseIfPresent(projectList, req.query.phase);
             data = _.groupBy(data, groupBy);
             var new_data = indexify(data);
@@ -940,10 +1002,26 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
                 "data": new_data,
                 "phase": req.query.phase,
                 "showFinished": req.cookies.showFinished,
+				"showSector": req.cookies.showSector,
+				"showDepartment": req.cookies.showDepartment,
+				"showAgency": req.cookies.showAgency,
+				"showExemplar": req.cookies.showExemplar,
+				"showCaseStudy": req.cookies.showCaseStudy,
+				"showDeliveryPartner": req.cookies.showDeliveryPartner,
+				"showMultiSupplier": req.cookies.showMultiSupplier,
+				"showConsultancy": req.cookies.showConsultancy,
+				"showColocated": req.cookies.showColocated,
+				"showMigration": req.cookies.showMigration,
+				"showManagedCloud": req.cookies.showManagedCloud,
+				"showEnablement": req.cookies.showEnablement,
+				"showUserResearch": req.cookies.showUserResearch,
                 "counts": phases,
                 "view": view,
                 "row_order": rowOrder,
-                "phase_order": phase_order
+                "phase_order": phase_order,
+				sectorTypes: sectorTypes,
+				departmentTypes: departmentTypes,
+				agencyTypes: agencyTypes
             });
         });
     });
@@ -1002,6 +1080,61 @@ function showFinishedProjectsIfRequested(data, showFinished) {
         data = _.where(data, { "isFinished": false });
     }
     return data;
+}
+
+// If showFinished is false, trim unfinished projects
+// Otherwise return unmodified data
+function showFilteredProjectsAsRequested(data, showFinished, showSector, showDepartment, showAgency, showExemplar, showCaseStudy, showDeliveryPartner, showMultiSupplier, showConsultancy, showColocated, showMigration, showManagedCloud, showEnablement, showUserResearch) 
+{   	
+	if (!showFinished) {
+        data = _.where(data, { "isFinished": false });
+    }
+  
+	if (showSector != "N/A") {
+        data = _.where(data, { "sector": showSector });
+    }
+	
+	if (showDepartment != "N/A") {
+        data = _.where(data, { "department": showDepartment });
+    }
+  
+	if (showAgency != "N/A") {
+        data = _.where(data, { "agency": showAgency });
+    }
+	
+	if (showExemplar) {
+        data = _.where(data, { "isExemplar": true });
+    }
+	
+	if (showCaseStudy) {
+        data = _.where(data, { "isCaseStudy": true });
+    }
+	if (showDeliveryPartner) {
+        data = _.where(data, { "isDeliveryPartner": true });
+    }
+	if (showMultiSupplier) {
+        data = _.where(data, { "isMultiSupplier": true });
+    }
+	if (showConsultancy) {
+        data = _.where(data, { "isConsultancy": true });
+    }
+	if (showColocated) {
+        data = _.where(data, { "isColocated": true });
+    }
+	if (showMigration) {
+        data = _.where(data, { "isMigration": true });
+    }
+	if (showManagedCloud) {
+        data = _.where(data, { "isManagedCloud": true });
+    }
+	if (showEnablement) {
+        data = _.where(data, { "isEnablement": true });
+    }
+	if (showUserResearch) {
+        data = _.where(data, { "isUserResearch": true });
+    }
+	
+  return data;
 }
 
 module.exports = Controller;
