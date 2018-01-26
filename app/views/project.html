@@ -121,6 +121,16 @@
             </div>
         </section>
     </div>
+	<div class="grid-row">
+         <section class="column-third">
+            <h2 class="heading-large">Additional Info <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-project-metadata">edit</a></h2>
+            <div class="projectmetadata">  
+					<label class="form-label-bold">Project Tags</label>
+                    {% for tags in data.projectMetadata.getTagArray() %}
+						<span class=""><span class="project-tag">{{ tags }}</span>
+                    {% endfor %}
+            </div>
+    </div>
 </main>
 {% endblock %}
 {% block body_end %}
