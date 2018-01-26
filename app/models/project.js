@@ -26,6 +26,10 @@ module.exports = class Project {
             "unknown",
             {name: "Added Automatically", email: ""},
             "Overall project health has not yet been set.");
+		
+		this.sector = "";
+		this.department = "";
+		this.agency = "";	
     }
 
     setId(str) { this.id = str; }
@@ -69,6 +73,10 @@ module.exports = class Project {
         this.setPhase(this.getLatestPhaseName());
     }
 
+	setSector(str) { this.sector = str; }
+    setDepartment(str) { this.department = str; }
+    setAgency(str) { this.agency = str; }
+	
     getLatestPhaseName() {
         return this.phaseHistory['live'] ? 'live' :
             this.phaseHistory['beta'] ? 'beta' :

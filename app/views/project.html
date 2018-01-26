@@ -4,6 +4,19 @@
           <h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1>
           <p>{{ data.description }}</p>
     </div>
+	     
+	<div class="grid-row">
+		<section class="column-third">
+			<label class="form-label-bold">Sector</label><p>{{ sectorTypes[data.sector].label  }}</p>
+		</section>
+		<section class="column-third">
+			<label class="form-label-bold">Department</label><p>{{ data.department }}</p>
+		</section>
+		<section class="column-third">
+			<label class="form-label-bold">Agency</label><p>{{ data.agency }}</p> 
+		</section>
+	</div>
+	
     <div class="grid-row">
       <div class="column-two-thirds">
         <h2 class="heading-large">Project overall Health&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">update health status</a></h2>

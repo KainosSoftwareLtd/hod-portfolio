@@ -32,6 +32,11 @@ var healthCheckTypes =  {
     "data": {label: "Data"}
 }
 
+var sectorTypes =  {
+    "public": {label: "Public"},
+    "private": {label: "Private"}
+}
+
 // JSON data of a project
 Controller.prototype.handleApiProjectId = function(req, res) {
     projectCache.getById(req.params.id, function(err, data) {
@@ -50,6 +55,9 @@ Controller.prototype.handleApiAddProject = function(req, res) {
     newProject.setPhaseHistoryEntry(req.body.phase, "Started", req.body.month, req.body.year);
     newProject.setIsFinished(req.body.isFinished);
     newProject.setCustomer(req.body.customer);
+    newProject.setSector(req.body.sector);
+    newProject.setDepartment(req.body.department);
+    newProject.setAgency(req.body.agency);
 
     projectDao.addProject(newProject, function(err, project) {
         log.trace('Adding project: ' + project.name);
@@ -597,7 +605,10 @@ Controller.prototype.handleApiEditProject = function(req, res) {
             project.setLocation(req.body.location);
             project.setIsFinished(req.body.isFinished === "true");
             project.setCustomer(req.body.customer);
-
+            project.setSector(req.body.sector);
+            project.setDepartment(req.body.department);
+            project.setAgency(req.body.agency);
+			
             projectDao.addProject(project, function(err, editedProject) {
                 log.trace('Updating project with id = ' + project.id);
                 if(err) {
@@ -698,7 +709,8 @@ Controller.prototype.handleProjectIdSlug = function(req, res) {
     projectCache.getById(req.params.id, function(error, data) {
         res.render('project', {
             "data": data,
-            "phase_order": phase_order
+            "phase_order": phase_order,
+            "sectorTypes": sectorTypes
         });
     });
 };
@@ -907,7 +919,8 @@ Controller.prototype.handleEditProject = function(req, res) {
     var id = req.params.id;
     projectCache.getById(id, function(error, project) {
         res.render('edit-project', {
-            project: project
+            project: project,
+            sectorTypes: sectorTypes
         });
     });
 };
