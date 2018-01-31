@@ -963,43 +963,7 @@ Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, vie
 };
 
 
-/**
- * @param  {String|function} groupBy Name of the field by which the projects will be grouped
- * @param  {String} path Router path, ex: '/location'
- * @param  {String[]} [rowOrder] Order of values by which to group the projects, default: alphabetical
- * @param  {String=} [viewType] Optional view name if groupBy is not a string
- */
-Controller.prototype.setupSalesDashboardRoute = function(groupBy, path, rowOrder, viewType) {
-    this.router.get(path, connect.ensureLoggedIn(), function(req, res) {
-        var view = viewType ? viewType : groupBy;
 
-        projectCache.getAll(function(err, projectMap) {
-            var projectList = [];
-
-            _.each(projectMap, function (proj) {
-                projectList.push(proj)
-            });
-
-            projectList = showFilteredProjectsAsRequested(projectList, req.cookies.showFinished, req.cookies.searchTags);
-            var data = filterPhaseIfPresent(projectList, req.query.phase);
-            data = _.groupBy(data, groupBy);
-            var new_data = indexify(data);
-            var phases = _.countBy(projectList, 'phase');
-            rowOrder = prepareRowOrder(rowOrder, data);
-
-            res.render('dashboard-sales', {
-                "data": new_data,
-                "phase": req.query.phase,
-                "showFinished": req.cookies.showFinished,
-                "counts": phases,
-                "view": view,
-                "row_order": rowOrder,
-                "phase_order": phase_order,
-				"searchTags": req.cookies.searchTags
-            });
-        });
-    });
-};
 
 /**
  * Prepare row order
@@ -1104,32 +1068,5 @@ Controller.prototype.handleApiUpdateProjectMetadata = function(req, res) {
     });
 };
 
-// If showFinished is false, trim unfinished projects
-// Otherwise return unmodified data
-function showFilteredProjectsAsRequested(data, showFinished, searchTags) 
-{   	
-	if (!showFinished) {
-        data = _.where(data, { "isFinished": false });
-    }
-  
-	if (searchTags != undefined && searchTags != "") {
-		
-		// AND based filter - Returns All that contain all tags
-		searchTags.split(',').forEach(function(tag) {
-				data = data.filter(function(item){
-					  return item.projectMetadata.tags.toLowerCase().indexOf(tag.toLowerCase())!==-1;
-					});
-			});
-		
-		// OR based filter - Returns All that contain at least one matching tag
-		//data = data.filter(function(item){
-		//		return _.some(searchTags.split(','), function(tag){
-		//		  return item.projectMetadata.tags.toLowerCase().indexOf(tag.toLowerCase())!==-1;
-		//		});
-		//});
-    }
-
-  return data;
-}
 	
 module.exports = Controller;
