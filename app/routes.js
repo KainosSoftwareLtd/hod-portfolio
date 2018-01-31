@@ -37,13 +37,6 @@ controller.setupIndexPageRoute('theme', '/theme');
 controller.setupIndexPageRoute(healthGroupFunc, ['/', '/health'], health_order, 'health');
 controller.setupIndexPageRoute('priority', '/priority', priority_order);
 
-controller.setupSalesDashboardRoute(healthGroupFunc, ['', '/dashboard/sales'], health_order, 'health');
-controller.setupSalesDashboardRoute('location', '/dashboard/sales/location');
-controller.setupSalesDashboardRoute('agency', '/dashboard/sales/agency');
-controller.setupSalesDashboardRoute('theme', '/dashboard/sales/theme');
-controller.setupSalesDashboardRoute(healthGroupFunc, ['', '/dashboard/sales/health'], health_order, 'health');
-controller.setupSalesDashboardRoute('priority', '/dashboard/sales/priority', priority_order)
-
 router.get('/projects/add', connect.ensureLoggedIn(), controller.handleAddProject);
 router.get('/projects/:id/:slug/edit-our-team', connect.ensureLoggedIn(), controller.handleEditOurTeam);
 router.get('/projects/:id/:slug/edit-resources', connect.ensureLoggedIn(), controller.handleEditResources);
