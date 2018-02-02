@@ -51,6 +51,7 @@ router.get('/projects/:projectId/:slug/person/client/:personId/edit', connect.en
 router.get('/projects/:id/:slug/edit', connect.ensureLoggedIn(), controller.handleEditProject);
 router.get('/projects/:id/:slug', connect.ensureLoggedIn(), controller.handleProjectIdSlug);
 
+
 router.get('/api', connect.ensureLoggedIn(), controller.handleApi);
 router.put('/api/projects/:projectId', connect.ensureLoggedIn(), controller.handleApiEditProject);
 router.put('/api/projects/:projectId/health', connect.ensureLoggedIn(), controller.handleApiUpdateHealthStatus);
@@ -68,4 +69,6 @@ router.put('/api/projects/:projectId/phase-history', connect.ensureLoggedIn(), c
 router.delete('/api/projects/:projectId/phase-history', connect.ensureLoggedIn(), controller.handleApiDeletePhaseHistory);
 router.post('/api/projects', connect.ensureLoggedIn(), controller.handleApiAddProject);
 
+router.get('/projects/:id/:slug/edit-project-metadata', connect.ensureLoggedIn(), controller.handleEditProjectMetadata);
+router.put('/api/projects/:projectId/project-metadata', connect.ensureLoggedIn(), controller.handleApiUpdateProjectMetadata);
 module.exports = router;
