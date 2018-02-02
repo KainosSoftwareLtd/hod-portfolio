@@ -1017,4 +1017,52 @@ function showFinishedProjectsIfRequested(data, showFinished) {
     return data;
 }
 
+/**
+ * Render Edit project metadata page
+ *
+ * @param req
+ * @param res
+ */
+Controller.prototype.handleEditProjectMetadata = function (req, res) {
+    var id = req.params.id;
+    projectCache.getById(id, function(error, project) {
+        res.render('edit-project-metadata', {
+            project: project
+        });
+    });
+};
+
+// Create or overwrite an entry in project metadata
+Controller.prototype.handleApiUpdateProjectMetadata = function(req, res) {
+	 
+  projectCache.getById(req.params.projectId, function(error, project) {
+        if(!project) {
+            log.debug('Error updating project metadata. Project with given ID was not found.');
+            apiUtils.handleResultSet(res, 422,
+                new ApiResponse(null, ['Error updating project metadata. Project with given ID was not found.'])
+            );
+        } else {
+            project.setProjectMetadata(req.body);
+
+            projectDao.addProject(project, function(err, editedProject) {
+                log.trace('Updating project metadata. ID of the project: ' + project.id);
+                if(err) {
+                    log.debug('Error updating metadata of a project with id = ' + project.id);
+
+                    apiUtils.handleResultSet(res, 500,
+                        new ApiResponse(null, ['Error updating project metadata'])
+                    );
+                } else {
+                    log.debug('Metadata of a project with id = ' + editedProject.id + ' has been updated');
+
+                    projectCache.refreshProject(editedProject.id);
+                    apiUtils.handleResultSet(res, 200,
+                        new ApiResponse({projectId: editedProject.id}, ['The project metadata has been updated'])
+                    );
+                }
+            });
+        }
+    });
+};
+	
 module.exports = Controller;

@@ -3,6 +3,7 @@ var _ = require('underscore');
 var Person = require('./person');
 var ResourceLink = require('./resourceLink');
 var HealthRecord = require('./healthRecord');
+var ProjectMetadata = require('./projectMetadata');
 
 module.exports = class Project {
     constructor(name, description) {
@@ -14,6 +15,7 @@ module.exports = class Project {
         this.health = {};
         this.resources = [];
         this.phaseHistory = {};
+		this.projectMetadata = {};
 
         // setting defaults - this project was designed not to work without them...
         this.facing = "user";
@@ -26,10 +28,10 @@ module.exports = class Project {
             "unknown",
             {name: "Added Automatically", email: ""},
             "Overall project health has not yet been set.");
-		
 		this.sector = "";
 		this.department = "";
 		this.agency = "";	
+		this.projectMetadata = new ProjectMetadata("");
     }
 
     setId(str) { this.id = str; }
@@ -64,6 +66,10 @@ module.exports = class Project {
     setResources(resources) { this.resources = resources; }
     setHealthStatusHistory(array) { this.healthStatusHistory = array; }
 
+	setProjectMetadata(projectMetadata) {
+        this.projectMetadata = new ProjectMetadata(projectMetadata.tags); 
+    }
+	
     setPhaseHistoryEntry(phase, label, month, year) {
         this.phaseHistory[phase] = this.phaseHistory[phase] || {};
         this.phaseHistory[phase][label] = {
@@ -170,9 +176,14 @@ module.exports = class Project {
                 });
             });
         }
-
+		
+		if (data && data.projectMetadata) {
+			p.projectMetadata = ProjectMetadata.fromJson(data.projectMetadata);
+			p.projectMetadata.tags = data.projectMetadata.tags;
+        }
+	
         p.setIsFinished(p.isFinished == true);
-
+		
         return p;
     }
 }
