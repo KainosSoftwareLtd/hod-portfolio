@@ -91,6 +91,27 @@ module.exports = class Project {
             this.phaseHistory['pipeline'] ? 'pipeline' : 'pipeline';
     }
 
+    getOverallHealthRequirement() {
+        var healthRequirement = "The current assurance needs of this project are not known.";
+        switch (this.health.overall.status) {
+            case "risk":
+                healthRequirement = "This project needs significant additional senior support.";
+                break;
+            case "fair":
+                healthRequirement = "This project needs some additional senior support.";
+                break;
+            case "good":
+                healthRequirement = "This project does not require any additional senior support.";
+                break;
+            case "unknown":
+                healthRequirement = "The current assurance needs of this project are not known.";
+                break;                             
+            default:
+                break;
+        }
+        return healthRequirement;
+    }
+
     addToOurTeam(Person) {
         this.ourTeam.push(Person);
     }
