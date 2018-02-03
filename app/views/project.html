@@ -1,29 +1,25 @@
 {% extends "layout.html" %} {% block content %}
 <main id="content" role="main">
     <div class="grid-row">
-          <h1 class="heading-xlarge">{{ data.name }}&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">edit</a></h1>
-          <p>{{ data.description }}</p>
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">{{ data.name }}&nbsp;</h1>
+            <p>{{ data.description }}</p>
+            <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit">Change this information</a>
+        </div>
+        <div class="column-one-third projectmetadata">
+            <label class="form-label-bold">Project Tags&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-project-metadata">edit</a></label>
+            {% for tags in data.projectMetadata.getTagArray() %}
+                <span class="project-tag">{{ tags }}</span>
+            {% endfor %}
+        </div>
     </div>
-	     
-	<div class="grid-row">
-		<section class="column-third">
-			<label class="form-label-bold">Sector</label><p>{{ sectorTypes[data.sector].label  }}</p>
-		</section>
-		<section class="column-third">
-			<label class="form-label-bold">Department</label><p>{{ data.department }}</p>
-		</section>
-		<section class="column-third">
-			<label class="form-label-bold">Agency</label><p>{{ data.agency }}</p> 
-		</section>
-	</div>
 	
     <div class="grid-row">
       <div class="column-two-thirds">
-        <h2 class="heading-large">Project overall Health&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">update health status</a></h2>
-      </div>
-      <div class="column-two-thirds">
-          <span class="health-block bold-xlarge {{ data.health.overall.status | lower }}"><a href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">{{ data.health.overall.status | title }}</a>&nbsp;<a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">view details</a>
-          <p class="font-medium">{{ data.health.overall.comment }}</p></span>
+        <h3 class="heading-medium">{{ data.getOverallHealthRequirement() }}</h3>
+        <p class="font-small">{{ data.health.overall.comment }}</p>
+        <p class="font-small">You can review details of the health status of this project <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/display-health">here.</a></p>
+        <p class="font-small">You can change the health status of this project <a href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-health">here.</a></p>
       </div>
     </div>
     <div class="grid-row">
@@ -133,16 +129,6 @@
                 {% endif %} {% endfor %}
             </div>
         </section>
-    </div>
-	<div class="grid-row">
-         <section class="column-third">
-            <h2 class="heading-large">Additional Info <a class="font-xsmall" href="/projects/{{ data.id }}/{{ data.name | slugify }}/edit-project-metadata">edit</a></h2>
-            <div class="projectmetadata">  
-					<label class="form-label-bold">Project Tags</label>
-                    {% for tags in data.projectMetadata.getTagArray() %}
-						<span class=""><span class="project-tag">{{ tags }}</span>
-                    {% endfor %}
-            </div>
     </div>
 </main>
 {% endblock %}
