@@ -1,0 +1,50 @@
+{% extends "layout.html" %} 
+{% block content %}
+<main id="content" role="main"> 
+    <div class="grid-row">
+    <section class="column-two-thirds">
+        &nbsp;
+        <form action="/sales" method="get" role="search">
+            <input class="form-control" id="filter" type="text" name="q" value="{{ filter }}">
+            <button type="submit" class="button">Search</button>
+        </form>
+    </section>
+    </div>
+    <div class="grid-row">         
+    <table>
+        <tbody>
+            <thead>
+                <tr>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Themes</th>
+                    <th scope="col">Sector</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Agency</th>
+                    <th scope="col">&nbsp;</th>
+                </tr>
+            </thead>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.customer }}</td>
+                <td>{{ item.name }}</td>
+                <td>
+                    {% for tags in item.projectMetadata.getTagArray() %}
+                        {{ tags }}
+                    {% endfor %}
+                </td>
+                <td>{{ item.sector}}</td>
+                <td>{{ item.department }}</td>
+                <td>{{ item.agency }}</td>
+                <td><a href="/projects/{{ item.id }}/{{ item.name | slugify }}">view</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>        
+    </div>
+</main>
+{% endblock %} 
+{% block body_end %} 
+{{ super() }}
+{% endblock %}
+

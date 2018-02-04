@@ -1,5 +1,5 @@
 'use strict';
-var utils = require('../utils');
+var utils = require('../utils/utils');
 
 module.exports = class ResourceLink {
     constructor(name, url) {

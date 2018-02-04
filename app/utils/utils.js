@@ -21,9 +21,7 @@ Utils.convertDate = function(timestamp) {
 };
 
 Utils.split = function(str, delimiter) {
-
     return String(str).split(delimiter);
 };
-
 
 module.exports = Utils;
