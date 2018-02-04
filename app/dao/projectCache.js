@@ -1,5 +1,5 @@
-var projectDao = require('./dao/project');
-var log = require('./logger');
+var projectDao = require('./project');
+var log = require('../logger');
 
 var ProjectCache = function() {};
 

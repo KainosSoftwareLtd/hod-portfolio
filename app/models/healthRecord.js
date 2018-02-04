@@ -1,5 +1,5 @@
 'use strict';
-var utils = require('../utils');
+var utils = require('../utils/utils');
 var ResourceLink = require('./resourceLink');
 
 module.exports = class HealthRecord {

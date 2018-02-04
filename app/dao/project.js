@@ -1,7 +1,7 @@
-var fileStore = require('../fileStore');
+var fileStore = require('./fileStore');
 var Project = require('../models/project');
 var log = require('../logger');
-var utils = require('../utils');
+var utils = require('../utils/utils');
 var _ = require('underscore');
 
 var Projects = function() {};

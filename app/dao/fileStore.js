@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 var fs = require('fs');
 var _ = require('underscore');
-var log = require('./logger');
+var log = require('../logger');
 
 var FileStore = function() {};
 

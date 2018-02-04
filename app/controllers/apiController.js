@@ -1,44 +1,24 @@
 'use strict';
 var _ = require('underscore');
-var connect = require('connect-ensure-login');
-var projectCache = require('./projectCache');
-var log = require('./logger');
-var apiUtils = require('./apiUtils');
-var utils = require('./utils');
-var projectDao = require('./dao/project');
-var Project = require('./models/project');
-var Person = require('./models/person');
-var ResourceLink = require('./models/resourceLink');
+var projectCache = require('../dao/projectCache');
+var log = require('../logger');
+var apiUtils = require('../utils/apiUtils');
+var utils = require('../utils/utils');
+var projectDao = require('../dao/project');
+var Project = require('../models/project');
+var Person = require('../models/person');
+var ResourceLink = require('../models/resourceLink');
 var ApiResponse = apiUtils.ApiResponse;
 
-function Controller(router) {
-    if (!(this instanceof Controller)) {
-        return new Controller(router);
+function ApiController(router) {
+    if (!(this instanceof ApiController)) {
+        return new ApiController(router);
     }
     this.router = router;
 }
 
-// A way to force the ordering of the phases.
-var phase_order = ['pipeline', 'discovery', 'alpha', 'beta', 'live'];
-
-var healthCheckTypes =  {
-    "overall": {label: "Overall"},
-    "commercial": {label: "Commercial"},
-    "engineering": {label: "Engineering"},
-    "ops": {label: "Operations"},
-    "userResearch": {label: "User Research"},
-    "security": {label: "Security"},
-    "delivery": {label: "Delivery"},
-    "data": {label: "Data"}
-}
-
-var sectorTypes =  {
-    "public": {label: "Public"},
-    "private": {label: "Private"}
-}
-
 // JSON data of a project
-Controller.prototype.handleApiProjectId = function(req, res) {
+ApiController.prototype.handleApiProjectId = function(req, res) {
     projectCache.getById(req.params.id, function(err, data) {
         if (data) {
             res.json(data);
@@ -49,7 +29,7 @@ Controller.prototype.handleApiProjectId = function(req, res) {
 };
 
 // JSON data of a project
-Controller.prototype.handleApiAddProject = function(req, res) {
+ApiController.prototype.handleApiAddProject = function(req, res) {
     let newProject = new Project(req.body.name, req.body.description);
     newProject.setLocation(req.body.location);
     newProject.setPhaseHistoryEntry(req.body.phase, "Started", req.body.month, req.body.year);
@@ -84,7 +64,7 @@ Controller.prototype.handleApiAddProject = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiAddResource = function(req, res) {
+ApiController.prototype.handleApiAddResource = function(req, res) {
     let newResource = new ResourceLink(req.body.name, req.body.url);
 
     log.info('Adding a new resource to project ID: ' + req.params.projectId);
@@ -134,7 +114,7 @@ Controller.prototype.handleApiAddResource = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiRemoveResource = function(req, res) {
+ApiController.prototype.handleApiRemoveResource = function(req, res) {
     var resourceId = req.params.resourceId;
 
     log.info('Removing a resource ' + resourceId + 'from project ID: ' + req.params.projectId);
@@ -183,7 +163,7 @@ Controller.prototype.handleApiRemoveResource = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiUpdateResource = function(req, res) {
+ApiController.prototype.handleApiUpdateResource = function(req, res) {
     let resourceData = ResourceLink.fromJson(req.body.resource);
     resourceData.setId(req.params.resourceId);
 
@@ -234,7 +214,7 @@ Controller.prototype.handleApiUpdateResource = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiAddTeamMember = function(req, res) {
+ApiController.prototype.handleApiAddTeamMember = function(req, res) {
     let newPerson = new Person(req.body.name, req.body.role);
     newPerson.setEmail(req.body.email);
     newPerson.setMobile(req.body.mobile);
@@ -288,7 +268,7 @@ Controller.prototype.handleApiAddTeamMember = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
+ApiController.prototype.handleApiUpdateTeamMember = function(req, res) {
     let personData = Person.fromJson(req.body.person);
     personData.setId(req.params.personId);
 
@@ -339,7 +319,7 @@ Controller.prototype.handleApiUpdateTeamMember = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
+ApiController.prototype.handleApiRemoveTeamMember = function(req, res) {
     var personId = req.params.personId;
 
     log.info('Removing a team member ' + personId + 'from project ID: ' + req.params.projectId);
@@ -388,7 +368,7 @@ Controller.prototype.handleApiRemoveTeamMember = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiAddClientTeamMember = function(req, res) {
+ApiController.prototype.handleApiAddClientTeamMember = function(req, res) {
     let newPerson = new Person(req.body.name, req.body.role);
     newPerson.setEmail(req.body.email);
     newPerson.setMobile(req.body.mobile);
@@ -442,7 +422,7 @@ Controller.prototype.handleApiAddClientTeamMember = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiUpdateClientTeamMember = function(req, res) {
+ApiController.prototype.handleApiUpdateClientTeamMember = function(req, res) {
     let personData = Person.fromJson(req.body.person);
     personData.setId(req.params.personId);
 
@@ -493,7 +473,7 @@ Controller.prototype.handleApiUpdateClientTeamMember = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiRemoveClientTeamMember = function(req, res) {
+ApiController.prototype.handleApiRemoveClientTeamMember = function(req, res) {
     var personId = req.params.personId;
 
     log.info('Removing a client team member ' + personId + 'from project ID: ' + req.params.projectId);
@@ -542,7 +522,7 @@ Controller.prototype.handleApiRemoveClientTeamMember = function(req, res) {
  * @param req
  * @param res
  */
-Controller.prototype.handleApiUpdateHealthStatus = function(req, res) {
+ApiController.prototype.handleApiUpdateHealthStatus = function(req, res) {
     var health = req.body.health;
 
     log.info('Changing health status in project ID: ' + req.params.projectId);
@@ -592,7 +572,7 @@ Controller.prototype.handleApiUpdateHealthStatus = function(req, res) {
 };
 
 // JSON data of a project
-Controller.prototype.handleApiEditProject = function(req, res) {
+ApiController.prototype.handleApiEditProject = function(req, res) {
     projectCache.getById(req.params.projectId, function(error, project) {
         if(!project) {
             log.debug('Error updating project. Project with given ID was not found.');
@@ -631,7 +611,7 @@ Controller.prototype.handleApiEditProject = function(req, res) {
 };
 
 // Create or overwrite an entry in phase history
-Controller.prototype.handleApiUpdatePhaseHistory = function(req, res) {
+ApiController.prototype.handleApiUpdatePhaseHistory = function(req, res) {
     projectCache.getById(req.params.projectId, function(error, project) {
         if(!project) {
             log.debug('Error updating project history. Project with given ID was not found.');
@@ -663,7 +643,7 @@ Controller.prototype.handleApiUpdatePhaseHistory = function(req, res) {
 };
 
 // Delete an entry from phase history
-Controller.prototype.handleApiDeletePhaseHistory = function(req, res) {
+ApiController.prototype.handleApiDeletePhaseHistory = function(req, res) {
     projectCache.getById(req.params.projectId, function(error, project) {
         if(!project) {
             log.debug('Error removing from project history. Project with given ID was not found.');
@@ -698,345 +678,14 @@ Controller.prototype.handleApiDeletePhaseHistory = function(req, res) {
 };
 
 // All the data as JSON
-Controller.prototype.handleApi = function(req, res) {
+ApiController.prototype.handleApi = function(req, res) {
     projectCache.getAll(function(err, data) {
         res.json(data);
     });
 };
 
-// Project info
-Controller.prototype.handleProjectIdSlug = function(req, res) {
-    projectCache.getById(req.params.id, function(error, data) {
-        res.render('project', {
-            "data": data,
-            "phase_order": phase_order,
-            "sectorTypes": sectorTypes
-        });
-    });
-};
-
-// Add project form
-Controller.prototype.handleAddProject = function(req, res) {
-    res.render('add-project');
-};
-
-/**
- * Render Edit resources page
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditResources = function (req, res) {
-    var id = req.params.id;
-
-    projectCache.getById(id, function(error, project) {
-        res.render('edit-resources', {
-            projectName: project.name,
-            projectId: id,
-            resources: project.resources
-        });
-    });
-};
-
-/**
- * Render Edit resource form
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditResource = function (req, res) {
-    var projectId = req.params.projectId;
-    var resourceId = req.params.resourceId;
-
-    projectCache.getById(projectId, function(error, project) {
-        var resource = _.find(project.resources, {id: resourceId});
-
-        res.render('edit-resource', {
-            projectName: project.name,
-            projectId: projectId,
-            resource: resource
-        });
-    });
-};
-
-/**
- * Render Edit phase history form
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditPhaseHistory = function (req, res) {
-    var projectId = req.params.projectId;
-
-    projectCache.getById(projectId, function(error, project) {
-        res.render('edit-phase-history', {
-            project: project,
-            phase_order: phase_order
-        });
-    });
-};
-
-/**
- * Render Edit team members page
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditOurTeam = function (req, res) {
-    var id = req.params.id;
-
-    var project = projectCache.getById(id, function(error, project) {
-        res.render('edit-our-team', {
-            projectName: project.name,
-            projectId: id,
-            teamMembers: project.ourTeam
-        });
-    });
-};
-
-/**
- * Render Edit team member page
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditTeamMember = function (req, res) {
-    var projectId = req.params.projectId;
-    var personId = req.params.personId;
-
-    projectCache.getById(projectId, function(error, project) {
-        var person = _.find(project.ourTeam, {id: personId});
-
-        res.render('edit-person', {
-            projectName: project.name,
-            projectId: projectId,
-            person: person
-        });
-    });
-};
-
-/**
- * Render Edit client team members page
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditClientTeam = function (req, res) {
-    var id = req.params.id;
-
-    projectCache.getById(id, function(error, project) {
-        res.render('edit-client-team', {
-            projectName: project.name,
-            projectId: id,
-            teamMembers: project.clientTeam
-        });
-    });
-};
-
-/**
- * Render Edit client team member page
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditClientTeamMember = function (req, res) {
-    var projectId = req.params.projectId;
-    var personId = req.params.personId;
-
-    projectCache.getById(projectId, function(error, project) {
-        var person = _.find(project.clientTeam, {id: personId});
-
-        res.render('edit-client', {
-            projectName: project.name,
-            projectId: projectId,
-            person: person
-        });
-    });
-};
-
-/**
- * Render Edit project health status
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditHealthStatus = function (req, res) {
-    var id = req.params.id;
-
-    projectCache.getById(id, function(error, project) {
-        res.render('edit-health', {
-            project: project,
-            convertDate: utils.convertDate,
-            healthCheckTypes: healthCheckTypes
-        });
-    });
-};
-
-/**
- * Render Edit project health status
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleDisplayHealthStatus = function (req, res) {
-    var id = req.params.id;
-
-    projectCache.getById(id, function(error, project) {
-        var healthHistory = _.chain(project.healthStatusHistory).map(_.values).flatten().sortBy("date").reverse().value();
-
-        res.render('display-health', {
-            project: project,
-            history: healthHistory,
-            convertDate: utils.convertDate,
-            healthCheckTypes: healthCheckTypes
-        });
-    });
-};
-
-/**
- * Render Edit project health status
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleDisplayHealthHistory = function (req, res) {
-    var id = req.params.id;
-
-    projectCache.getById(id, function(error, project) {
-        var healthHistory = _.chain(project.healthStatusHistory).map(_.values).flatten().sortBy("date").reverse().value();
-
-        res.render('display-health-history', {
-            project: project,
-            history: healthHistory,
-            convertDate: utils.convertDate,
-            healthCheckTypes: healthCheckTypes
-        });
-    });
-};
-
-// Edit project form
-Controller.prototype.handleEditProject = function(req, res) {
-    var id = req.params.id;
-    projectCache.getById(id, function(error, project) {
-        res.render('edit-project', {
-            project: project,
-            sectorTypes: sectorTypes
-        });
-    });
-};
-
-/**
- * @param  {String|function} groupBy Name of the field by which the projects will be grouped
- * @param  {String} path Router path, ex: '/location'
- * @param  {String[]} [rowOrder] Order of values by which to group the projects, default: alphabetical
- * @param  {String=} [viewType] Optional view name if groupBy is not a string
- */
-Controller.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder, viewType) {
-    this.router.get(path, connect.ensureLoggedIn(), function(req, res) {
-        var view = viewType ? viewType : groupBy;
-		
-        projectCache.getAll(function(err, projectMap) {
-            var projectList = [];
-
-            _.each(projectMap, function (proj) {
-                projectList.push(proj)
-            });
-
-            projectList = showFinishedProjectsIfRequested(projectList, req.cookies.showFinished);
-            var data = filterPhaseIfPresent(projectList, req.query.phase);
-            data = _.groupBy(data, groupBy);
-            var new_data = indexify(data);
-            var phases = _.countBy(projectList, 'phase');
-            rowOrder = prepareRowOrder(rowOrder, data);
-
-            res.render('index', {
-                "data": new_data,
-                "phase": req.query.phase,
-                "showFinished": req.cookies.showFinished,
-                "counts": phases,
-                "view": view,
-                "row_order": rowOrder,
-                "phase_order": phase_order
-            });
-        });
-    });
-};
-
-
-
-
-/**
- * Prepare row order
- *
- * @param  {String[]} [rowOrder] list that forces the order of values by which the projects are grouped
- * @param  {Object[]} data projects
- * @return {String[]} list showing the order of values by which the projects are grouped
- */
-function prepareRowOrder(rowOrder, data) {
-    if (!rowOrder || rowOrder.length === 0) {
-        rowOrder = [];
-        _.each(data, function(value, key, list) {
-            rowOrder.push(key);
-        });
-        rowOrder.sort();
-    }
-
-    return rowOrder;
-}
-
-/*
-A function to gather the data by
-'phase' and then 'facing' so the
-index.html can spit them out.
-*/
-function indexify(data) {
-    var new_data = {};
-    _.each(data, function(value, key, list) {
-        var item = _.groupBy(value, 'phase');
-        new_data[key] = {};
-        _.each(item, function(v, k, l) {
-            var piece = _.groupBy(v, 'facing');
-            new_data[key][k] = piece;
-        });
-    });
-    return new_data;
-}
-
-// If phaseName was provided, trim projects that don't belong to that phase
-// Otherwise return unmodified data
-function filterPhaseIfPresent(data, phaseName) {
-    if (typeof phaseName !== "undefined" && phaseName !== "all") {
-        data = _.where(data, { "phase": phaseName });
-    }
-    return data;
-}
-
-// If showFinished is falsy, trim unfinished projects
-// Otherwise return unmodified data
-function showFinishedProjectsIfRequested(data, showFinished) {
-    if (!showFinished) {
-        data = _.where(data, { "isFinished": false });
-    }
-    return data;
-}
-
-/**
- * Render Edit project metadata page
- *
- * @param req
- * @param res
- */
-Controller.prototype.handleEditProjectMetadata = function (req, res) {
-    var id = req.params.id;
-    projectCache.getById(id, function(error, project) {
-        res.render('edit-project-metadata', {
-            project: project
-        });
-    });
-};
-
 // Create or overwrite an entry in project metadata
-Controller.prototype.handleApiUpdateProjectMetadata = function(req, res) {
+ApiController.prototype.handleApiUpdateProjectMetadata = function(req, res) {
 	 
   projectCache.getById(req.params.projectId, function(error, project) {
         if(!project) {
@@ -1069,4 +718,4 @@ Controller.prototype.handleApiUpdateProjectMetadata = function(req, res) {
 };
 
 	
-module.exports = Controller;
+module.exports = ApiController;
