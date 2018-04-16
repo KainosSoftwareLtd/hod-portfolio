@@ -24,13 +24,17 @@ SalesController.prototype.handleSalesView = function(req, res) {
         });
 
         if(filter){
+            var searchTerms = filter.split(" ");
+
             projectList = _.filter(projectList, function (project) {
-                return project.customer.toLowerCase().includes(filter.toLowerCase()) || 
-                project.name.toLowerCase().includes(filter.toLowerCase()) || 
-                project.projectMetadata.tags.toLowerCase().includes(filter.toLowerCase()) ||
-                project.sector.toLowerCase().includes(filter.toLowerCase()) ||
-                project.department.toLowerCase().includes(filter.toLowerCase()) ||
-                project.agency.toLowerCase().includes(filter.toLowerCase());
+                var customerMatches = searchTerms.some(term => project.customer.toLowerCase().includes(term.toLowerCase()));
+                var nameMatches = searchTerms.some(term => project.name.toLowerCase().includes(term.toLowerCase()));
+                var tagMatches = searchTerms.some(term => project.projectMetadata.tags.toLowerCase().includes(term.toLowerCase()));
+                var sectorMatches = searchTerms.some(term => project.sector.toLowerCase().includes(term.toLowerCase()));
+                var departmentMatches = searchTerms.some(term => project.department.toLowerCase().includes(term.toLowerCase()));
+                var agencyMatches = searchTerms.some(term => project.agency.toLowerCase().includes(term.toLowerCase()));
+                
+                return customerMatches || nameMatches || tagMatches || sectorMatches || departmentMatches || agencyMatches;
             });
         }
 
