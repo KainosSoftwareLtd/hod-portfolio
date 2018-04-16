@@ -54,7 +54,9 @@ InfoController.prototype.handleProjectIdSlug = function(req, res) {
  * @param res
  */
 InfoController.prototype.handleAddProject = function(req, res) {
-    res.render('add-project');
+    res.render('add-project', {
+        "sectorTypes": sectorTypes
+    });
 };
 
 /**
