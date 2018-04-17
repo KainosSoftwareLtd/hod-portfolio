@@ -1,4 +1,5 @@
   exports.creds = {
+
     // This is your app's 'REPLY URL' in AAD
     returnURL: process.env.AZURE_RETURN_URL || 'http://localhost:8090/auth/openid/return',
 
@@ -38,4 +39,8 @@
     // if you want to use the req object in your verify function for the passport strategy, set passReqToCallback true.
     // for example, if your verify function is like "function(req, profile, done)", passReqToCallback should be set true.
     passReqToCallback: process.env.AZURE_PASS_REQ_TO_CALLBACK || false,
+    
+    // This is allowed for development purposes. If the environment is production this MUST NOT BE true
+    //
+    allowHTTP: process.env.ALLOW_HTTP || true,
 };

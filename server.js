@@ -40,14 +40,14 @@ app.use('/public', express.static(__dirname + '/govuk_modules/govuk_template/ass
 app.use('/public', express.static(__dirname + '/govuk_modules/govuk_frontend_toolkit'));
 app.use('/public/images/icons', express.static(__dirname + '/govuk_modules/govuk_frontend_toolkit/images'));
 
-nunjucks.setup({
+const njk = nunjucks(app, {
     autoescape: true,
     watch: true
-}, app, function(env) {
-    env.addFilter('slugify', function(str) {
+});
+
+njk.env.addFilter('slugify', function (str) {
         return str.replace(/[.,-\/#!$%\^&\*;:{}=\-_`~()’]/g, "").replace(/ +/g, '_').toLowerCase();
     });
-});
 
 // Elements refers to icon folder instead of images folder
 app.use(favicon(path.join(__dirname, 'govuk_modules', 'govuk_template', 'assets', 'images', 'favicon.ico')));
