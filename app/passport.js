@@ -9,7 +9,7 @@ const log = require('./logger');
 const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
 var strategyConfig = {
-  callbackURL: config.creds.returnURL,
+  redirectUrl: config.creds.returnURL,
   realm: config.creds.realm,
   clientID: config.creds.clientID,
   clientSecret: config.creds.clientSecret,
@@ -20,7 +20,8 @@ var strategyConfig = {
   responseType: config.creds.responseType,
   responseMode: config.creds.responseMode,
   validateIssuer: config.creds.validateIssuer,
-  passReqToCallback: config.creds.passReqToCallback
+  passReqToCallback: config.creds.passReqToCallback,
+  allowHttpForRedirectUrl: config.creds.allowHTTP
 };
 
 /**
@@ -28,7 +29,7 @@ var strategyConfig = {
  * @param {any} email Email to mask
  * @returns Masked email
  */
-function maskEmail(email){
+function maskEmail(email) {
   return email.replace(/(?!^).(?=[^@]+@)/g, '*');
 }
 
@@ -37,12 +38,10 @@ if (strategyConfig.loggingLevel) { log.levels("console", strategyConfig.loggingL
 // array to hold logged in users
 var users = [];
 
-var findByEmail = function (email, fn) {
-  log.info('Searching for a user by email: ' + maskEmail(email));
+var findByEmail = function (upn, fn) {
   for (var i = 0, len = users.length; i < len; i++) {
     var user = users[i];
-    if (user.email === email) {
-      log.info('User was found using his email: ' + maskEmail(email));
+    if (user.upn === upn) {
       return fn(user);
     }
   }
@@ -57,18 +56,15 @@ passport.use(new OIDCStrategy(strategyConfig,
     // user's email may be returned in "unique_name" field instead of "email"
     var email = profile._json.email || profile._json.unique_name
     if (!email) {
-      log.error("No email found in the user's profile data returned by the identity provider");
       return done(new Error("No email found"), null);
     }
 
     process.nextTick(function () {
-      findByEmail(email, function(user){
+      findByEmail(email, function (user) {
         if (!user) {
-          log.info("Registering a new user using his email: " + maskEmail(email));
           users.push(profile);
           return done(null, profile);
         }
-        log.info("Authenticating an existing user: " + maskEmail(email));
         return done(null, user);
       });
     });
@@ -76,13 +72,11 @@ passport.use(new OIDCStrategy(strategyConfig,
 ));
 
 passport.serializeUser(function (user, done) {
-  log.info("Serializing user: " + maskEmail(user.email));
-  done(null, user.email);
+  done(null, user.upn);
 });
 
-passport.deserializeUser(function (email, done) {
-  log.info("Deserializing user: " + maskEmail(email));
-  findByEmail(email, function (user) {
+passport.deserializeUser(function (upn, done) {
+  findByEmail(upn, function (user) {
     done(null, user);
   });
 });
