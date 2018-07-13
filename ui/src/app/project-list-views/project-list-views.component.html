@@ -1,0 +1,7 @@
+<button (click)="setSelectedView(SelectedView.default)">Default View</button>
+
+<button (click)="setSelectedView(SelectedView.detailed)">Detailed View</button>
+
+<app-project-list-view [hidden]="selectedView !== SelectedView.default"></app-project-list-view>
+
+<app-project-list-detailed-view [hidden]="selectedView !== SelectedView.detailed"></app-project-list-detailed-view>
