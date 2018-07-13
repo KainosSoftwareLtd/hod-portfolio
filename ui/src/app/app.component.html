@@ -1,5 +1,7 @@
 <app-projects-overview></app-projects-overview>
 
-<app-project-list-view></app-project-list-view>
+<button id="display-list" ng-model="listClicked">Default view</button>
+<button id="display-detailed-list" ng-model="detailedListClicked">Detailed view</button>
+<app-project-list-view ng-show="listClicked"></app-project-list-view>
 
-<app-project-list-detailed-view></app-project-list-detailed-view>
+<app-project-list-detailed-view ng-show="detailedListClicked"></app-project-list-detailed-view>
