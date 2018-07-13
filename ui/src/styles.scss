@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+//  layout ---------------------------------------
+html {
+  width:100%;
+  margin:0px;
+  font-family: 'Open Sans', sans-serif;
+
+  body {
+    width:100%;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+}
+
+
+//  colour ---------------------------------------
+@import "colours";
+
+//  flags ---------------------------------------
+   $red-flag: #a8453e;
+$yellow-flag: #d8a861;
+ $green-flag: #5dbd76;
+
+
+//  buttons ---------------------------------------
+  $btn-red: #a7333b;//
+ $btn-blue: #2555a0;//
+$btn-green: #5a9e60;//
+ $btn-grey: #c9c9c9;//
+
+//    tiles ---------------------------------------
+   $tile-red: #b23b30;//
+ $tile-green: #5dbd76;//
+ $tile-amber: #cf943e;//
+
+
+//    forms ---------------------------------------
+
+
+//    buttons ---------------------------------------
+.button {
+  width:90px;
+  height:40px;
+  text-align: center;
+  font-weight: bold;
+}
+.btn-red {
+  background-color: $btn-red;
+  color: #fff;
+}
+.btn-green {
+  background-color: $btn-green;
+  color: #fff;
+}
+.btn-blue {
+  background-color: $btn-blue;
+  color: #fff;
+}
+.btn-grey {
+  background-color: $btn-grey;
+}
+
+
+//  fonts ---------------------------------------
+H1, H2, H3 {
+
+}
+h1 {
+  font-size:24;
+}
+h2 {
+  font-size:18;
+}
+h1 {
+  font-size:14;
+}
+
+
+//   header ---------------------------------------
+header {
+  width: 100%;
+  height: 101px;
+  color: #fff;
+  background: $primary-blue;
+  padding: 0.5em 3% 2em 3%;
+
+  a {
+    text-decoration: none;
+    background: $light-blue;
+    color: #fff;
+    padding:1%;
+  }
+}
+
+
+//   Navigation ---------------------------------------
+@import "navigation";
+
+
+//   Navigation ---------------------------------------
+.grey-grid {
+  background: $light-grey;
+  width: 100%;
+  padding: 0 2% 3% 2%;
+
+  li {
+    display: inline-block;
+    list-style: none;
+    width:16%;
+
+    h3, div {
+      text-align: center;
+    }
+
+    div {
+      font-size: 2em;
+    }
+  }
+}
+
+
+@import "tables";

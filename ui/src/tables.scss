@@ -1,0 +1,22 @@
+@import "colours";
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid $dark-grey;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background: $primary-blue;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: $light-grey;
+}

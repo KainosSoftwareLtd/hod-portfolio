@@ -1,0 +1,20 @@
+<table>
+    <tr>
+        <th id="project-phase">Phase</th>
+        <th id="project-sector">Sector</th>
+        <th id="project-department">Department</th>
+        <th id="project-agency">Agency</th>
+        <th id="project-accountName">Account name</th>
+        <th id="project-name">Project</th>
+        <th id="project-themes">Themes</th>
+    </tr>
+    <tr *ngFor="let project of projects">
+        <td id="{{ 'project-' + project.id + '-phase' }}">{{ project.phase }}</td>
+        <td id="{{ 'project-' + project.id + '-sector' }}">{{ project.sector }}</td>
+        <td id="{{ 'project-' + project.id + '-department' }}">{{ project.department }}</td>
+        <td id="{{ 'project-' + project.id + '-agency' }}">{{ project.agency }}</td>
+        <td id="{{ 'project-' + project.id + '-accountName' }}">{{ project.accountName }}</td>
+        <td id="{{ 'project-' + project.id + '-name' }}">{{ project.name }}</td>
+        <td id="{{ 'project-' + project.id + '-themes' }}">{{ project.themes }}</td>
+    </tr>
+</table>

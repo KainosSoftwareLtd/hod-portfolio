@@ -1,0 +1,28 @@
+<table>
+    <tr>
+        <th id="project-phase">Phase</th>
+        <th id="project-name">Project</th>
+        <th id="project-completedDate">Completed date</th>
+        <th id="project-overall">Overall</th>
+        <th id="project-mgnt">Mgnt</th>
+        <th id="project-consulting">Consulting</th>
+        <th id="project-design">Design</th>
+        <th id="project-engineering">Engineering</th>
+        <th id="project-ops">Ops</th>
+        <th id="project-security">Security</th>
+        <th id="project-data">Data</th>
+    </tr>
+    <tr *ngFor="let project of projects">
+        <td id="{{ 'project-' + project.id + '-phase' }}">{{ project.phase }}</td>
+        <td id="{{ 'project-' + project.id + '-name'}}">{{ project.name }}</td>
+        <td id="{{ 'project-' + project.id + '-completedDate' }}">{{ project.completedDate | date : "shortDate" }}</td>
+        <td id="{{ 'project-' + project.id + '-overall' }}">{{ project.overall }}</td>
+        <td id="{{ 'project-' + project.id + '-mgnt' }}">{{ project.mgnt }}</td>
+        <td id="{{ 'project-' + project.id + '-consulting' }}">{{ project.consulting }}</td>
+        <td id="{{ 'project-' + project.id + '-design' }}">{{ project.design }}</td>
+        <td id="{{ 'project-' + project.id + '-engineering' }}">{{ project.engineering }}</td>
+        <td id="{{ 'project-' + project.id + '-ops' }}">{{ project.ops }}</td>
+        <td id="{{ 'project-' + project.id + '-security' }}">{{ project.security }}</td>
+        <td id="{{ 'project-' + project.id + '-data' }}">{{ project.data }}</td>
+    </tr>
+</table>
