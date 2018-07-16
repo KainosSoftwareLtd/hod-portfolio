@@ -6,7 +6,7 @@ import { ProjectListViewComponent } from './project-list-view/project-list-view.
 import { ProjectListDetailedViewComponent } from './project-list-detailed-view/project-list-detailed-view.component';
 import { ProjectsOverviewComponent } from './projects-overview/projects-overview.component';
 import { ProjectListViewsComponent } from './project-list-views/project-list-views.component';
-import { PageHeaderComponent } from './page-header/page-header.component';
+import { HeaderComponent } from './header/header.component';
 import { AddAProjectComponent } from './add-a-project/add-a-project.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { OverviewComponent } from './overview/overview.component';
@@ -18,7 +18,7 @@ import { OverviewComponent } from './overview/overview.component';
     ProjectListDetailedViewComponent,
     ProjectsOverviewComponent,
     ProjectListViewsComponent,
-    PageHeaderComponent,
+    HeaderComponent,
     AddAProjectComponent,
     OverviewComponent
   ],

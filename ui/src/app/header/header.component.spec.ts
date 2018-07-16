@@ -3,26 +3,28 @@ import { By } from '@angular/platform-browser';
 
 import { RouterLinkDirectiveStub } from '../router-link-directive-stub.directive';
 
-import { PageHeaderComponent } from './page-header.component';
+import { HeaderComponent } from './header.component';
 
-describe('PageHeaderComponent', () => {
-  let component: PageHeaderComponent;
-  let fixture: ComponentFixture<PageHeaderComponent>;
+describe('HeaderComponent', () => {
+  let component: HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
+  let el;
 
   let linkDebugElements;
   let routerLinks;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RouterLinkDirectiveStub, PageHeaderComponent ]
+      declarations: [ RouterLinkDirectiveStub, HeaderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PageHeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    el = fixture.nativeElement;
 
     // find DebugElements with an attached RouterLinkStubDirective
     linkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
@@ -31,12 +33,16 @@ describe('PageHeaderComponent', () => {
     routerLinks = linkDebugElements.map(de => de.injector.get(RouterLinkDirectiveStub));
   });
 
-  it('has home link', () => {
+  it('renders app title', () => {
+    expect(el.querySelector('header h1').textContent).toContain('Project Dashboard');
+  });
+
+  it('has got home link', () => {
     expect(routerLinks.length).toBe(1, 'should have 1 routerLink');
     expect(routerLinks[0].linkParams).toBe('/overview');
   });
 
-  it('navigates to overview on home click', () => {
+  it('navigates to landing page on home click', () => {
     const homeLinkDebugElement = linkDebugElements[0];
     const homeLink = routerLinks[0];
 
