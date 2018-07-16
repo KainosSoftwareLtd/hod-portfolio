@@ -1,6 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
 import { ProjectListViewsComponent } from './project-list-views/project-list-views.component';
 import { ProjectListViewComponent } from './project-list-view/project-list-view.component';
 import { ProjectListDetailedViewComponent } from './project-list-detailed-view/project-list-detailed-view.component';
@@ -11,6 +12,7 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
+        PageHeaderComponent,
         ProjectListViewsComponent,
         ProjectListViewComponent,
         ProjectListDetailedViewComponent,
