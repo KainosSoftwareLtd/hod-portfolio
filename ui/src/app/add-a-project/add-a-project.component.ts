@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+
 import { Project } from '../project';
 import { ProjectService } from '../project.service';
 
@@ -9,6 +10,7 @@ import { ProjectService } from '../project.service';
 })
 export class AddAProjectComponent implements OnInit {
 
+  project: Project = <Project>{}
 
   constructor(private projectService: ProjectService) { }
 
@@ -21,6 +23,6 @@ export class AddAProjectComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
 
 }

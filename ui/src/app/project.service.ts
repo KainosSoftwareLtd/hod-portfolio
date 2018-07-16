@@ -8,7 +8,7 @@ import { PROJECTS } from './project-data';
 })
 export class ProjectService {
 
- projectArray: Project[];
+ projectArray: Project[] = [];
 
  // this doesn't work
  /*PROJECTS.foreach(function(project)
