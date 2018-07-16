@@ -39,10 +39,10 @@ describe('HeaderComponent', () => {
 
   it('has got home link', () => {
     expect(routerLinks.length).toBe(1, 'should have 1 routerLink');
-    expect(routerLinks[0].linkParams).toBe('/overview');
+    expect(routerLinks[0].linkParams).toBe('/home');
   });
 
-  it('navigates to landing page on home click', () => {
+  it('navigates to home page on home link click', () => {
     const homeLinkDebugElement = linkDebugElements[0];
     const homeLink = routerLinks[0];
 
@@ -51,6 +51,6 @@ describe('HeaderComponent', () => {
     homeLinkDebugElement.triggerEventHandler('click', null);
     fixture.detectChanges();
 
-    expect(homeLink.navigatedTo).toBe('/overview');
+    expect(homeLink.navigatedTo).toBe('/home');
   });
 });

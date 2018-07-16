@@ -8,8 +8,8 @@ import { ProjectsOverviewComponent } from './projects-overview/projects-overview
 import { ProjectListViewsComponent } from './project-list-views/project-list-views.component';
 import { HeaderComponent } from './header/header.component';
 import { AddAProjectComponent } from './add-a-project/add-a-project.component';
-import { AppRoutingModule } from './/app-routing.module';
-import { OverviewComponent } from './overview/overview.component';
+import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { OverviewComponent } from './overview/overview.component';
     ProjectListViewsComponent,
     HeaderComponent,
     AddAProjectComponent,
-    OverviewComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
