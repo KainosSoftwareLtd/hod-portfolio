@@ -6,6 +6,7 @@ import { ProjectListViewComponent } from './project-list-view/project-list-view.
 import { ProjectListDetailedViewComponent } from './project-list-detailed-view/project-list-detailed-view.component';
 import { ProjectsOverviewComponent } from './projects-overview/projects-overview.component';
 import { ProjectListViewsComponent } from './project-list-views/project-list-views.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { ProjectListViewsComponent } from './project-list-views/project-list-vie
     ProjectListViewComponent,
     ProjectListDetailedViewComponent,
     ProjectsOverviewComponent,
-    ProjectListViewsComponent
+    ProjectListViewsComponent,
+    PageHeaderComponent
   ],
   imports: [
     BrowserModule
