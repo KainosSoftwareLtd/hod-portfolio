@@ -16,4 +16,6 @@ export class Project {
     agency: string;
     accountName: string;
     themes: string;
+    //description: string;
+    //manager: string;
 }

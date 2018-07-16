@@ -1,10 +1,23 @@
 <h1>Add a project</h1>
 
 <div>
-  <label>Project name
-    <input [(ngModel)]="project.name" placeholder="name">
+  <label>Account
+    <input [(ngModel)]="project.accountName" placeholder="accountName">
+</div><!--
+<div>
+  <label>Project
+      <input [(ngModel)]="project.name" placeholder="name">
+    </label>
+  </div>
+  <label>Description
+    <textarea[(ngModel)]="project.description" placeholder="description"></textarea>
   </label>
 </div>
+<div>
+  <label>Manager
+    <input [(ngModel)]="project.manager" placeholder="manager">
+  </label>
+</div>-->
 <div>
   <button (click)="addProject(project)">Add project</button>
 </div>
