@@ -1,7 +1,9 @@
-<button id="default-view" (click)="setSelectedView(ProjectListView.default)">Default View</button>
+<div>
+  <button id="default-view" (click)="setSelectedView(ProjectListView.default)">Default View</button>
 
-<button id="detailed-view" (click)="setSelectedView(ProjectListView.detailed)">Detailed View</button>
+  <button id="detailed-view" (click)="setSelectedView(ProjectListView.detailed)">Detailed View</button>
 
-<app-project-list-view id="project-list-view" [hidden]="selectedView !== ProjectListView.default"></app-project-list-view>
+  <app-project-list-view id="project-list-view" [hidden]="selectedView !== ProjectListView.default"></app-project-list-view>
 
-<app-project-list-detailed-view id="project-list-detailed-view" [hidden]="selectedView !== ProjectListView.detailed"></app-project-list-detailed-view>
+  <app-project-list-detailed-view id="project-list-detailed-view" [hidden]="selectedView !== ProjectListView.detailed"></app-project-list-detailed-view>
+</div>

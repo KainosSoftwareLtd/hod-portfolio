@@ -10,6 +10,7 @@ import { HeaderComponent } from './header/header.component';
 import { AddAProjectComponent } from './add-a-project/add-a-project.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
+import { LinksComponent } from './links/links.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HomeComponent } from './home/home.component';
     ProjectListViewsComponent,
     HeaderComponent,
     AddAProjectComponent,
-    HomeComponent
+    HomeComponent,
+    LinksComponent
   ],
   imports: [
     BrowserModule,
