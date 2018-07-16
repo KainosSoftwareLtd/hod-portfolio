@@ -7,6 +7,7 @@ import { ProjectListDetailedViewComponent } from '../project-list-detailed-view/
 describe('ProjectListViewsComponent', () => {
   let component: ProjectListViewsComponent;
   let fixture: ComponentFixture<ProjectListViewsComponent>;
+  let el;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,9 +20,30 @@ describe('ProjectListViewsComponent', () => {
     fixture = TestBed.createComponent(ProjectListViewsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    el = fixture.nativeElement;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('renders default-view by default', () => {
+    expect(el.querySelector('#project-list-view').hidden).toBe(false);
+    expect(el.querySelector('#project-list-detailed-view').hidden).toBe(true);
+  });
+
+  it('renders detailed-view after selecting it', () => {
+    el.querySelector('#detailed-view').click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('#project-list-view').hidden).toBe(true);
+    expect(el.querySelector('#project-list-detailed-view').hidden).toBe(false);
+  });
+
+  it('renders default-view after selecting it back', () => {
+    el.querySelector('#detailed-view').click();
+    fixture.detectChanges();
+
+    el.querySelector('#default-view').click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('#project-list-view').hidden).toBe(false);
+    expect(el.querySelector('#project-list-detailed-view').hidden).toBe(true);
   });
 });

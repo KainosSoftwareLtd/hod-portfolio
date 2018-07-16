@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { SelectedView } from './selectedView';
+import { ProjectListView } from './project-list-view';
 
 @Component({
   selector: 'app-project-list-views',
@@ -9,17 +9,17 @@ import { SelectedView } from './selectedView';
 })
 export class ProjectListViewsComponent implements OnInit {
 
-  SelectedView = SelectedView;
+  ProjectListView = ProjectListView;
 
-  selectedView: SelectedView;
+  selectedView: ProjectListView;
 
   constructor() { }
 
   ngOnInit() {
-    this.selectedView = SelectedView.default;
+    this.selectedView = ProjectListView.default;
   }
 
-  setSelectedView(selectedView: SelectedView) {
+  setSelectedView(selectedView: ProjectListView) {
     this.selectedView = selectedView;
   }
 
