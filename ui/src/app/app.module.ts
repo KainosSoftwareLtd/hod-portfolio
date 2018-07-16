@@ -10,6 +10,7 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { AddAProjectComponent } from './add-a-project/add-a-project.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { OverviewComponent } from './overview/overview.component';
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { OverviewComponent } from './overview/overview.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,    
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,3 +1,10 @@
-<p>
-  add-a-project works!
-</p>
+<h1>Add a project</h1>
+
+<div>
+  <label>Project name
+    <input [(ngModel)]="project.name" placeholder="name">
+  </label>
+</div>
+<div>
+  <button (click)="addProject(project)">Add project</button>
+</div>
