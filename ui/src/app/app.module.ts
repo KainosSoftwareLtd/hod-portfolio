@@ -10,7 +10,6 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { AddAProjectComponent } from './add-a-project/add-a-project.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { OverviewComponent } from './overview/overview.component';
-import { RouterLinkDirectiveStubDirective } from './router-link-directive-stub.directive';
 
 @NgModule({
   declarations: [
@@ -21,8 +20,7 @@ import { RouterLinkDirectiveStubDirective } from './router-link-directive-stub.d
     ProjectListViewsComponent,
     PageHeaderComponent,
     AddAProjectComponent,
-    OverviewComponent,
-    RouterLinkDirectiveStubDirective
+    OverviewComponent
   ],
   imports: [
     BrowserModule,
