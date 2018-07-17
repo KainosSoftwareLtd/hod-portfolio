@@ -38,15 +38,7 @@ export class ProjectService {
 
   constructor() { }
 
-  getProjects(): Project[] {
-    this.getS3Bucket().listObjects(params, function (err, data) {
-      if (err) {
-        console.log('There was an error getting your files: ' + err);
-        return;
-      }
-    
-      data.contents;
-    });
+  getProjects(): Project[] {   
     return this.projectArray;
   }
 
