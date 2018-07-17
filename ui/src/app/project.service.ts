@@ -18,14 +18,14 @@ const params = {
   Key: 'gov-project-dashboard-dev/',
 };
  
-this.getS3Bucket().listObjects(params, function (err, data) {
+/*this.getS3Bucket().listObjects(params, function (err, data) {
   if (err) {
     console.log('There was an error getting your files: ' + err);
     return;
   }
 
   data.contents;
-});
+});*/
 
 @Injectable({
   providedIn: 'root'
