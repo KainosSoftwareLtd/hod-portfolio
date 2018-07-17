@@ -32,7 +32,6 @@ this.getS3Bucket().listObjects(params, function (err, data) {
 })
 export class ProjectService {
 
-  
 
   projectArray: Project[] = PROJECTS;
 
