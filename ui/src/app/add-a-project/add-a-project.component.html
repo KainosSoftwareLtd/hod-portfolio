@@ -88,4 +88,24 @@
 
   </div>
 
+  <h2>People</h2>
+  <div formArrayName="people">
+
+    <div *ngFor="let person of projectPeople.controls; let i=index" [formGroupName]="i">
+
+      <mat-form-field>
+        <input matInput placeholder="forename" formControlName="forename">
+      </mat-form-field>
+
+      <mat-form-field>
+          <input matInput placeholder="surname" formControlName="surname">
+        </mat-form-field>
+
+        <button mat-raised-button color="warn" (click)="deletePerson(i)">Remove</button>
+
+    </div>
+
+  </div>
+  <button mat-raised-button color="primary" (click)="addPerson()">Add person</button>
+
 </form>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { prepareProfile } from 'selenium-webdriver/firefox';
 
 @Component({
   selector: 'app-add-a-project',
@@ -29,10 +30,29 @@ export class AddAProjectComponent implements OnInit {
         beta: this.fb.group(phase),
         betaToLive: this.fb.group(phase),
         live: this.fb.group(phase)
-      })
+      }),
+      people: this.fb.array([]),
     });
+
 
     this.myForm.valueChanges.subscribe(console.log);
   }
 
+  
+  get projectPeople() {
+    return this.myForm.get('people') as FormArray
+  }
+
+  addPerson() {
+    const person = this.fb.group({
+      forename: '',
+      surname: '',
+    })
+
+    this.projectPeople.push(person);
+  }
+
+  deletePerson(i) {
+    this.projectPeople.removeAt(i);
+  }
 }
