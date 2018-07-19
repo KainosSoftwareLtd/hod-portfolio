@@ -39,6 +39,7 @@ export class AddAProjectComponent implements OnInit {
       agency: '',
       usefulLinks: this.fb.array([]),
       kainosPeople: this.fb.array([]),
+      clientPeople: this.fb.array([]),
     });
 
     this.projectPhases.forEach(p => this.addPhase(p));
@@ -50,6 +51,10 @@ export class AddAProjectComponent implements OnInit {
 
   get getKainosPeople() {
     return this.myForm.get('kainosPeople') as FormArray;
+  }
+
+  get getClientPeople() {
+    return this.myForm.get('clientPeople') as FormArray;
   }
 
   get getUsefulLinks() {
@@ -75,6 +80,18 @@ export class AddAProjectComponent implements OnInit {
 
   deleteKainosPerson(i) {
     this.getKainosPeople.removeAt(i);
+  }
+
+  addClientPerson() {
+    const person = this.fb.group({
+      name: '',
+      role: '',
+    });
+    this.getClientPeople.push(person);
+  }
+
+  deleteClientPerson(i) {
+    this.getClientPeople.removeAt(i);
   }
 
   addUsefulLink() {

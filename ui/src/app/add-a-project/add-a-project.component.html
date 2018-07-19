@@ -135,6 +135,23 @@
       </div>
       <button mat-raised-button (click)="addKainosPerson()">Add Person</button>
     </section>
+
+    <section id="clientPeople">
+      <h3>Client Team</h3>
+      <div formArrayName="clientPeople">
+        <div *ngFor="let clientPerson of getClientPeople.controls; let i = index" [formGroupName]="i">
+          <mat-form-field>
+            <input matInput placeholder="name" formControlName="name">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="role" formControlName="role">
+          </mat-form-field>
+          <button mat-raised-button (click)="deleteClientPerson(i)">Remove</button>
+        </div>
+      </div>
+      <button mat-raised-button (click)="addClientPerson()">Add Person</button>
+    </section>
+
   </section>
 
   <div>
