@@ -14,18 +14,27 @@ export class AddAProjectComponent implements OnInit {
   project: Project = <Project>{}
   myForm: FormGroup;
 
-  constructor(private projectService: ProjectService) { }
+  constructor(private projectService: ProjectService, private fb: FormBuilder) { }
 
-  addProject(project: Project) {
-    if(project)
+  addProject(myForm: FormGroup) {
+    try{
+    
+      this.project.accountName = this.myForm.value('accountName');
+    
+
+      if(this.project)
     {
-      this.projectService.addProject(project);
+      this.projectService.addProject(this.project);
     }
+  }catch(err)
+  {
+
+  }
   };
 
   ngOnInit() {
     this.myForm = this.fb.group({
-      name: ''
+      accountName: ''
     });
 
     this.myForm.valueChanges.subscribe(console.log);

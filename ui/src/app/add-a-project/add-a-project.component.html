@@ -5,13 +5,15 @@
   Value: {{ myForm.value | json }}
 
   <hr>
-
-  <mat-form-field>
-    <input matInput placeholder="name" formControlName="name">
-  </mat-form-field>
+  <div>
+    <h2>Account</h2>
+    <mat-form-field>
+      <input matInput placeholder="account" formControlName="accountName">
+    </mat-form-field>
+  </div>
 
 </form>
-<h1>Add a project</h1>
+<!--<h1>Add a project</h1>
 
 <div>
   <h2>Account</h2>
@@ -93,7 +95,7 @@
 <div>
   <h2>Agency</h2>
     <input [(ngModel)]="project.agency" placeholder="Agency"> 
-</div>
+</div>-->
 
 <div>
   <button (click)="addProject(project)">Add project</button>
