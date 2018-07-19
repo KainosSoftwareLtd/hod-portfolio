@@ -6,8 +6,56 @@
 
   <hr>
 
-  <mat-form-field>
-    <input matInput placeholder="name" formControlName="name">
-  </mat-form-field>
+  <div>
+    <mat-form-field>
+      <input matInput placeholder="Account" formControlName="account">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <input matInput placeholder="Project" formControlName="project">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <input matInput placeholder="Description" formControlName="description">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <input matInput placeholder="Manager" formControlName="manager">
+    </mat-form-field>
+  </div>
+
+  <h3>Project phase</h3>
+
+  <div formGroupName="alpha">
+
+    Alpha
+
+    <mat-form-field>
+      <input matInput placeholder="startDate" formControlName="startDate">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="endDate" formControlName="endDate">
+    </mat-form-field>
+  </div>
+
+  <div formGroupName="beta">
+
+    Beta
+
+    <mat-form-field>
+      <input matInput placeholder="startDate" formControlName="startDate">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="endDate" formControlName="endDate">
+    </mat-form-field>
+  </div>
 
 </form>
