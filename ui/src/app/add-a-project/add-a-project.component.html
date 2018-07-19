@@ -1,3 +1,16 @@
+<h2>Add a project</h2>
+
+<form [formGroup]="myForm">
+
+  Value: {{ myForm.value | json }}
+
+  <hr>
+
+  <mat-form-field>
+    <input matInput placeholder="name" formControlName="name">
+  </mat-form-field>
+
+</form>
 <h1>Add a project</h1>
 
 <div>

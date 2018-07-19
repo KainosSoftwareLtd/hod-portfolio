@@ -3,11 +3,11 @@ import { By } from '@angular/platform-browser';
 
 import { RouterLinkDirectiveStub } from '../router-link-directive-stub.directive';
 
-import { HeaderComponent } from './header.component';
+import { LinksComponent } from './links.component';
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+describe('LinksComponent', () => {
+  let component: LinksComponent;
+  let fixture: ComponentFixture<LinksComponent>;
   let el;
 
   let linkDebugElements;
@@ -15,13 +15,13 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RouterLinkDirectiveStub, HeaderComponent ]
+      declarations: [ LinksComponent, RouterLinkDirectiveStub ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(LinksComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     el = fixture.nativeElement;
@@ -33,24 +33,21 @@ describe('HeaderComponent', () => {
     routerLinks = linkDebugElements.map(de => de.injector.get(RouterLinkDirectiveStub));
   });
 
-  it('renders app title', () => {
-    expect(el.querySelector('header h1').textContent).toContain('Project Dashboard');
-  });
-
-  it('has got home link', () => {
+  it('has got \'Add a project\' link', () => {
     expect(routerLinks.length).toBe(1, 'should have 1 routerLink');
-    expect(routerLinks[0].linkParams).toBe('/home');
+    expect(routerLinks[0].linkParams).toBe('/add-a-project');
+    expect(el.querySelector('#add-a-project-link').textContent).toEqual('Add a project');
   });
 
-  it('navigates to home page on \'Home\' click', () => {
-    const homeLinkDebugElement = linkDebugElements[0];
-    const homeLink = routerLinks[0];
+  it('navigates to add a project page on \'Add a project\' click', () => {
+    const addAProjectLinkDebugElement = linkDebugElements[0];
+    const addAProjectLink = routerLinks[0];
 
-    expect(homeLink.navigatedTo).toBeNull('Should not have navigated yet');
+    expect(addAProjectLink.navigatedTo).toBeNull('Should not have navigated yet');
 
-    homeLinkDebugElement.triggerEventHandler('click', null);
+    addAProjectLinkDebugElement.triggerEventHandler('click', null);
     fixture.detectChanges();
 
-    expect(homeLink.navigatedTo).toBe('/home');
+    expect(addAProjectLink.navigatedTo).toBe('/add-a-project');
   });
 });

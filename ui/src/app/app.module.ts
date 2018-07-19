@@ -1,6 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule} from '@angular/material';
+
 import { AppComponent } from './app.component';
 import { ProjectListViewComponent } from './project-list-view/project-list-view.component';
 import { ProjectListDetailedViewComponent } from './project-list-detailed-view/project-list-detailed-view.component';
@@ -8,8 +11,10 @@ import { ProjectsOverviewComponent } from './projects-overview/projects-overview
 import { ProjectListViewsComponent } from './project-list-views/project-list-views.component';
 import { HeaderComponent } from './header/header.component';
 import { AddAProjectComponent } from './add-a-project/add-a-project.component';
-import { AppRoutingModule } from './/app-routing.module';
-import { OverviewComponent } from './overview/overview.component';
+import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './home/home.component';
+import { LinksComponent } from './links/links.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- NgModel lives here
 
 @NgModule({
@@ -21,13 +26,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- NgMode
     ProjectListViewsComponent,
     HeaderComponent,
     AddAProjectComponent,
-    OverviewComponent
+    HomeComponent,
+    LinksComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,    
-    FormsModule,
-    ReactiveFormsModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]
