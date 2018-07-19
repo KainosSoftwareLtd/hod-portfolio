@@ -16,10 +16,27 @@
   </label>
 </div>
 <div>
-  <label>Manager
-    <input [(ngModel)]="project.manager" placeholder="manager">
+  <label>Department
+    <input [(ngModel)]="project.department" placeholder="department">
+  </label>
+</div><div>
+  <label>Agency
+    <input [(ngModel)]="project.agency" placeholder="agency">
   </label>
 </div>
+<!--<div>
+  <label>Sector
+    <input [(ngModel)]="project.sector" placeholder="sector">
+    <input type="radio"
+       [(ng-model)]="project.sector"
+       value="Private"
+       ng-value="private">
+       <input type="radio"
+       [(ng-model)]="project.sector"
+       value="Public"
+       ng-value="public">
+  </label>
+</div>-->
 <div>
   <button (click)="addProject(project)">Add project</button>
 </div>

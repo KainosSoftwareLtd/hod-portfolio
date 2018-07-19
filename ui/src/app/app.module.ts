@@ -10,7 +10,7 @@ import { HeaderComponent } from './header/header.component';
 import { AddAProjectComponent } from './add-a-project/add-a-project.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { OverviewComponent } from './overview/overview.component';
-import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- NgModel lives here
 
 @NgModule({
   declarations: [
@@ -26,7 +26,8 @@ import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
   imports: [
     BrowserModule,
     AppRoutingModule,    
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -18,6 +18,4 @@ export class Project {
     themes: string;
     description: string;
     manager: string;
-    alphaStartDate: Date;
-    alphaEndDate: Date;
 }
