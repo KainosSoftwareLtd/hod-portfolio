@@ -14,20 +14,22 @@ export class AddAProjectComponent implements OnInit {
 
   ngOnInit() {
 
-    const phase = this.fb.group({
+    const phase = {
       startDate: '',
       endDate: ''
-    });
+    };
 
     this.myForm = this.fb.group({
       account: '',
       project: '',
       description: '',
       manager: '',
-      alpha: phase,
-      beta: phase,
-      betaToLive: phase,
-      live: phase
+      phases: this.fb.group({
+        alpha: this.fb.group(phase),
+        beta: this.fb.group(phase),
+        betaToLive: this.fb.group(phase),
+        live: this.fb.group(phase)
+      })
     });
 
     this.myForm.valueChanges.subscribe(console.log);
