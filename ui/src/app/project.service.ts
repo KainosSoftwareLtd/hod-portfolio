@@ -8,9 +8,15 @@ import { PROJECTS } from './project-data';
 })
 export class ProjectService {
 
+  projects: Project[] = PROJECTS;
+
   constructor() { }
 
   getProjects(): Project[] {
-    return PROJECTS;
+    return this.projects;
+  }
+
+  addProject(project: Project) {
+    this.projects.push(project);
   }
 }

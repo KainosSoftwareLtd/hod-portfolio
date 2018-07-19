@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { prepareProfile } from 'selenium-webdriver/firefox';
+
+import { Project } from '../project';
+import { ProjectService } from '../project.service';
 
 @Component({
   selector: 'app-add-a-project',
@@ -17,7 +21,7 @@ export class AddAProjectComponent implements OnInit {
 
   myForm: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private router: Router, private projectService: ProjectService) { }
 
   ngOnInit() {
 
@@ -43,6 +47,12 @@ export class AddAProjectComponent implements OnInit {
     });
 
     this.projectPhases.forEach(p => this.addPhase(p));
+  }
+
+  onSave() {
+    const project: Project = this.myForm.value as Project;
+    this.projectService.addProject(project);
+    this.router.navigateByUrl('/home');
   }
 
   get getPhases() {
