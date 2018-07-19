@@ -2,7 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule} from '@angular/material';
+import { MatInputModule } from '@angular/material';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTableModule } from '@angular/material/table';
 
 import { AppComponent } from './app.component';
 import { ProjectListViewComponent } from './project-list-view/project-list-view.component';
@@ -33,7 +35,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatRadioModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,106 +6,140 @@
 
   <hr>
 
+  <section id="general">
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Account Name" formControlName="accountName">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Project Name" formControlName="projectName">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Description" formControlName="description">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Manager" formControlName="manager">
+      </mat-form-field>
+    </div>
+
+  </section>
+
+  <section id="projectPhases">
+
+    <h3>Project phases</h3>
+
+    <div formArrayName="phases">
+      <table>
+        <tr>
+          <th>Phase</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+        </tr>
+        <tr *ngFor="let phase of getPhases.controls; let i = index" [formGroupName]="i">
+          <td>{{ phase.get('name').value }}</td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Start Date" formControlName="startDate">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="End Date" formControlName="endDate">
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </section>
+
+  <section id="riskLevel">
+
+    <h3>Risk level</h3>
+
+    <div>
+      <mat-radio-group formControlName="riskLevel">
+        <mat-radio-button *ngFor="let riskLevel of riskLevels" [value]="riskLevel">
+          {{ riskLevel }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+  </section>
+
+  <section id="furtherProjectInfo">
+    <h3>Further project info:</h3>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Location" formControlName="location">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <h3>Sector</h3>
+      <mat-radio-group formControlName="sector">
+        <mat-radio-button *ngFor="let sector of sectors" [value]="sector">
+          {{ sector }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Department" formControlName="department">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Agency" formControlName="agency">
+      </mat-form-field>
+    </div>
+
+    <section id="usefulLinks">
+      <h3>Useful Links</h3>
+      <div formArrayName="usefulLinks">
+        <div *ngFor="let usefulLink of getUsefulLinks.controls; let i = index" [formGroupName]="i">
+          <mat-form-field>
+            <input matInput placeholder="link" formControlName="link">
+          </mat-form-field>
+          <button mat-raised-button (click)="deleteUsefulLink(i)">Remove Link</button>
+        </div>
+      </div>
+      <button mat-raised-button (click)="addUsefulLink()">Add Link</button>
+    </section>
+
+    <section id="kainosPeople">
+      <h3>Kainos People</h3>
+      <div formArrayName="kainosPeople">
+        <div *ngFor="let kainosPerson of getKainosPeople.controls; let i = index" [formGroupName]="i">
+          <mat-form-field>
+            <input matInput placeholder="name" formControlName="name">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="role" formControlName="role">
+          </mat-form-field>
+          <button mat-raised-button (click)="deleteKainosPerson(i)">Remove</button>
+        </div>
+      </div>
+      <button mat-raised-button (click)="addKainosPerson()">Add Person</button>
+    </section>
+  </section>
+
   <div>
-    <mat-form-field>
-      <input matInput placeholder="Account" formControlName="account">
-    </mat-form-field>
+    <button mat-stroked-button class="button btn-green">Save</button>
+    <button routerLink="/home" mat-stroked-button class="button btn-red">Cancel</button>
   </div>
-
-  <div>
-    <mat-form-field>
-      <input matInput placeholder="Project" formControlName="project">
-    </mat-form-field>
-  </div>
-
-  <div>
-    <mat-form-field>
-      <input matInput placeholder="Description" formControlName="description">
-    </mat-form-field>
-  </div>
-
-  <div>
-    <mat-form-field>
-      <input matInput placeholder="Manager" formControlName="manager">
-    </mat-form-field>
-  </div>
-
-  <h3>Project phase</h3>
-
-  <div formGroupName="phases">
-
-    <div formGroupName="alpha">
-
-      Alpha
-
-      <mat-form-field>
-        <input matInput placeholder="Start Date" formControlName="startDate">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput placeholder="End Date" formControlName="endDate">
-      </mat-form-field>
-    </div>
-
-    <div formGroupName="beta">
-
-      Beta
-
-      <mat-form-field>
-        <input matInput placeholder="Start Date" formControlName="startDate">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput placeholder="End Date" formControlName="endDate">
-      </mat-form-field>
-    </div>
-
-    <div formGroupName="betaToLive">
-
-      Beta To Live
-
-      <mat-form-field>
-        <input matInput placeholder="Start Date" formControlName="startDate">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput placeholder="End Date" formControlName="endDate">
-      </mat-form-field>
-    </div>
-
-    <div formGroupName="live">
-
-      Live
-
-      <mat-form-field>
-        <input matInput placeholder="Start Date" formControlName="startDate">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput placeholder="End Date" formControlName="endDate">
-      </mat-form-field>
-    </div>
-
-  </div>
-
-  <h2>People</h2>
-  <div formArrayName="people">
-
-    <div *ngFor="let person of projectPeople.controls; let i=index" [formGroupName]="i">
-
-      <mat-form-field>
-        <input matInput placeholder="forename" formControlName="forename">
-      </mat-form-field>
-
-      <mat-form-field>
-          <input matInput placeholder="surname" formControlName="surname">
-        </mat-form-field>
-
-        <button mat-raised-button color="warn" (click)="deletePerson(i)">Remove</button>
-
-    </div>
-
-  </div>
-  <button mat-raised-button color="primary" (click)="addPerson()">Add person</button>
 
 </form>
