@@ -18,4 +18,14 @@ export class Project {
     themes: string;
     description: string;
     manager: string;
+    alphaStartDate: Date;
+    alphaEndDate: Date;
+    betaStartDate: Date;
+    betaEndDate: Date;
+    betaToLiveStartDate: Date;
+    betaToLiveEndDate: Date;
+    liveStartDate: Date;
+    liveEndDate: Date;
+    riskLevel: string;
+    location: string;
 }

@@ -1,42 +1,87 @@
 <h1>Add a project</h1>
 
 <div>
-  <label>Account
-    <input [(ngModel)]="project.accountName" placeholder="accountName">
-    </label>
+  <h2>Account</h2>
+    <input [(ngModel)]="project.accountName" placeholder="Account name">
 </div>
+
 <div>
-  <label>Project
-      <input [(ngModel)]="project.name" placeholder="name">
-    </label>
-  </div>
-  <div>
-  <label>Description
-    <textarea [(ngModel)]="project.description" placeholder="description"></textarea>
-  </label>
+   <h2>Project</h2>
+      <input [(ngModel)]="project.name" placeholder="Name">
 </div>
+
 <div>
-  <label>Department
-    <input [(ngModel)]="project.department" placeholder="department">
-  </label>
-</div><div>
-  <label>Agency
-    <input [(ngModel)]="project.agency" placeholder="agency">
-  </label>
+  <h2>Description</h2>
+    <textarea [(ngModel)]="project.description" placeholder="Description"></textarea> 
 </div>
-<!--<div>
-  <label>Sector
-    <input [(ngModel)]="project.sector" placeholder="sector">
-    <input type="radio"
-       [(ng-model)]="project.sector"
-       value="Private"
-       ng-value="private">
-       <input type="radio"
-       [(ng-model)]="project.sector"
-       value="Public"
-       ng-value="public">
-  </label>
-</div>-->
+
+<div>
+    <h2>Manager</h2>
+       <input [(ngModel)]="project.manager" placeholder="Manager ">    
+</div>
+
+<div>
+  <h2>Project phases</h2>
+  <table class="no-class">
+      <tr>
+          <th>Phase</th>
+          <th>Start date</th>
+          <th>End date</th>
+      </tr>
+      <tr>
+          <td>Alpha</td>
+          <td><input [(ngModel)]="project.alphaStartDate" placeholder="dd/mm/yy"></td>
+          <td><input [(ngModel)]="project.alphaEndDate" placeholder="dd/mm/yy"></td>
+      </tr>
+      <tr>
+          <td>Beta</td>
+          <td><input [(ngModel)]="project.betaStartDate" placeholder="dd/mm/yy"></td>
+          <td><input [(ngModel)]="project.betaStartDate" placeholder="dd/mm/yy"></td>
+      </tr>
+      <tr>
+          <td>Beta to live</td>
+          <td><input [(ngModel)]="project.betaToLiveStartDate" placeholder="dd/mm/yy"></td>
+          <td><input [(ngModel)]="project.betatoLiveStartDate" placeholder="dd/mm/yy"></td>
+      </tr>
+      <tr>
+          <td>Live</td>
+          <td><input [(ngModel)]="project.LiveStartDate" placeholder="dd/mm/yy"></td>
+          <td><input [(ngModel)]="project.LiveStartDate" placeholder="dd/mm/yy"></td>
+      </tr>
+  </table>
+</div>
+
+<div>
+    <h2>Risk level</h2>
+      <label class="center-block"><input type="radio" [(ngModel)]="project.riskLevel" value="high">High</label>
+      <label class="center-block"><input type="radio" [(ngModel)]="project.riskLevel" value="medium">Medium</label>
+</div>
+
+<div>
+  <h1>Further project info</h1>
+</div>
+
+<div>
+    <h2>Location</h2>
+       <input [(ngModel)]="project.location" placeholder="Location ">    
+</div>
+
+<div>
+    <h2>Sector</h2>
+      <label class="center-block"><input type="radio" [(ngModel)]="project.sector" value="public">Public</label>
+      <label class="center-block"><input type="radio" [(ngModel)]="project.sector" value="private">Private</label>
+</div>
+
+<div>
+  <h2>Department</h2>
+    <input [(ngModel)]="project.department" placeholder="Department">
+</div>
+
+<div>
+  <h2>Agency</h2>
+    <input [(ngModel)]="project.agency" placeholder="Agency"> 
+</div>
+
 <div>
   <button (click)="addProject(project)">Add project</button>
 </div>
