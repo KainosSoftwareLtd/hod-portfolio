@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-a-project',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddAProjectComponent implements OnInit {
 
-  constructor() { }
+  myForm: FormGroup;
+
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.myForm = this.fb.group({
+      name: ''
+    });
+
+    this.myForm.valueChanges.subscribe(console.log);
   }
 
 }

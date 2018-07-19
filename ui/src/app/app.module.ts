@@ -1,6 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule} from '@angular/material';
+
 import { AppComponent } from './app.component';
 import { ProjectListViewComponent } from './project-list-view/project-list-view.component';
 import { ProjectListDetailedViewComponent } from './project-list-detailed-view/project-list-detailed-view.component';
@@ -28,7 +31,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]
