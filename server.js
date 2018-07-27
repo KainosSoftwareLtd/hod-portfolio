@@ -35,10 +35,14 @@ app.set('view engine', 'html');
 app.set('views', [__dirname + '/app/views/', __dirname + '/lib/']);
 
 // Middleware to serve static assets
-app.use('/public', express.static(__dirname + '/public'));
-app.use('/public', express.static(__dirname + '/govuk_modules/govuk_template/assets'));
-app.use('/public', express.static(__dirname + '/govuk_modules/govuk_frontend_toolkit'));
-app.use('/public/images/icons', express.static(__dirname + '/govuk_modules/govuk_frontend_toolkit/images'));
+//app.use('/app/assets/sass', express.static(__dirname + '/public'));
+app.use('/app/assets/sass', express.static(__dirname + '/style.scss'));
+app.use('/app/assets/sass', express.static(__dirname + '/_navigation.scss'));
+app.use('/app/assets/sass', express.static(__dirname + '/_tables.scss'));
+app.use('/app/assets/sass', express.static(__dirname + '/_tables0.scss'));
+//app.use('/public', express.static(__dirname + '/govuk_modules/govuk_template/assets'));
+//app.use('/public', express.static(__dirname + '/govuk_modules/govuk_frontend_toolkit'));
+//app.use('/public/images/icons', express.static(__dirname + '/govuk_modules/govuk_frontend_toolkit/images'));
 
 const njk = nunjucks(app, {
     autoescape: true,

@@ -288,7 +288,7 @@ InfoController.prototype.setupIndexPageRoute = function(groupBy, path, rowOrder,
             var phases = _.countBy(projectList, 'phase');
             rowOrder = prepareRowOrder(rowOrder, data);
 
-            res.render('index', {
+            res.render('testPage', {
                 "data": new_data,
                 "phase": req.query.phase,
                 "showFinished": req.cookies.showFinished,
